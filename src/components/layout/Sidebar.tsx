@@ -50,7 +50,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       <aside
         aria-label="Section navigation"
         className={cn(
-          'fixed bottom-0 left-0 top-0 z-50 flex w-80 flex-col border-r border-white/10 bg-navy-deep/95 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'fixed bottom-0 left-0 top-0 z-50 flex w-[min(20rem,calc(100vw-1rem))] flex-col border-r border-white/10 bg-navy-deep/95 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >

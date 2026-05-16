@@ -5,7 +5,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const basePath = isProd ? '/ADAC' : '';
 
 const nextConfig = {
-  output: 'export',
+  ...(isProd ? { output: 'export' } : {}),
   basePath,
   assetPrefix: basePath || undefined,
   images: { unoptimized: true },

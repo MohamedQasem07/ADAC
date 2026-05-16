@@ -18,8 +18,8 @@ const cache = new Map<string, CacheEntry<unknown>>();
  * fallback. The fallback is the same data shipped at build time, so the
  * deck always renders even with no network during the meeting.
  *
- * Logs the resolved source URL to the console for debugging only —
- * nothing visible to ADAC.
+ * The fallback is intentionally silent so the deck does not produce
+ * console noise during the live meeting.
  */
 async function loadJsonWithFallback<T>(filename: string, fallback: T): Promise<T> {
   const cached = cache.get(filename);
@@ -36,19 +36,9 @@ async function loadJsonWithFallback<T>(filename: string, fallback: T): Promise<T
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = (await res.json()) as T;
 
-    // eslint-disable-next-line no-console
-    console.info('[ADAC Presentation] Data loaded from:', url);
-
     cache.set(filename, { data: json, source: 'fetch', timestamp: Date.now() });
     return json;
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.info(
-      '[ADAC Presentation] Falling back to bundled data for',
-      filename,
-      '· reason:',
-      err
-    );
+  } catch {
     cache.set(filename, { data: fallback, source: 'fallback', timestamp: Date.now() });
     return fallback;
   }

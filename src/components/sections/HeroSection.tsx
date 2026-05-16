@@ -2,7 +2,9 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import confetti from 'canvas-confetti';
+import { ArrowRight } from 'lucide-react';
 import { BrandHeader } from '@/components/layout/BrandHeader';
 import { ease } from '@/lib/motion';
 
@@ -47,10 +49,8 @@ export function HeroSection({
   useEffect(() => {
     if (variant !== 'cover') return;
     const showAt = window.setTimeout(() => setShowHint(true), 4500);
-    const hideAt = window.setTimeout(() => setShowHint(false), 9500);
     return () => {
       window.clearTimeout(showAt);
-      window.clearTimeout(hideAt);
     };
   }, [variant]);
 
@@ -94,7 +94,7 @@ export function HeroSection({
           transition={{ duration: 1.2, ease: ease.premium }}
           className="mb-12 flex justify-center"
         >
-          <BrandHeader variant="dark" height={42} />
+          <BrandHeader variant="dark" height={88} />
         </motion.div>
 
         {/* Eyebrow */}
@@ -149,6 +149,27 @@ export function HeroSection({
           </motion.p>
         )}
 
+        {/* Start presentation button (cover only) */}
+        {variant === 'cover' && (
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: showHint ? 1 : 0, y: showHint ? 0 : 14 }}
+            transition={{ duration: 0.6, ease: ease.premium }}
+            className="mt-10 flex justify-center"
+          >
+            <Link
+              href="/section/2"
+              className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/50 bg-gold px-7 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-navy-deep shadow-[0_18px_55px_rgba(201,169,97,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_24px_70px_rgba(201,169,97,0.32)] focus:outline-none focus:ring-2 focus:ring-gold-soft focus:ring-offset-2 focus:ring-offset-navy-deep"
+            >
+              {pressHint ?? 'Start Presentation'}
+              <ArrowRight
+                aria-hidden="true"
+                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </Link>
+          </motion.div>
+        )}
+
         {/* Body */}
         {body && (
           <motion.div
@@ -161,17 +182,6 @@ export function HeroSection({
           </motion.div>
         )}
 
-        {/* Press → to begin hint (cover only) */}
-        {variant === 'cover' && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: showHint ? 1 : 0 }}
-            transition={{ duration: 0.6, ease: ease.premium }}
-            className="pointer-events-none absolute -bottom-24 left-1/2 -translate-x-1/2 font-sans text-[10px] uppercase tracking-[0.4em] text-ink-soft/60"
-          >
-            {pressHint ?? 'Press → to begin'}
-          </motion.p>
-        )}
       </div>
     </section>
   );
