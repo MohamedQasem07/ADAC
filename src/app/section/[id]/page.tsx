@@ -82,6 +82,7 @@ export default function SectionPage({ params }: { params: { id: string } }) {
       title: string;
       eyebrow?: string;
       subtitle?: string;
+      framingNote?: string;
       items: Array<{ id: string; icon?: string; title: string; summary: string; href: string }>;
     };
     return <OverviewSection data={data} keyPrefix={section.id} />;

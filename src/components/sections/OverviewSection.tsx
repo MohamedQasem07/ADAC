@@ -38,6 +38,12 @@ interface OverviewData {
   title: string;
   eyebrow?: string;
   subtitle?: string;
+  /**
+   * Optional "What 'yes' looks like" framing paragraph rendered above
+   * the card grid. Currently used on the Decision Points page to make
+   * the meeting close explicit.
+   */
+  framingNote?: string;
   items: OverviewItem[];
 }
 
@@ -174,6 +180,31 @@ export function OverviewSection({
             />
           </Link>
         </div>
+      )}
+
+      {/* Framing paragraph — currently used by the Decision Points page
+          to make the meeting close explicit ("what 'yes' looks like"). */}
+      {data.framingNote && (
+        <motion.aside
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ delay: 0.1, duration: 0.7, ease: ease.premium }}
+          className="mx-auto mt-12 max-w-4xl rounded-sm border px-6 py-5 backdrop-blur-sm"
+          style={{
+            background: 'var(--theme-badge-bg)',
+            borderColor: 'var(--theme-badge-border)',
+          }}
+        >
+          <p
+            className="font-mono text-[10px] uppercase tracking-[0.35em]"
+            style={{ color: 'var(--theme-badge-text)' }}
+          >
+            What &lsquo;yes&rsquo; looks like
+          </p>
+          <p className="mt-2 text-base leading-relaxed text-white md:text-lg">
+            {textOf(`${keyPrefix}.framingNote`, data.framingNote)}
+          </p>
+        </motion.aside>
       )}
 
       <motion.ul
