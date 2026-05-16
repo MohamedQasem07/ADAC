@@ -11,6 +11,7 @@ import { HotkeyToast } from './HotkeyToast';
 import { KeyboardNav } from './KeyboardNav';
 import { PageTransition } from './PageTransition';
 import { ScenarioIndicator } from './ScenarioIndicator';
+import { SearchOverlay } from '@/components/packages/SearchOverlay';
 import { Sidebar } from './Sidebar';
 
 /**
@@ -48,6 +49,7 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
       <ScenarioIndicator />
       <HotkeyToast />
       <CheatsheetOverlay />
+      <SearchOverlay />
     </PricingProvider>
   );
 }

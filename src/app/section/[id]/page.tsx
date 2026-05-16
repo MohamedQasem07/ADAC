@@ -8,8 +8,9 @@ import {
 import { DashboardOverview } from '@/components/sections/DashboardOverview';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
+import { PackageCatalogueOverview } from '@/components/sections/PackageCatalogueOverview';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
-import type { ADACDataset } from '@/types/content';
+import type { ADACDataset, Package, PackageCategory } from '@/types/content';
 
 export function generateStaticParams() {
   return getAllSections().map((s) => ({ id: s.id }));
@@ -51,6 +52,23 @@ export default function SectionPage({ params }: { params: { id: string } }) {
         subtopics={section.subtopics ?? []}
       />
     );
+  }
+
+  // §12 package catalogue top-level: 3×3 category grid.
+  if (section.id === '12' && content?.kind === 'markdown') {
+    const data = readJson<{ categories: PackageCategory[]; packages: Package[] }>(
+      'packages.json'
+    );
+    if (data) {
+      return (
+        <PackageCatalogueOverview
+          sectionId={section.id}
+          content={content.data}
+          categories={data.categories}
+          packages={data.packages}
+        />
+      );
+    }
   }
 
   if (content?.kind === 'markdown') {

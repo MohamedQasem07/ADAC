@@ -4,11 +4,14 @@ import {
   getSectionMeta,
   getSubtopicMeta,
   loadReferencedContent,
+  readJson,
 } from '@/lib/content-loader';
 import { CHART_REGISTRY } from '@/components/charts';
 import { NetworkMap, type NetworkMapData } from '@/components/map/NetworkMap';
+import { CategoryDetail } from '@/components/packages/CategoryDetail';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
+import type { Package, PackageCategory } from '@/types/content';
 
 export function generateStaticParams() {
   const params: Array<{ id: string; sub: string }> = [];
@@ -42,6 +45,28 @@ export default function SubtopicPage({
         section={section}
         subtopic={subtopic}
         reason="renderer-not-built"
+      />
+    );
+  }
+
+  // §12.1–12.9 — package category detail screens.
+  if (subtopic.renderer === 'package-category') {
+    const data = readJson<{ categories: PackageCategory[]; packages: Package[] }>(
+      'packages.json'
+    );
+    // subtopic.data is shaped like "packages.json#category=N"
+    const m = subtopic.data?.match(/category=(\d+)/);
+    const catId = m ? Number(m[1]) : null;
+    const category = data?.categories.find((c) => c.id === catId);
+    const catPackages = data?.packages.filter((p) => p.category === catId) ?? [];
+    if (category) {
+      return <CategoryDetail category={category} packages={catPackages} />;
+    }
+    return (
+      <PlaceholderSection
+        section={section}
+        subtopic={subtopic}
+        reason="missing-content"
       />
     );
   }

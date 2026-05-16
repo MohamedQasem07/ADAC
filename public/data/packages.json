@@ -1,0 +1,151 @@
+{
+  "version": "1.0.0",
+  "source": "HMC_Package_Catalogue.pdf — 65 packages verified against the PDF tables on pages 3-8. Scenario C prices = round(B × 1.8 / 10) × 10 per the spec.",
+
+  "categories": [
+    {
+      "id": 1,
+      "code": "GI",
+      "name": "Gastroenteritis, GI & IV Therapy",
+      "description": "Acute gastroenteritis is the most common presentation in the Red Sea region (~60% of tourist hospital cases). This combined category covers GI complaints together with IV hydration therapy, as they are clinically linked. Packages are tiered by severity, hydration status, and whether laboratory work or extended observation is required.",
+      "escalationNote": "Persistent vomiting beyond reasonable limits, severe dehydration unresponsive to IV, bloody diarrhea, signs of acute abdomen, or pediatric cases under 1 year of age are escalated to inpatient admission. Assistance company notified within 15 minutes.",
+      "subsections": [
+        { "id": "A", "title": "Gastroenteritis & GI Management" },
+        { "id": "B", "title": "IV Therapy & Hydration" }
+      ]
+    },
+    {
+      "id": 2,
+      "code": "RX",
+      "name": "Respiratory Conditions",
+      "description": "Acute respiratory infections — bronchitis, pharyngitis, tonsillitis, pneumonia — are among the most frequent presentations in travelers visiting the Red Sea region. Packages cover mild outpatient cases through acute exacerbations requiring nebulizer therapy and supportive treatment."
+    },
+    {
+      "id": 3,
+      "code": "WD",
+      "name": "Wound Care & Suturing",
+      "description": "Wound care packages are tiered by wound complexity, suture count, anatomical location, and whether imaging is required to exclude underlying injury. Sea-urchin removal is included given its frequency in Red Sea tourist medicine.",
+      "escalationNote": "Wounds with deep tissue involvement, suspected nerve or tendon damage, animal bites, or wounds older than 12 hours may require additional procedures and are quoted separately.",
+      "subsections": [
+        { "id": "A", "title": "Simple Wounds & Dressing" },
+        { "id": "B", "title": "Suturing (Standard Body Locations)" },
+        { "id": "C", "title": "Facial / Plastic Suturing" },
+        { "id": "D", "title": "Marine Injuries" }
+      ]
+    },
+    {
+      "id": 4,
+      "code": "OR",
+      "name": "Trauma & Orthopedic",
+      "description": "Trauma cases — sprains, contusions, suspected fractures — are common in active tourist environments. HMC's portable X-Ray capability allows full assessment at the hotel for travelers unable to travel, with cast or immobilization performed on site."
+    },
+    {
+      "id": 5,
+      "code": "EN",
+      "name": "ENT (Ear · Nose · Throat)",
+      "description": "ENT presentations include ear barotrauma (common after diving), otitis from swimming, and acute throat infections. Ear wash and foreign-body extraction are routinely performed using portable equipment."
+    },
+    {
+      "id": 6,
+      "code": "DN",
+      "name": "Dental Emergency",
+      "description": "Dental packages cover urgent presentations only. Insurance coverage for dental services varies by plan — pre-authorization is recommended for any procedure beyond consultation."
+    },
+    {
+      "id": 7,
+      "code": "DR",
+      "name": "Allergic & Skin Conditions",
+      "description": "Sun exposure, marine environment, and dietary changes lead to a high incidence of allergic and dermatological presentations during travel."
+    },
+    {
+      "id": 8,
+      "code": "EY",
+      "name": "Eye Conditions",
+      "description": "Conjunctivitis from sun, chlorine, or sand is the dominant eye presentation. Foreign-body removal is performed in clinic under magnification."
+    },
+    {
+      "id": 9,
+      "code": "CR",
+      "name": "Cardiac Outpatient",
+      "description": "Cardiac outpatient packages are designed for low-risk presentations only. ALL chest pain or suspected cardiac events undergo immediate ECG screening, and any abnormality triggers immediate escalation to ER and notification to the assistance company.",
+      "escalationNote": "Mandatory escalation: ST changes on ECG, troponin elevation, hemodynamic instability, SpO₂ < 94%, or unresolved chest pain → immediate transfer to ER with ambulance support. Assistance company notified within 15 minutes."
+    }
+  ],
+
+  "packages": [
+    { "category": 1, "section": "A", "code": "HMC-GI-01", "name": "Mild Gastroenteritis — Oral Management",                "included": "Doctor exam · Vital signs · Oral rehydration therapy · Anti-emetic/anti-diarrheal oral meds · Medical report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-02", "name": "Moderate Gastroenteritis with Mild Dehydration",         "included": "Doctor exam · Vital signs · IV cannula + 1 IV bag (saline/Ringer) · IM anti-emetic · Oral meds · Nursing service · Report", "prices": { "A": "To be agreed", "B": 240, "C": 430 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-03", "name": "Acute Gastroenteritis with Dehydration",                  "included": "Doctor exam · Vital signs · IV cannula + 2 IV bags · IM/IV anti-emetic & anti-diarrheal · Oral meds · 2-hour observation · Report", "prices": { "A": "To be agreed", "B": 280, "C": 500 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-04", "name": "Severe Gastroenteritis + Basic Labs",                     "included": "All of GI-03 + CBC + CRP + Electrolytes + Urea/Creatinine · Re-assessment · Report", "prices": { "A": "To be agreed", "B": 330, "C": 590 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-05", "name": "Food Poisoning Protocol (Adult)",                         "included": "Doctor exam · IV cannula + 2 IV bags · Anti-emetic IV · Antibiotic if indicated · Anti-spasmodic · Observation 3 hr · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-06", "name": "Pediatric Gastroenteritis (Infant/Child)",                "included": "Pediatric exam · Weight-based IV/ORT · Anti-emetic syrup · Probiotic · Nursing · Pediatric report · Follow-up call next day", "prices": { "A": "To be agreed", "B": 290, "C": 520 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-07", "name": "Acute Gastritis / Abdominal Colic (No Dehydration)",     "included": "Doctor exam · IM anti-spasmodic · IM/oral PPI · Oral meds package · Report", "prices": { "A": "To be agreed", "B": 220, "C": 390 } },
+    { "category": 1, "section": "A", "code": "HMC-GI-08", "name": "Severe GI + Extended Observation (4–6 hrs)",              "included": "Full GI-04 + Extended observation 4–6 hr · 2nd doctor re-assessment · Discharge planning · Report", "prices": { "A": "To be agreed", "B": 400, "C": 720 } },
+
+    { "category": 1, "section": "B", "code": "HMC-IV-01", "name": "Mild Dehydration — Single IV Session",                    "included": "Doctor exam · IV cannula · 1 IV bag (1L saline or Ringer) · Vitamin supplement · Nursing · Report", "prices": { "A": "To be agreed", "B": 220, "C": 390 } },
+    { "category": 1, "section": "B", "code": "HMC-IV-02", "name": "Moderate Dehydration — Dual IV",                          "included": "Doctor exam · IV cannula · 2 IV bags · Electrolyte supplement · Anti-emetic if needed · Nursing · Report", "prices": { "A": "To be agreed", "B": 270, "C": 480 } },
+    { "category": 1, "section": "B", "code": "HMC-IV-03", "name": "Severe Dehydration — Triple IV + Electrolytes",           "included": "Doctor exam · IV cannula · 3 IV bags · IV potassium/electrolyte correction · 2-hr observation · Report", "prices": { "A": "To be agreed", "B": 340, "C": 610 } },
+    { "category": 1, "section": "B", "code": "HMC-IV-04", "name": "Heat Exhaustion / Sunstroke Recovery",                    "included": "Doctor exam · IV cannula + 2 IV bags · Cooling protocol · Anti-emetic · Pain relief · 3-hr observation · Report", "prices": { "A": "To be agreed", "B": 310, "C": 560 } },
+    { "category": 1, "section": "B", "code": "HMC-IV-05", "name": "Travel Fatigue & Recovery IV",                            "included": "Doctor exam · IV cannula · 1 IV bag with B-complex + vitamin C · Anti-emetic · Analgesic · Nursing · Report", "prices": { "A": "To be agreed", "B": 240, "C": 430 } },
+    { "category": 1, "section": "B", "code": "HMC-IV-06", "name": "Extended IV Therapy + 4-hr Observation",                  "included": "All of IV-03 + Extended monitoring 4 hr · Re-assessment · Re-hydration verification · Report", "prices": { "A": "To be agreed", "B": 410, "C": 740 } },
+
+    { "category": 2, "code": "HMC-RX-01", "name": "Mild URTI / Pharyngitis — Oral Management",                                "included": "Doctor exam · Throat assessment · Oral analgesics + antipyretics · Lozenges · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 2, "code": "HMC-RX-02", "name": "Acute Bronchitis — Oral + IM Injection",                                   "included": "Doctor exam · Chest auscultation · IM antibiotic loading dose · Oral antibiotic + mucolytic · Report", "prices": { "A": "To be agreed", "B": 230, "C": 410 } },
+    { "category": 2, "code": "HMC-RX-03", "name": "Acute Tonsillitis — Moderate Fever",                                       "included": "Doctor exam · Throat swab assessment · IM/IV antibiotic + analgesic · Antipyretic · Oral package · Report", "prices": { "A": "To be agreed", "B": 260, "C": 470 } },
+    { "category": 2, "code": "HMC-RX-04", "name": "Acute Tonsillitis — High Fever + Labs",                                    "included": "All of RX-03 + CBC + CRP · IV fluids if needed · 2-hr observation · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+    { "category": 2, "code": "HMC-RX-05", "name": "Pneumonia — Outpatient + X-Ray + Labs",                                    "included": "Doctor exam · Chest X-Ray + radiology report · CBC + CRP · IM/IV antibiotic · Nebulizer · Oral package · Report", "prices": { "A": "To be agreed", "B": 380, "C": 680 } },
+    { "category": 2, "code": "HMC-RX-06", "name": "Acute Asthmatic Bronchitis — Nebulizer Session",                           "included": "Doctor exam · SpO₂ measurement · Nebulizer (bronchodilator + steroid) × 2–3 sessions · IM steroid · Report", "prices": { "A": "To be agreed", "B": 290, "C": 520 } },
+    { "category": 2, "code": "HMC-RX-07", "name": "Acute Sinusitis / Rhinitis",                                               "included": "Doctor (or ENT) exam · Nasal decongestant · IM antibiotic if indicated · Oral package · Report", "prices": { "A": "To be agreed", "B": 220, "C": 390 } },
+
+    { "category": 3, "section": "A", "code": "HMC-WD-01", "name": "Superficial Wound — Cleaning Only (No Suture)",            "included": "Doctor exam · Wound cleaning · Antiseptic dressing · Tetanus advice · IM antibiotic if indicated · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 3, "section": "A", "code": "HMC-WD-02", "name": "Wound Dressing Follow-up (Single Session)",                "included": "Wound inspection · Re-dressing · Antiseptic application · Brief nursing visit · Note", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 3, "section": "A", "code": "HMC-WD-03", "name": "Infected Wound — Drainage + Dressing",                     "included": "Doctor exam · Pus drainage · Wound irrigation · Sterile dressing · IM antibiotic · Oral meds · Report", "prices": { "A": "To be agreed", "B": 260, "C": 470 } },
+    { "category": 3, "section": "B", "code": "HMC-WD-04", "name": "Suturing — 1 to 3 Stitches (No X-Ray)",                    "included": "Doctor exam · Local anaesthesia · Wound cleaning · Suturing · Dressing · Tetanus · Removal visit · Report", "prices": { "A": "To be agreed", "B": 230, "C": 410 } },
+    { "category": 3, "section": "B", "code": "HMC-WD-05", "name": "Suturing — 4 to 6 Stitches (No X-Ray)",                    "included": "Doctor exam · Local anaesthesia · Wound cleaning · Suturing · Dressing · IM antibiotic · Removal visit · Report", "prices": { "A": "To be agreed", "B": 270, "C": 480 } },
+    { "category": 3, "section": "B", "code": "HMC-WD-06", "name": "Suturing — 7 to 10 Stitches (No X-Ray)",                   "included": "Doctor exam · Local anaesthesia · Wound cleaning · Suturing · Dressing · IM antibiotic · 2 removal visits · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+    { "category": 3, "section": "B", "code": "HMC-WD-07", "name": "Suturing + X-Ray — 1 to 5 Stitches",                       "included": "Doctor exam · Local anaesthesia · X-Ray (foreign body / underlying injury) · Suturing · Dressing · Antibiotic · Report", "prices": { "A": "To be agreed", "B": 310, "C": 560 } },
+    { "category": 3, "section": "B", "code": "HMC-WD-08", "name": "Suturing + X-Ray — 6 to 10 Stitches",                      "included": "All of WD-07 with 6–10 stitches · 2 removal visits · Report", "prices": { "A": "To be agreed", "B": 370, "C": 670 } },
+    { "category": 3, "section": "C", "code": "HMC-WD-09", "name": "Facial Wound — Plastic Suturing 1 to 5 cm",                "included": "Doctor (plastic technique) · Local anaesthesia · Fine-suture material · Cosmetic closure · Dressing · 2 removal visits · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+    { "category": 3, "section": "C", "code": "HMC-WD-10", "name": "Facial Wound — Plastic Suturing 5 to 10 cm",               "included": "All of WD-09 for larger wound · 3 removal visits · Anti-scar advice · Report", "prices": { "A": "To be agreed", "B": 400, "C": 720 } },
+    { "category": 3, "section": "D", "code": "HMC-WD-11", "name": "Sea Urchin Removal — Small (1–3 spines)",                  "included": "Doctor exam · Local anaesthesia · Surgical spine extraction · Antiseptic · Dressing · Tetanus · IM antibiotic · Report", "prices": { "A": "To be agreed", "B": 280, "C": 500 } },
+    { "category": 3, "section": "D", "code": "HMC-WD-12", "name": "Sea Urchin Removal — Large (4+ spines)",                   "included": "All of WD-11 for larger extraction · Multiple sessions · 2 dressing changes · Report", "prices": { "A": "To be agreed", "B": 370, "C": 670 } },
+    { "category": 3, "section": "D", "code": "HMC-WD-13", "name": "Jellyfish / Marine Sting — Severe",                        "included": "Doctor exam · Wound irrigation · Pain management (IM/IV) · Anti-histamine · Steroid if needed · Topical · Report", "prices": { "A": "To be agreed", "B": 230, "C": 410 } },
+
+    { "category": 4, "code": "HMC-OR-01", "name": "Sprain / Strain — No X-Ray",                                                "included": "Doctor exam · Clinical assessment · Cold therapy · Elastic compression bandage · Pain meds · Crutches if needed · Report", "prices": { "A": "To be agreed", "B": 230, "C": 410 } },
+    { "category": 4, "code": "HMC-OR-02", "name": "Sprain / Strain — With X-Ray",                                              "included": "All of OR-01 + X-Ray (1 region) + Radiology report · Confirmation of no fracture · Report", "prices": { "A": "To be agreed", "B": 290, "C": 520 } },
+    { "category": 4, "code": "HMC-OR-03", "name": "Contusion / Soft Tissue Injury — No X-Ray",                                 "included": "Doctor exam · Clinical assessment · Pain management (IM/oral) · Topical anti-inflammatory · Bandage if needed · Report", "prices": { "A": "To be agreed", "B": 240, "C": 430 } },
+    { "category": 4, "code": "HMC-OR-04", "name": "Contusion + X-Ray (Rule out Fracture)",                                     "included": "All of OR-03 + X-Ray + report · Pain management · Soft splint if indicated · Report", "prices": { "A": "To be agreed", "B": 300, "C": 540 } },
+    { "category": 4, "code": "HMC-OR-05", "name": "Suspected Fracture — X-Ray + Bandage",                                      "included": "Doctor exam · X-Ray (1 region) · Radiology report · Pain management · Bandage / sling · Orthopedic referral if positive · Report", "prices": { "A": "To be agreed", "B": 330, "C": 590 } },
+    { "category": 4, "code": "HMC-OR-06", "name": "Confirmed Fracture — X-Ray + Plaster Cast",                                 "included": "All of OR-05 + Plaster cast application · Cast care instructions · 1 follow-up visit · Report", "prices": { "A": "To be agreed", "B": 440, "C": 790 } },
+    { "category": 4, "code": "HMC-OR-07", "name": "Joint Dislocation — Reduction + Immobilization",                            "included": "Doctor exam · X-Ray · IV/IM analgesia + sedation · Closed reduction · Post-reduction X-Ray · Immobilization · Report", "prices": { "A": "To be agreed", "B": 490, "C": 880 } },
+    { "category": 4, "code": "HMC-OR-08", "name": "Acute Back Pain / Lumbago — Outpatient Management",                         "included": "Doctor exam · Clinical assessment · IM analgesic + muscle relaxant · Oral package · Postural advice · Report", "prices": { "A": "To be agreed", "B": 240, "C": 430 } },
+
+    { "category": 5, "code": "HMC-EN-01", "name": "Otitis Externa / Swimmer's Ear — Simple",                                   "included": "Doctor exam · Otoscopy · Ear cleaning · Antibiotic ear drops · Oral analgesic · Swimming advice · Report", "prices": { "A": "To be agreed", "B": 210, "C": 380 } },
+    { "category": 5, "code": "HMC-EN-02", "name": "Otitis Media — Simple",                                                     "included": "Doctor exam · Otoscopy · IM/oral antibiotic · Decongestant · Analgesic · Report", "prices": { "A": "To be agreed", "B": 240, "C": 430 } },
+    { "category": 5, "code": "HMC-EN-03", "name": "Severe Otitis — Ear Pack / Lavage + Treatment",                             "included": "Doctor exam · Otoscopy · Ear pack OR therapeutic lavage · Topical + systemic antibiotic · Pain control · Report", "prices": { "A": "To be agreed", "B": 290, "C": 520 } },
+    { "category": 5, "code": "HMC-EN-04", "name": "Ear Wax Removal — Single Ear",                                              "included": "Doctor exam · Portable ear-wash system · Pre-softening drops · Post-procedure assessment · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 5, "code": "HMC-EN-05", "name": "Ear Wax Removal — Both Ears",                                               "included": "Doctor exam · Portable ear-wash both ears · Pre-softening drops · Post-procedure assessment · Report", "prices": { "A": "To be agreed", "B": 270, "C": 480 } },
+    { "category": 5, "code": "HMC-EN-06", "name": "Epistaxis (Nosebleed) with Anterior Packing",                               "included": "Doctor exam · Nasal cautery if needed · Anterior packing · Anti-hypertensive if indicated · Post-care advice · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+
+    { "category": 6, "code": "HMC-DN-01", "name": "Dental Pain — Examination + Medication",                                    "included": "Dental exam · Pain/infection assessment · Oral analgesic + antibiotic · Emergency advice · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 6, "code": "HMC-DN-02", "name": "Simple Tooth Extraction",                                                   "included": "Dental exam · Local anaesthesia · Simple extraction · Wound packing · Oral meds · Post-extraction advice · Report", "prices": { "A": "To be agreed", "B": 280, "C": 500 } },
+    { "category": 6, "code": "HMC-DN-03", "name": "Tooth Filling — Amalgam (One Tooth)",                                       "included": "Dental exam · Local anaesthesia · Filling preparation · Amalgam restoration · Bite check · Report", "prices": { "A": "To be agreed", "B": 310, "C": 560 } },
+    { "category": 6, "code": "HMC-DN-04", "name": "Complicated Extraction + X-Ray",                                            "included": "Dental exam · X-Ray + report · Local anaesthesia · Surgical extraction · Suturing if needed · Antibiotic · Report", "prices": { "A": "To be agreed", "B": 390, "C": 700 } },
+    { "category": 6, "code": "HMC-DN-05", "name": "Dental Abscess — Drainage + Antibiotics",                                   "included": "Dental exam · X-Ray · Drainage under local anaesthesia · IM/oral antibiotic · Analgesic · Follow-up advice · Report", "prices": { "A": "To be agreed", "B": 430, "C": 770 } },
+
+    { "category": 7, "code": "HMC-DR-01", "name": "Mild Allergic Reaction / Insect Bite",                                      "included": "Doctor exam · IM anti-histamine · IM/oral steroid if needed · Topical preparation · Oral package · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 7, "code": "HMC-DR-02", "name": "Moderate Allergic Reaction / Urticaria",                                    "included": "Doctor exam · IM/IV anti-histamine + steroid · IV fluids if needed · 2-hr observation · Oral meds · Report", "prices": { "A": "To be agreed", "B": 270, "C": 480 } },
+    { "category": 7, "code": "HMC-DR-03", "name": "Severe Allergic Reaction with Shortness of Breath",                         "included": "Doctor exam · IV access · IV anti-histamine + IV steroid · Nebulizer · O₂ if needed · 4-hr observation · Report", "prices": { "A": "To be agreed", "B": 340, "C": 610 } },
+    { "category": 7, "code": "HMC-DR-04", "name": "1st-degree Burn / Sunburn (Adult)",                                         "included": "Doctor exam · Burn cleaning · Topical preparation · Pain management · Hydration · Oral package · Report", "prices": { "A": "To be agreed", "B": 230, "C": 410 } },
+    { "category": 7, "code": "HMC-DR-05", "name": "2nd-degree Burn / Severe Sunburn",                                          "included": "Doctor exam · Wound cleaning · Sterile dressing · IM analgesic · Anti-histamine · Antibiotic if indicated · Report", "prices": { "A": "To be agreed", "B": 300, "C": 540 } },
+
+    { "category": 8, "code": "HMC-EY-01", "name": "Conjunctivitis / Photosensitivity",                                         "included": "Doctor exam · Eye assessment · Antibiotic eye drops · Anti-inflammatory drops · Patching advice · Report", "prices": { "A": "To be agreed", "B": 200, "C": 360 } },
+    { "category": 8, "code": "HMC-EY-02", "name": "Eye Irritation + Foreign Body Removal",                                     "included": "Doctor exam · Local anaesthetic drops · Foreign-body extraction · Antibiotic drops · Eye pad · Report", "prices": { "A": "To be agreed", "B": 250, "C": 450 } },
+    { "category": 8, "code": "HMC-EY-03", "name": "Severe Eye Infection / Keratitis",                                          "included": "Doctor exam · Detailed eye assessment · Fluorescein stain · Combined antibiotic + steroid drops · Oral meds · Follow-up · Report", "prices": { "A": "To be agreed", "B": 290, "C": 520 } },
+
+    { "category": 9, "code": "HMC-CR-01", "name": "Hypertensive Emergency — Outpatient Control",                               "included": "Doctor exam · BP monitoring · ECG · IM/IV anti-hypertensive · 2-hr observation · Oral package · Report", "prices": { "A": "To be agreed", "B": 320, "C": 570 } },
+    { "category": 9, "code": "HMC-CR-02", "name": "Hypotension / Syncope — Investigation",                                     "included": "Doctor exam · ECG · CBC + Electrolytes · IV fluids · 3-hr observation · Re-assessment · Report", "prices": { "A": "To be agreed", "B": 360, "C": 650 } },
+    { "category": 9, "code": "HMC-CR-03", "name": "Low-risk Chest Pain — Cardiac Screening",                                   "included": "Doctor exam · ECG · Troponin · CBC · Basic metabolic panel · BP/SpO₂ monitoring · Outpatient assessment · Report", "prices": { "A": "To be agreed", "B": 420, "C": 760 } },
+    { "category": 9, "code": "HMC-CR-04", "name": "Acute Arrhythmia / Palpitations",                                           "included": "Doctor exam · ECG · Cardiac auscultation · IM/IV anti-arrhythmic if indicated · 4-hr monitoring · Report", "prices": { "A": "To be agreed", "B": 470, "C": 850 } }
+  ]
+}
