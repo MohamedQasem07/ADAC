@@ -1,16 +1,22 @@
 ---
 title: "Escalation Criteria"
 eyebrow: "§8.4"
-summary: "Clinical red flags that trigger an immediate ER pathway and 15-minute notification to ADAC."
-layout: "editorial"
+summary: "Clinical red flags that move a case out of package scope into ambulance, ER, or hospital admission."
+layout: "structured"
 ---
 
-Triage stops being outpatient the moment a clinical red flag appears. Detailed criteria live in §11. The trigger framework is below.
+## Context
 
-- Cardiac: ST changes, troponin elevation, hemodynamic instability, unresolved chest pain
-- Respiratory: SpO₂ < 94%, severe dyspnea unresponsive to nebulizer
-- GI: bloody diarrhea, signs of acute abdomen, severe dehydration unresponsive to IV
-- Neurological: GCS deterioration, focal deficit, seizure
-- Pediatric: any unwell child under 1 year
-- Trauma: high-energy mechanism, suspected internal injury, neurovascular compromise
-- All red-flag cases: ambulance + ER pathway + ADAC notified within 15 minutes
+Escalation is the point where clinical reality exceeds the outpatient package scope. The triggers are clinical, not commercial. When a red flag appears, the case leaves the package framework and moves into an ambulance, ER, or hospital admission pathway, with ADAC notified inside the escalation target window.
+
+## Key points
+
+- **Cardiac and respiratory triggers.** Ischemic ECG changes, troponin elevation, hemodynamic instability, SpO2 below 94%, or severe dyspnea unresponsive to nebulizer.
+- **Abdominal and neurological triggers.** Acute abdomen, bloody diarrhea, severe dehydration unresponsive to IV, GCS deterioration, focal deficit, or seizure activity.
+- **Pediatric and trauma triggers.** Any unwell child under one year, high-energy mechanism, suspected internal injury, or neurovascular compromise.
+- **Separate quote, same record.** Escalation costs — ambulance, hospital admission, inpatient care — are quoted separately and do not change the underlying package price.
+- **Single case file.** The original triage record, the escalation decision, and the downstream hospital coordination live in one continuous case file.
+
+## What this means for ADAC
+
+ADAC sees a clean line between outpatient scope and acute escalation, with no quiet upgrades inside the package price. When a case escalates, the trigger, the timestamp, and the downstream coordination are all documented in the same record, which keeps cost-control and clinical-quality reviews on the same page.

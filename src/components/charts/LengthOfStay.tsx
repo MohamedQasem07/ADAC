@@ -51,6 +51,7 @@ export function LengthOfStay() {
       eyebrow="§3.7"
       title="ADAC Length of Stay"
       populationLabel="n=156 ADAC admissions · 2024–2025"
+      dataWindow="Clinical breakdown · 2024–2025"
       annotation="83% of admissions discharged within 48 hours"
       insight={{
         keyInsight:

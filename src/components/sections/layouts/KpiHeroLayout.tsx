@@ -17,8 +17,18 @@ interface KpiHeroLayoutProps {
 export function KpiHeroLayout({ sectionId, content, subtopics }: KpiHeroLayoutProps) {
   const { frontmatter, body } = content;
   const stats = Array.isArray(frontmatter.stats)
-    ? (frontmatter.stats as Array<{ value: string | number; label: string }>).map(
-        (s): KpiItem => ({ value: String(s.value), label: s.label })
+    ? (
+        frontmatter.stats as Array<{
+          value: string | number;
+          label: string;
+          sublabel?: string;
+        }>
+      ).map(
+        (s): KpiItem => ({
+          value: String(s.value),
+          label: s.label,
+          sublabel: s.sublabel,
+        })
       )
     : [];
 

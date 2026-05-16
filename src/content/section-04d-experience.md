@@ -1,14 +1,22 @@
 ---
 title: "Traveler Experience Benefit"
 eyebrow: "§4.4"
-summary: "When the traveler does not have to negotiate the medical bill, the assistance partner becomes the trusted voice — not a friction point."
-layout: "editorial"
+summary: "Predictable scope at the bedside lets the assistance partner be the trusted voice rather than a friction point."
+layout: "structured"
 ---
 
-A traveler in distress should hear one clear answer: "Yes, this is covered." Flat-rate packages let the ADAC case coordinator give that answer immediately, instead of waiting for an itemized estimate from the clinic.
+## Context
 
-- Faster verbal confirmation of coverage at the moment of distress
-- No discussion of consumables, observation time, or extras at the bedside
-- AG Holder hears a consistent message from ADAC, HMC, and the hotel
-- Post-treatment paperwork is short and clear
-- Higher likelihood the AG Holder reports the case as a good experience
+The traveler experience during a medical event is shaped less by clinical quality than by the clarity of the answers they receive. A traveler in distress needs to hear one consistent message about coverage, treatment, and next steps. Flat-rate packages make that message possible because the scope is known before the consultation begins.
+
+## Key points
+
+- **German-language reception at intake.** Travelers are received and triaged in their own language, so the history is clean and the case note is usable.
+- **No surprise bills at point of care.** The price is set by the package, so the bedside conversation is clinical, not financial.
+- **Single-document case summary.** Travelers leave with one structured summary suitable for follow-up at home.
+- **Consistent message across parties.** The assistance desk, the clinic, and the hotel desk reference the same package and the same scope.
+- **Predictable handover to ADAC.** Reporting back to the assistance team follows a fixed format with the package code attached.
+
+## What this means for ADAC
+
+A traveler who receives clear answers does not call back repeatedly, does not dispute charges at home, and does not generate retrospective complaints. The framework targets a measurable improvement in AG Holder-reported experience while reducing inbound contact volume to the assistance desk.

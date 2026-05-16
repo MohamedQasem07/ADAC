@@ -47,6 +47,7 @@ export function AgeDistribution() {
       eyebrow="§3.6"
       title="ADAC Age Distribution"
       populationLabel="n=156 ADAC admissions · 2024–2025"
+      dataWindow="Clinical breakdown · 2024–2025"
       annotation="62% seniors · 82% over 40 · higher clinical complexity"
       insight={{
         keyInsight:

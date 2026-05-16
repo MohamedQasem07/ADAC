@@ -1,15 +1,22 @@
 ---
 title: "Clinical Red Flags"
 eyebrow: "§11.1"
-summary: "The clinical criteria that automatically convert an outpatient case into an ER pathway."
-layout: "editorial"
+summary: "Specific clinical patterns that trigger immediate escalation regardless of the originally selected package."
+layout: "structured"
 ---
 
-The same red flags listed in the package catalogue trigger automatic escalation regardless of the originally selected package.
+## Context
 
-- **Cardiac**: ST changes, troponin elevation, hemodynamic instability, SpO₂ < 94%, unresolved chest pain
-- **Respiratory**: severe dyspnea unresponsive to nebulizer, hypoxia
-- **GI**: bloody diarrhea, signs of acute abdomen, severe dehydration unresponsive to IV
-- **Neurological**: GCS deterioration, focal deficit, seizure
-- **Trauma**: high-energy mechanism, suspected internal injury, neurovascular compromise
-- **Pediatric**: any unwell child under 1 year
+Escalation is a clinical decision, not a commercial one. A defined set of clinical patterns automatically converts a case from the outpatient pathway into the escalation pathway, regardless of which package was originally opened. The criteria are written down so the call is consistent across physicians and shifts.
+
+## Key points
+
+- **Cardiac signs.** Chest pain with cardiac risk indicators, ST-segment changes, troponin elevation, hemodynamic instability, or SpO2 below 94% trigger mandatory escalation.
+- **Neurological signs.** GCS deterioration, focal deficit, or seizure activity escalates immediately to the ambulance and ER pathway.
+- **Severe trauma.** High-energy mechanism, suspected internal injury, or neurovascular compromise are non-discretionary escalations.
+- **GI red flags.** Bloody diarrhea, signs of acute abdomen, or severe dehydration unresponsive to IV fluids are mandatory escalations per protocol.
+- **Paediatric red flags.** Any unwell child under one year of age is escalated by default, with a low threshold across the wider paediatric population.
+
+## What this means for ADAC
+
+The escalation threshold does not move with case load, time of day, or package selection. ADAC can rely on the same clinical bar being applied to every traveler, and the documented criteria mean each escalation can be reviewed against a published standard rather than a judgement call.

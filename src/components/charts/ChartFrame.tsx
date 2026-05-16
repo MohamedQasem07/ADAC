@@ -20,6 +20,13 @@ interface ChartFrameProps {
   eyebrow?: string;
   /** Optional two-card insight panel under the chart. */
   insight?: ChartInsight;
+  /**
+   * Optional data-window chip rendered beside the population label.
+   * Examples: "Historical 2023–2026", "Analysis window 2024–2025",
+   * "2026 YTD". Use to clarify why a given chart covers a different
+   * time slice than its neighbours.
+   */
+  dataWindow?: string;
   children: ReactNode;
   /** Tighter top padding for non-hero charts. */
   compact?: boolean;
@@ -40,6 +47,7 @@ export function ChartFrame({
   annotation,
   eyebrow,
   insight,
+  dataWindow,
   children,
   compact = false,
 }: ChartFrameProps) {
@@ -74,14 +82,28 @@ export function ChartFrame({
         <h2 className="mt-2 font-display text-3xl font-semibold leading-tight text-white md:text-4xl">
           {title}
         </h2>
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: 0.15, duration: 0.6, ease: ease.premium }}
-          className="mt-2 text-xs uppercase tracking-[0.25em] text-ice/85"
+          className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5"
         >
-          {populationLabel}
-        </motion.p>
+          <p className="text-xs uppercase tracking-[0.25em] text-ice/85">
+            {populationLabel}
+          </p>
+          {dataWindow && (
+            <span
+              className="inline-flex items-center rounded-sm border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{
+                borderColor: 'var(--theme-badge-border)',
+                background: 'var(--theme-badge-bg)',
+                color: 'var(--theme-badge-text)',
+              }}
+            >
+              {dataWindow}
+            </span>
+          )}
+        </motion.div>
       </motion.header>
 
       <motion.div

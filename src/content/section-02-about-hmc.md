@@ -7,7 +7,7 @@ stats:
   - { value: 10, label: "Clinical Locations" }
   - { value: "24/7", label: "Operations" }
   - { value: "5+", label: "Years Serving ADAC" }
-  - { value: "EN/DE/AR/RU", label: "Languages" }
+  - { value: "4", label: "Languages", sublabel: "EN · DE · AR · RU" }
 ---
 
 Hurghada Medical Center is the largest private outpatient and emergency network in the Red Sea region. We staff each location 24/7 with German-speaking physicians where possible and operate with portable equipment that allows full clinical work-up in any hotel room.

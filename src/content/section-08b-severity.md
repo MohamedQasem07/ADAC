@@ -1,14 +1,22 @@
 ---
 title: "Severity Classification"
 eyebrow: "§8.2"
-summary: "Green / Yellow / Red — each class maps to a package family and a mode of service."
-layout: "editorial"
+summary: "Green / Yellow / Red bands that map each case to the right package family and service mode."
+layout: "structured"
 ---
 
-The case is classified into one of three severity bands. The band determines the package family and the appropriate mode of service.
+## Context
 
-- **Green** — simple outpatient. Single package, hotel-room or clinic visit, short observation
-- **Yellow** — outpatient with labs, imaging, or extended (2–6 hr) observation. Larger package, mobile unit if needed
-- **Red** — escalation criteria present. ER pathway opened, ambulance dispatched, assistance company notified inside 15 min
-- Pediatric under 1 year is automatically yellow or red regardless of complaint
-- Hemodynamic instability, SpO₂ < 94%, ST changes, severe dehydration unresponsive to IV → automatic red
+Once initial assessment is complete, the case is placed into one of three severity bands. The band is a clinical judgement, not a commercial one, and it dictates both the package family and the mode of service. The classification is documented in the case record so ADAC can see why a given pathway was chosen.
+
+## Key points
+
+- **Green — outpatient scope.** Routine outpatient presentations that fit the standard package framework, delivered in clinic, hotel room, or mobile unit.
+- **Yellow — extended observation.** Cases that need labs, imaging, or two-to-six-hour observation. Stays within the package framework but uses a larger package family.
+- **Red — immediate escalation.** Clinical red flags present. Ambulance dispatched, ER pathway opened, ADAC notified inside the escalation target window.
+- **Automatic upgrades.** Children under one year, hemodynamic instability, SpO2 below 94%, ischemic ECG changes, and unresolved severe dehydration move the case up automatically.
+- **Documented rationale.** The band, the criteria that triggered it, and the timestamp are recorded so the decision is auditable after the fact.
+
+## What this means for ADAC
+
+ADAC sees a consistent clinical logic applied to every case, regardless of which HMC physician runs the assessment. The severity band is the single anchor that ties the clinical picture, the package code, and the escalation decision together in one auditable record.

@@ -31,6 +31,7 @@ export function FinancialDonuts() {
       eyebrow="§3.4"
       title="Cash vs Insurance Split"
       populationLabel="n=200 ADAC cases · 2024–2025"
+      dataWindow="Analysis window 2024–2025"
       annotation="Insurance share grew from 70% → 87% in 2025"
       insight={{
         keyInsight:

@@ -32,6 +32,7 @@ export function GermanVolumeSummary() {
       eyebrow="§3.9"
       title="German Patient Volume"
       populationLabel="n=1,127 German patients · 2024–2025"
+      dataWindow="Analysis window 2024–2025"
       annotation="23% → 27% of HMC volume in 2 years"
       insight={{
         keyInsight:

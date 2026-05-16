@@ -35,6 +35,7 @@ export function MarketShareHero() {
       eyebrow="§3.8"
       title="ADAC Market Share of Insured German Cases"
       populationLabel="n=766 insured German cases · 2024–2025"
+      dataWindow="Analysis window 2024–2025"
       insight={{
         keyInsight:
           'ADAC represents the leading share of insured German cases at HMC — approximately 1 in every 5 insured German patients.',

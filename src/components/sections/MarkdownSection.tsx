@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { MarkdownContent } from '@/types/content';
+import { StructuredSubtopic } from './layouts/StructuredSubtopic';
 
 interface MarkdownSectionProps {
   content: MarkdownContent;
@@ -19,6 +20,16 @@ interface MarkdownSectionProps {
  */
 export function MarkdownSection({ content, sectionId, subId }: MarkdownSectionProps) {
   const { frontmatter, body } = content;
+
+  // Structured-layout dispatch: opt-in via `layout: "structured"` in
+  // frontmatter. Parses `## Context / ## Key points / ## What this means
+  // for ADAC` into intro + insight cards + ADAC callout. Older subtopic
+  // pages without `layout: "structured"` fall through to the original
+  // editorial renderer below — no breaking change.
+  if (frontmatter.layout === 'structured') {
+    return <StructuredSubtopic content={content} sectionId={sectionId} subId={subId} />;
+  }
+
   const title = (frontmatter.title as string) ?? `Section ${subId ?? sectionId}`;
   const eyebrow = frontmatter.eyebrow as string | undefined;
   const subtitle = frontmatter.subtitle as string | undefined;

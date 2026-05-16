@@ -1,14 +1,22 @@
 ---
 title: "Hotel Access Capability"
 eyebrow: "§5.4"
-summary: "Pre-existing access agreements with the major hotel groups across Hurghada and Sahl Hasheesh — we enter the building, no negotiation at the gate."
-layout: "editorial"
+summary: "Hotel-room delivery as an operational standard — same package, same price, different mode of delivery."
+layout: "structured"
 ---
 
-Hotel-room delivery is an HMC operational standard, not an exception. The network has standing access agreements with the major hotel groups across the Hurghada and Sahl Hasheesh resort zones.
+## Context
 
-- Pre-arranged gate access for HMC physicians and nurses at the major hotel groups
-- Mobile clinic unit can be parked at hotel reception for extended cases
-- Hotel concierge protocol: front-desk staff trained to call the HMC hotline directly
-- Portable equipment carried on every hotel visit — full IV workup possible bedside
-- Hotel-room visits use the same flat-rate package price as a clinic visit
+Hotel-room visits are an HMC operational standard rather than an exception. Standing access agreements with the major hotel operators across Hurghada and Sahl Hasheesh allow physicians and nurses to enter the building and reach the room without negotiation at the gate. Portable equipment supports a full outpatient workup at the bedside.
+
+## Key points
+
+- **Pre-arranged gate access.** Standing agreements with the major hotel groups remove the access negotiation at point of dispatch.
+- **Portable equipment on every visit.** IV workup, basic imaging triage, and medication delivery are available bedside.
+- **Concierge protocol at reception.** Front-desk staff are briefed to call the HMC hotline directly when a traveler reports illness.
+- **Mobile clinic for extended cases.** When a case requires longer on-site observation, the mobile unit can be parked at hotel reception.
+- **Same package price across modes.** Hotel-room delivery carries the same package price as the equivalent clinic-mode case.
+
+## What this means for ADAC
+
+Hotel access removes the transport step for travelers who are too unwell or too anxious to attend a clinic, without changing the commercial framework. The package price is fixed regardless of delivery mode, so the choice between clinic, hotel, and mobile delivery is a clinical and traveler-experience decision rather than a cost decision.

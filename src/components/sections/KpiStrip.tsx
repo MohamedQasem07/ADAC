@@ -8,6 +8,21 @@ import { useScrollReveal } from '@/lib/use-scroll-reveal';
 export interface KpiItem {
   value: string;
   label: string;
+  /** Optional small line below the label (e.g. "EN · DE · AR · RU"). */
+  sublabel?: string;
+}
+
+/**
+ * Pick a value-size class set based on string length so long values
+ * (e.g. "EN/DE/AR/RU") don't blow past the card edges. CountUp numbers
+ * always fit in 4-5 chars (e.g. "1,127", "20.37%") so they stay large.
+ */
+function valueSizeClass(value: string): string {
+  const len = value.length;
+  if (len <= 4) return 'text-4xl md:text-5xl lg:text-6xl';
+  if (len <= 7) return 'text-3xl md:text-4xl lg:text-5xl';
+  if (len <= 11) return 'text-2xl md:text-3xl lg:text-4xl';
+  return 'text-xl md:text-2xl lg:text-3xl';
 }
 
 interface KpiStripProps {
@@ -56,12 +71,21 @@ export function KpiStrip({ items, eyebrow }: KpiStripProps) {
             }}
           >
             <div className="text-center">
-              <p className="font-display text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
+              <p
+                className={`font-display font-semibold tracking-tight text-white ${valueSizeClass(
+                  kpi.value
+                )} whitespace-nowrap leading-[1.05]`}
+              >
                 {inView ? <KpiNumber raw={kpi.value} /> : kpi.value}
               </p>
               <p className="mt-3 text-[11px] uppercase tracking-[0.3em] text-ink-soft/80">
                 {kpi.label}
               </p>
+              {kpi.sublabel && (
+                <p className="mt-1 font-mono text-[10px] tracking-[0.18em] text-ice/70">
+                  {kpi.sublabel}
+                </p>
+              )}
             </div>
             {/* Top-left + bottom-right theme-accent corner marks */}
             <span

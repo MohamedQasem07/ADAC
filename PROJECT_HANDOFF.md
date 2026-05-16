@@ -27,7 +27,9 @@
 | 2.4D | Welcome page redesign (HMC × ADAC partnership lockup) |
 | 2.4D.2 | Welcome opening logo animation rebuild |
 | 2.4E | Optional Partnership theme system (CSS-var scaffold + Section 3 chart opt-ins) |
-| **2.4E.2** | **Real Partnership visual mode + on-screen theme switcher + hotkey removed + console cleanup (this commit)** |
+| 2.4E.2 | Real Partnership visual mode + on-screen theme switcher + hotkey removed + console cleanup |
+| 2.4E.3 | Split HMC × ADAC partnership visual mode polish |
+| **2.4F** | **Subtopic content expansion + KPI overflow fix + data window labels (this commit)** |
 
 ## 3. Current key features
 
@@ -82,6 +84,25 @@
 ### 4.1 Known external requests
 
 A `GET https://mohamedqasem07.github.io/ADAC.txt?... 404` appears in some console sessions on the live URL. **It is not from the app code.** Grep across the codebase for `ADAC.txt`, `.txt'`, `fetch(`, service worker, manifest, robots.txt, and analytics SDK returns zero matches. The only network request the app issues is `fetch('${BASE_PATH}/data/adac-data.json')` and `/data/packages.json` in `src/lib/data-loader.ts`, both `*.json`. The 404 originates from a browser extension or browser-side feature (page-translation probe, site-checker, or similar) requesting `<basePath>.txt`. Safe to ignore. To confirm on demand: reproduce in an Incognito window with all extensions disabled — the 404 should disappear.
+
+## 4b. Phase 2.4F — Subtopic content expansion
+
+- **KPI overflow fix:** `KpiStrip` now auto-shrinks the value font size based on string length and supports an optional `sublabel`. The "Languages" KPI in `/section/2` is now `value: "4"` · `label: "Languages"` · `sublabel: "EN · DE · AR · RU"` — no more overflow.
+- **New structured subtopic renderer:** `src/components/sections/layouts/StructuredSubtopic.tsx`. Opt-in via `layout: "structured"` in subtopic frontmatter. Parses `## Context` / `## Key points` / `## What this means for ADAC` markdown into intro paragraph + insight card grid (auto-numbered, themed corners) + ADAC-meaning callout. Author-friendly: any extra `##` headings render as compact prose blocks.
+- **Subtopics expanded:** Section 2 (2.1, 2.3, 2.5), Section 4 (4.1–4.4), Section 5 (5.1–5.4), Section 6 (6.1–6.3), Section 7 (7.1–7.7), Section 8 (8.1–8.4), Section 9 (9.1–9.4), Section 10 (10.2–10.4), Section 11 (11.1–11.4), Section 13 (13.1–13.4). **Total 40 subtopic markdown files** rewritten to the structured shape, 180–300 words each.
+- **Data window labels:** `ChartFrame` now takes an optional `dataWindow` chip rendered beside `populationLabel`. Applied to all §3 charts: `Historical 2023–2026 · 2026 YTD` (Yearly), `Analysis window 2024–2025` (Heatmap, Financial donut, Market share hero, German volume), `Clinical breakdown · 2024–2025` (Diagnosis, Admission, Age, LoS). Audience now sees the source-of-truth window for every chart at a glance.
+
+### Data Window Rules
+
+The deck mixes two intentionally different windows. The labels make the difference explicit so an executive never has to guess.
+
+| Window | What it covers | Why |
+|---|---|---|
+| **Historical 2023–2026 · 2026 YTD** | Yearly ADAC case counts only (57/103/97/11 = 268). | Demonstrates multi-year continuity. 2026 is partial-year and is labelled YTD on the bar itself. |
+| **Analysis window 2024–2025** | The complete-year operational dataset: 200 ADAC cases, 1,127 German patients, 20.37% market share, 22%/78% cash/insurance split. | Two complete years of clean data. Used for any reporting that requires complete-year totals or denominators. |
+| **Clinical breakdown · 2024–2025** | The 156-admission medical subset: diagnosis profile, admission profile, age distribution, length of stay. | The detailed clinical dataset is only complete for the admitted-case 2024–2025 subset. We do not extend it to 2023 or 2026 because the source data does not. |
+
+Rule: **never extrapolate.** If a chart's source data is 2024–2025 only, the chart and its label stay 2024–2025 only. 2023 and 2026 numbers appear only in the yearly volume chart and the historical KPI.
 
 ## 5. Critical locked rules
 
@@ -148,12 +169,13 @@ A `GET https://mohamedqasem07.github.io/ADAC.txt?... 404` appears in some consol
 
 ## 9. Recommended next steps (post-meeting or final dress-rehearsal)
 
-1. **Partnership theme visual QA on the projector.** Toggle via the top-right Visual Theme switcher and walk every screen at 1920×1080 and 1366×768 to confirm yellow CTA legibility and blue/yellow glow balance.
-2. **Catalogue redesign pass.** Optional — package cards could get a second-pass typographic refinement; currently functional and on-brand.
-3. **Projector QA on the actual meeting hardware.** Hurghada venue check: contrast, type sizing, particle density, fullscreen with `F`.
-4. **Presenter notes update.** `docs/PRESENTER_NOTES_ADAC.md` was last touched at the 2.4B handoff — append theme-switch instructions before the meeting.
-5. **Final rehearsal mode.** Walk the deck end-to-end with the Control Mode + scenarios + theme in the order Mohamed plans to use them on the day.
-6. **§2.5 Reputation placeholder → real screenshots.** Drop verified Google Reviews PNGs into `public/reviews/` and update `section-02e-reputation.md`.
+1. **Package Catalogue premium redesign.** Optional — category cards + detail pages still use Phase 2 layout. A second-pass typographic refinement could lift §12 to match the Data Room.
+2. **Final presenter notes.** `docs/PRESENTER_NOTES_ADAC.md` should get a fresh pass that covers theme switching (top-right Visual Theme switcher, NOT a hotkey — the `Ctrl/Cmd+Shift+T` shortcut was removed in 2.4E.2), scenario hotkeys, the structured subtopic layout, and the data-window narrative.
+3. **Full rehearsal path.** Walk the deck end-to-end with Control Mode + scenarios + theme in the exact order Mohamed plans to use them on the day. Time it against a 90-minute meeting.
+4. **Projector QA on the actual Hurghada venue hardware.** Toggle Partnership theme via the top-right Visual Theme switcher and walk every screen at 1920×1080 and 1366×768. Confirm yellow CTA legibility, blue/yellow glow balance, and that no subtopic card text wraps oddly.
+5. **Final export and backup.** Tag the commit, archive a `.zip` of the `out/` static build, and put a USB copy on the presenter laptop as a fallback for the venue Wi-Fi.
+6. **§2.5 Reputation placeholder → real screenshots.** Drop verified Google Reviews PNGs into `public/reviews/` and update `section-02e-reputation.md` to reference them.
+7. **Remaining content gaps to consider** (none meeting-critical): Section 15 (Benefits for ADAC, 6 subtopics) and Section 16 (Benefits for AG Holders, 4 subtopics) still use Phase 2 prose. They cover the same ground as the now-structured §4–§11 subtopics, so they are acceptable as-is for the 19 May meeting but would benefit from the same structured pass in a future phase.
 
 ## 10. Prompt for the next Claude Code session
 

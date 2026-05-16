@@ -54,6 +54,7 @@ export function AdmissionProfile() {
       eyebrow="§3.5"
       title="Admission Profile"
       populationLabel="n=156 ADAC admissions · 2024–2025"
+      dataWindow="Clinical breakdown · 2024–2025"
       annotation="78% of all ADAC cases require inpatient admission · 22% are outpatient (the flat-rate target)"
       insight={{
         keyInsight:

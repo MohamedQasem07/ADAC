@@ -15,7 +15,8 @@ export type SectionLayout =
   | 'grid-4'
   | 'grid-6'
   | 'timeline'
-  | 'dashboard';
+  | 'dashboard'
+  | 'structured';
 
 export type SubtopicRenderer =
   | 'markdown'

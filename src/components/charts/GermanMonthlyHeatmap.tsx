@@ -39,6 +39,7 @@ export function GermanMonthlyHeatmap() {
       eyebrow="§3.2"
       title="German Patient Monthly Volume"
       populationLabel="n=1,127 German patients · 2024–2025 monthly"
+      dataWindow="Analysis window 2024–2025"
       annotation="Peak season concentration · August through December"
       insight={{
         keyInsight:

@@ -41,6 +41,7 @@ export function DiagnosisProfile() {
       eyebrow="§3.3"
       title="ADAC Diagnosis Profile"
       populationLabel="n=156 ADAC admissions · 2024–2025"
+      dataWindow="Clinical breakdown · 2024–2025"
       annotation="Top 3 categories = 75.6% of admissions"
       insight={{
         keyInsight:
