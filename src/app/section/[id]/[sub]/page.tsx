@@ -11,6 +11,7 @@ import { NetworkMap, type NetworkMapData } from '@/components/map/NetworkMap';
 import { CategoryDetail } from '@/components/packages/CategoryDetail';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
+import { SampleReportCard } from '@/components/sections/SampleReportCard';
 import type { Package, PackageCategory } from '@/types/content';
 
 export function generateStaticParams() {
@@ -69,6 +70,11 @@ export default function SubtopicPage({
         reason="missing-content"
       />
     );
+  }
+
+  // Sample medical report (§10.1).
+  if (subtopic.renderer === 'sample-report') {
+    return <SampleReportCard />;
   }
 
   // Map renderer (§2.2) — wired in Phase 6.
