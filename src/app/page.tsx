@@ -1,19 +1,20 @@
-export default function Page() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-8 text-center">
-      <span className="font-sans text-xs uppercase tracking-[0.4em] text-gold">
-        Partnership Proposal
-      </span>
-      <h1 className="mt-6 font-display text-6xl font-semibold leading-tight md:text-8xl">
-        HMC × ADAC
-      </h1>
-      <div className="gold-rule mt-8 w-32" />
-      <p className="mt-8 max-w-xl text-base text-ink-soft md:text-lg">
-        Scaffold ready. Phase 1 verified. Cinematic presentation coming next.
-      </p>
-      <p className="mt-2 text-xs uppercase tracking-widest text-ink-soft/70">
-        19 May 2026 · Hurghada, Egypt
-      </p>
-    </main>
-  );
+import { loadReferencedContent, getSectionMeta } from '@/lib/content-loader';
+import { MarkdownSection } from '@/components/sections/MarkdownSection';
+import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
+
+/**
+ * Home (Section 1 cover). Cinematic HeroSection treatment comes in
+ * Phase 4 — for now this routes through the same content pipeline as
+ * every other section so a single edit to section-01-welcome.md updates
+ * the cover live in development.
+ */
+export default function HomePage() {
+  const section = getSectionMeta('1');
+  if (!section) return null;
+
+  const content = loadReferencedContent(section.content);
+  if (content?.kind === 'markdown') {
+    return <MarkdownSection content={content.data} sectionId="1" />;
+  }
+  return <PlaceholderSection section={section} />;
 }

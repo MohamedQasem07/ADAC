@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { PricingProvider } from '@/context/PricingContext';
 import { parsePathname } from '@/lib/nav-config';
+import { AmbientBackground } from './AmbientBackground';
 import { Breadcrumb } from './Breadcrumb';
 import { CheatsheetOverlay } from './CheatsheetOverlay';
 import { HotkeyToast } from './HotkeyToast';
 import { KeyboardNav } from './KeyboardNav';
+import { PageTransition } from './PageTransition';
 import { ScenarioIndicator } from './ScenarioIndicator';
 import { Sidebar } from './Sidebar';
 
@@ -32,12 +34,15 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
 
   return (
     <PricingProvider>
+      <AmbientBackground />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <Breadcrumb />
 
       {/* Main slot — section pages render their own SectionFrame later. */}
-      <div className="relative min-h-screen">{children}</div>
+      <div className="relative z-10 min-h-screen">
+        <PageTransition>{children}</PageTransition>
+      </div>
 
       <KeyboardNav onToggleSidebar={() => setSidebarOpen((v) => !v)} />
       <ScenarioIndicator />
