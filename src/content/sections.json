@@ -1,0 +1,253 @@
+{
+  "meeting": {
+    "date": "19 May 2026",
+    "location": "Hurghada, Egypt",
+    "title": "Outpatient Medical Care, Reimagined for ADAC",
+    "eyebrow": "Partnership Proposal"
+  },
+  "sections": [
+    {
+      "id": "1",
+      "title": "Welcome",
+      "type": "hero",
+      "content": "section-01-welcome.md",
+      "group": "Opening"
+    },
+    {
+      "id": "2",
+      "title": "About HMC",
+      "type": "mixed",
+      "content": "section-02-about-hmc.md",
+      "group": "Story",
+      "subtopics": [
+        { "id": "2.1", "title": "Our Story", "content": "section-02a-story.md", "renderer": "markdown" },
+        { "id": "2.2", "title": "Our Network", "content": "section-02b-locations.json", "renderer": "map" },
+        { "id": "2.3", "title": "Our Team", "content": "section-02c-team.md", "renderer": "markdown" },
+        { "id": "2.4", "title": "Our Equipment", "content": "section-02d-equipment.json", "renderer": "cards" },
+        { "id": "2.5", "title": "Our Reputation", "content": "section-02e-reputation.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Partnership Track Record",
+      "type": "dashboard",
+      "content": "section-03-overview.md",
+      "group": "Data",
+      "subtopics": [
+        { "id": "3.1", "title": "Year-by-Year Volume", "renderer": "chart-yearly", "data": "adac-data.json#yearlyADAC" },
+        { "id": "3.2", "title": "German Monthly Volume", "renderer": "chart-heatmap", "data": "adac-data.json#germanMonthly" },
+        { "id": "3.3", "title": "Diagnosis Profile", "renderer": "chart-diagnoses", "data": "adac-data.json#diagnosisProfile" },
+        { "id": "3.4", "title": "Cash vs Insurance", "renderer": "chart-financial", "data": "adac-data.json#financialMix" },
+        { "id": "3.5", "title": "Admission Profile", "renderer": "chart-admission", "data": "adac-data.json#admissionProfile" },
+        { "id": "3.6", "title": "Age Distribution", "renderer": "chart-age", "data": "adac-data.json#ageProfile" },
+        { "id": "3.7", "title": "Length of Stay", "renderer": "chart-los", "data": "adac-data.json#lengthOfStay" },
+        { "id": "3.8", "title": "Market Share", "renderer": "chart-market-share", "data": "adac-data.json#marketShare" },
+        { "id": "3.9", "title": "German Volume", "renderer": "chart-german-volume", "data": "adac-data.json#germanVolume" }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Why Outpatient Packages",
+      "type": "editorial",
+      "content": "section-04-why-packages.md",
+      "group": "Story",
+      "subtopics": [
+        { "id": "4.1", "title": "Travel Medicine Challenge", "content": "section-04a-challenge.md", "renderer": "markdown" },
+        { "id": "4.2", "title": "Cost Predictability", "content": "section-04b-cost.md", "renderer": "markdown" },
+        { "id": "4.3", "title": "How Flat Rates Solve It", "content": "section-04c-solution.md", "renderer": "markdown" },
+        { "id": "4.4", "title": "Patient Experience", "content": "section-04d-experience.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Geographic Coverage",
+      "type": "mixed",
+      "content": "section-05-coverage.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "5.1", "title": "Hurghada Cluster", "content": "section-05a-hurghada.md", "renderer": "markdown" },
+        { "id": "5.2", "title": "Sahl Hasheesh Cluster", "content": "section-05b-sahl.md", "renderer": "markdown" },
+        { "id": "5.3", "title": "Safaga + Marsa Alam", "content": "section-05c-extension.md", "renderer": "markdown" },
+        { "id": "5.4", "title": "Hotel Access", "content": "section-05d-hotel.md", "renderer": "markdown" },
+        { "id": "5.5", "title": "Response Time by Zone", "content": "section-05e-response.json", "renderer": "cards" }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Service Delivery Modes",
+      "type": "editorial",
+      "content": "section-06-modes.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "6.1", "title": "Clinic Visit", "content": "section-06a-clinic.md", "renderer": "markdown" },
+        { "id": "6.2", "title": "Hotel Room Visit", "content": "section-06b-hotel.md", "renderer": "markdown" },
+        { "id": "6.3", "title": "Mobile Clinic Unit", "content": "section-06c-mobile.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "Patient Journey",
+      "type": "flow",
+      "content": "section-07-journey.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "7.1", "title": "Case Notification", "content": "section-07a-notification.md", "renderer": "markdown" },
+        { "id": "7.2", "title": "Triage Protocol", "content": "section-07b-triage.md", "renderer": "markdown" },
+        { "id": "7.3", "title": "Service Assignment", "content": "section-07c-assignment.md", "renderer": "markdown" },
+        { "id": "7.4", "title": "Treatment Delivery", "content": "section-07d-treatment.md", "renderer": "markdown" },
+        { "id": "7.5", "title": "Documentation", "content": "section-07e-documentation.md", "renderer": "markdown" },
+        { "id": "7.6", "title": "Invoice & Reporting", "content": "section-07f-invoice.md", "renderer": "markdown" },
+        { "id": "7.7", "title": "Follow-up", "content": "section-07g-followup.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "Medical Triage Workflow",
+      "type": "flow",
+      "content": "section-08-triage.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "8.1", "title": "Initial Assessment", "content": "section-08a-initial.md", "renderer": "markdown" },
+        { "id": "8.2", "title": "Severity Classification", "content": "section-08b-severity.md", "renderer": "markdown" },
+        { "id": "8.3", "title": "Routing Logic", "content": "section-08c-routing.md", "renderer": "markdown" },
+        { "id": "8.4", "title": "Escalation Criteria", "content": "section-08d-escalation.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "9",
+      "title": "Service Quality & SLA",
+      "type": "editorial",
+      "content": "section-09-sla.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "9.1", "title": "Response Time Commitments", "content": "section-09a-response.md", "renderer": "markdown" },
+        { "id": "9.2", "title": "Communication Channels", "content": "section-09b-comms.md", "renderer": "markdown" },
+        { "id": "9.3", "title": "Reporting Cadence", "content": "section-09c-cadence.md", "renderer": "markdown" },
+        { "id": "9.4", "title": "Quality Metrics", "content": "section-09d-metrics.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "10",
+      "title": "Documentation Standards",
+      "type": "editorial",
+      "content": "section-10-documentation.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "10.1", "title": "Medical Report Template", "renderer": "sample-report" },
+        { "id": "10.2", "title": "Invoice Format", "content": "section-10b-invoice.md", "renderer": "markdown" },
+        { "id": "10.3", "title": "Same-Day Case Summary", "content": "section-10c-summary.md", "renderer": "markdown" },
+        { "id": "10.4", "title": "Monthly Performance Report", "content": "section-10d-monthly.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "11",
+      "title": "Escalation Protocol",
+      "type": "editorial",
+      "content": "section-11-escalation.md",
+      "group": "Operations",
+      "subtopics": [
+        { "id": "11.1", "title": "Clinical Red Flags", "content": "section-11a-redflags.md", "renderer": "markdown" },
+        { "id": "11.2", "title": "Ambulance Activation", "content": "section-11b-ambulance.md", "renderer": "markdown" },
+        { "id": "11.3", "title": "ER Coordination", "content": "section-11c-er.md", "renderer": "markdown" },
+        { "id": "11.4", "title": "Communication During Escalation", "content": "section-11d-comms.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "12",
+      "title": "Package Catalogue",
+      "type": "mixed",
+      "content": "section-12-overview.md",
+      "group": "Pricing",
+      "subtopics": [
+        { "id": "12.1", "title": "GI + IV Therapy", "renderer": "package-category", "data": "packages.json#category=1" },
+        { "id": "12.2", "title": "Respiratory", "renderer": "package-category", "data": "packages.json#category=2" },
+        { "id": "12.3", "title": "Wound Care", "renderer": "package-category", "data": "packages.json#category=3" },
+        { "id": "12.4", "title": "Trauma & Orthopedic", "renderer": "package-category", "data": "packages.json#category=4" },
+        { "id": "12.5", "title": "ENT", "renderer": "package-category", "data": "packages.json#category=5" },
+        { "id": "12.6", "title": "Dental Emergency", "renderer": "package-category", "data": "packages.json#category=6" },
+        { "id": "12.7", "title": "Allergic & Skin", "renderer": "package-category", "data": "packages.json#category=7" },
+        { "id": "12.8", "title": "Eye Conditions", "renderer": "package-category", "data": "packages.json#category=8" },
+        { "id": "12.9", "title": "Cardiac Outpatient", "renderer": "package-category", "data": "packages.json#category=9" }
+      ]
+    },
+    {
+      "id": "13",
+      "title": "Pricing Philosophy",
+      "type": "editorial",
+      "content": "section-13-pricing.md",
+      "group": "Pricing",
+      "subtopics": [
+        { "id": "13.1", "title": "Calibrated for Reasonable Pricing", "content": "section-13a-calibrated.md", "renderer": "markdown" },
+        { "id": "13.2", "title": "What's Always Included", "content": "section-13b-included.md", "renderer": "markdown" },
+        { "id": "13.3", "title": "What's Quoted Separately", "content": "section-13c-separate.md", "renderer": "markdown" },
+        { "id": "13.4", "title": "Currency & Payment Terms", "content": "section-13d-payment.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Implementation Roadmap",
+      "type": "flow",
+      "content": "section-14-roadmap.md",
+      "group": "Partnership",
+      "subtopics": [
+        { "id": "14.1", "title": "May 2026 — Agreement", "content": "section-14a-may.md", "renderer": "markdown" },
+        { "id": "14.2", "title": "June 2026 — Preparation", "content": "section-14b-june.md", "renderer": "markdown" },
+        { "id": "14.3", "title": "Jul-Sep 2026 — Pilot", "content": "section-14c-pilot.md", "renderer": "markdown" },
+        { "id": "14.4", "title": "October 2026 — Review", "content": "section-14d-review.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "15",
+      "title": "Benefits for ADAC",
+      "type": "editorial",
+      "content": "section-15-benefits-adac.md",
+      "group": "Partnership",
+      "subtopics": [
+        { "id": "15.1", "title": "Cost Predictability", "content": "section-15a-cost.md", "renderer": "markdown" },
+        { "id": "15.2", "title": "Faster Claims", "content": "section-15b-claims.md", "renderer": "markdown" },
+        { "id": "15.3", "title": "Reduced Disputes", "content": "section-15c-disputes.md", "renderer": "markdown" },
+        { "id": "15.4", "title": "Patient Experience", "content": "section-15d-experience.md", "renderer": "markdown" },
+        { "id": "15.5", "title": "Geographic Coverage", "content": "section-15e-coverage.md", "renderer": "markdown" },
+        { "id": "15.6", "title": "Single Point of Contact", "content": "section-15f-contact.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "16",
+      "title": "Benefits for AG Holders",
+      "type": "editorial",
+      "content": "section-16-benefits-patients.md",
+      "group": "Partnership",
+      "subtopics": [
+        { "id": "16.1", "title": "Easy Access", "content": "section-16a-access.md", "renderer": "markdown" },
+        { "id": "16.2", "title": "Hotel-Room Service", "content": "section-16b-hotel.md", "renderer": "markdown" },
+        { "id": "16.3", "title": "Language Support", "content": "section-16c-language.md", "renderer": "markdown" },
+        { "id": "16.4", "title": "Trust & Reviews", "content": "section-16d-trust.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "17",
+      "title": "Discussion Points",
+      "type": "editorial",
+      "content": "section-17-discussion.md",
+      "group": "Partnership",
+      "subtopics": [
+        { "id": "17.1", "title": "Package Scope", "content": "section-17a-scope.md", "renderer": "markdown" },
+        { "id": "17.2", "title": "Pricing Finalization", "content": "section-17b-pricing.md", "renderer": "markdown" },
+        { "id": "17.3", "title": "Reporting Format", "content": "section-17c-reporting.md", "renderer": "markdown" },
+        { "id": "17.4", "title": "Approval Workflows", "content": "section-17d-approvals.md", "renderer": "markdown" },
+        { "id": "17.5", "title": "Escalation Rules", "content": "section-17e-escalation.md", "renderer": "markdown" },
+        { "id": "17.6", "title": "Transportation Policy", "content": "section-17f-transport.md", "renderer": "markdown" },
+        { "id": "17.7", "title": "Invoice Format", "content": "section-17g-invoice.md", "renderer": "markdown" },
+        { "id": "17.8", "title": "Communication Protocol", "content": "section-17h-comms.md", "renderer": "markdown" },
+        { "id": "17.9", "title": "Pilot Scope", "content": "section-17i-pilot.md", "renderer": "markdown" }
+      ]
+    },
+    {
+      "id": "18",
+      "title": "Closing & Next Steps",
+      "type": "hero",
+      "content": "section-18-closing.md",
+      "group": "Closing"
+    }
+  ]
+}
