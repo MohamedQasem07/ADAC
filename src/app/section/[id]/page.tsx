@@ -7,6 +7,7 @@ import {
   readJson,
 } from '@/lib/content-loader';
 import { DashboardOverview } from '@/components/sections/DashboardOverview';
+import { DataRoomPage } from '@/components/sections/DataRoomPage';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { LayoutAwareSection } from '@/components/sections/LayoutAwareSection';
 import { OverviewSection } from '@/components/sections/OverviewSection';
@@ -57,6 +58,11 @@ export default function SectionPage({ params }: { params: { id: string } }) {
         subtopics={section.subtopics ?? []}
       />
     );
+  }
+
+  // Executive Data Room — id "data-room", consolidated dashboard.
+  if (section.type === 'data-room' && content?.kind === 'markdown') {
+    return <DataRoomPage content={content.data} />;
   }
 
   // Card-grid sections backed by a JSON file with `items`:

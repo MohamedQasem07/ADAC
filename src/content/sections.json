@@ -21,6 +21,13 @@
       "group": "Opening"
     },
     {
+      "id": "data-room",
+      "title": "Executive Data Room",
+      "type": "data-room",
+      "content": "section-data-room.md",
+      "group": "Opening"
+    },
+    {
       "id": "2",
       "title": "About HMC",
       "type": "mixed",

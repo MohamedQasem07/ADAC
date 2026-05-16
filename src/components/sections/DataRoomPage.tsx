@@ -1,0 +1,577 @@
+'use client';
+
+import Link from 'next/link';
+import { motion, type Variants } from 'framer-motion';
+import CountUp from 'react-countup';
+import {
+  ArrowUpRight,
+  Briefcase,
+  ClipboardList,
+  HeartPulse,
+  Layers3,
+  MapPin,
+  Sparkles,
+} from 'lucide-react';
+import { fallbackPackagesData } from '@/data/fallback';
+import { useOverrides } from '@/context/PresentationOverridesContext';
+import { ease, staggerTight } from '@/lib/motion';
+import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import type { MarkdownContent, Package } from '@/types/content';
+import { type KpiItem } from './KpiStrip';
+import {
+  MiniAdmission,
+  MiniAge,
+  MiniDiagnosis,
+  MiniFinancialDonut,
+  MiniHeatmap,
+  MiniLengthOfStay,
+  MiniMarketShare,
+  MiniYearlyBars,
+} from './data-room/DataRoomCharts';
+import { DataRoomCoverage } from './data-room/DataRoomCoverage';
+import { DataRoomDecisions } from './data-room/DataRoomDecisions';
+import { DataRoomPackages } from './data-room/DataRoomPackages';
+
+interface DataRoomPageProps {
+  content: MarkdownContent;
+}
+
+const BADGES = [
+  'ADAC historical cooperation',
+  'German traveler care',
+  'Red Sea coverage',
+  'Outpatient package framework',
+  'Pricing discussion ready',
+];
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: ease.premium },
+  },
+};
+
+/**
+ * Executive Data Room — `/section/data-room`.
+ *
+ * Single board-grade dashboard that consolidates the meeting story.
+ * Lives between the Presentation Overview (/section/overview) and
+ * About HMC (/section/2) in the sidebar and keyboard nav.
+ *
+ * All data is locked (read from src/data/fallback.ts). No new chart
+ * library. Compact dashboard-only chart variants live in
+ * data-room/DataRoomCharts.tsx — the full §3 chart routes are unchanged.
+ */
+export function DataRoomPage({ content }: DataRoomPageProps) {
+  const fm = content.frontmatter;
+  const { applyPackages } = useOverrides();
+  const packageCount = applyPackages(fallbackPackagesData.packages as Package[]).length;
+
+  const kpis: KpiItem[] = [
+    { value: '268', label: 'ADAC cases 2023–2026' },
+    { value: '200', label: 'Cases in 2024–2025' },
+    { value: '1,127', label: 'German patients 2024–2025' },
+    { value: '20.37%', label: 'Share of insured German cases' },
+    { value: String(fallbackPackagesData.categories.length), label: 'Package categories' },
+    { value: String(packageCount), label: 'Active packages' },
+  ];
+
+  return (
+    <article className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 md:py-24">
+      {/* Block 1 — Hero / Executive Summary */}
+      <Hero
+        eyebrow={(fm.eyebrow as string) ?? 'Decision-ready summary'}
+        title={(fm.title as string) ?? 'Executive Data Room'}
+        subtitle={fm.subtitle as string | undefined}
+        body={content.body}
+      />
+
+      {/* Block 2 — KPI Strip (6 cards) */}
+      <Section delay={0.15}>
+        <SixUpKpis items={kpis} />
+      </Section>
+
+      {/* Block 3 — Historical ADAC Performance */}
+      <Section>
+        <Card
+          eyebrow="Historical performance"
+          title="ADAC Case Volume 2023–2026"
+          insight="2024–2025 represents the strongest complete analysis window, with 200 ADAC cases forming the basis for the outpatient package discussion."
+          openHref="/section/3/3.1"
+          openLabel="Open full view · §3.1"
+        >
+          <MiniYearlyBars />
+        </Card>
+      </Section>
+
+      {/* Block 4 — German Traveler Market Context (Heatmap + Market Share) */}
+      <Section>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_320px]">
+          <Card
+            eyebrow="Market context"
+            title="German patient monthly volume"
+            subtitle="Not ADAC-only — full German traveler flow across the operation"
+            insight="German traveler flow provides the operational context for ADAC demand planning, staffing readiness, and mobile service coverage."
+            openHref="/section/3/3.2"
+            openLabel="Open full view · §3.2"
+          >
+            <MiniHeatmap />
+          </Card>
+          <Card
+            eyebrow="Market share"
+            title="ADAC share of insured German cases"
+            insight="ADAC is the largest single German insurance partner in our portfolio — roughly 1 in every 5 insured German patients."
+            openHref="/section/3/3.8"
+            openLabel="Open full view · §3.8"
+            compact
+          >
+            <MiniMarketShare />
+          </Card>
+        </div>
+      </Section>
+
+      {/* Block 5 — Payment / Handling Profile */}
+      <Section>
+        <Card
+          eyebrow="Payment profile"
+          title="Cash vs Insurance · 2024–2025"
+          insight="The majority of cases in the analysis window were insurance-handled, supporting the value of structured documentation, package clarity, and predictable approval workflows."
+          openHref="/section/3/3.4"
+          openLabel="Open full view · §3.4"
+        >
+          <MiniFinancialDonut />
+        </Card>
+      </Section>
+
+      {/* Block 6 — Clinical Profile Grid (2×2) */}
+      <Section>
+        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+          Clinical profile
+        </p>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <Card
+            title="Diagnosis profile"
+            subtitle="Top 5 categories · 156 admissions"
+            insight="Top 3 categories = 75.6% of admissions — suits structured packages."
+            openHref="/section/3/3.3"
+            openLabel="Open full · §3.3"
+          >
+            <MiniDiagnosis />
+          </Card>
+          <Card
+            title="Admission profile"
+            subtitle="156 admissions of 200 cases · 2024–2025"
+            insight="78% admitted · 22% outpatient — the outpatient slice is the package target."
+            openHref="/section/3/3.5"
+            openLabel="Open full · §3.5"
+          >
+            <MiniAdmission />
+          </Card>
+          <Card
+            title="Age distribution"
+            subtitle="156 ADAC admissions"
+            insight="62% seniors · 82% over 40 · higher clinical responsibility, structured triage."
+            openHref="/section/3/3.6"
+            openLabel="Open full · §3.6"
+          >
+            <MiniAge />
+          </Card>
+          <Card
+            title="Length of stay"
+            subtitle="156 ADAC admissions"
+            insight="83% discharged within 48 hours — same-day documentation aligned with ADAC's case closure."
+            openHref="/section/3/3.7"
+            openLabel="Open full · §3.7"
+          >
+            <MiniLengthOfStay />
+          </Card>
+        </div>
+      </Section>
+
+      {/* Block 7 — Red Sea Coverage */}
+      <Section>
+        <Card
+          eyebrow="Service coverage"
+          title="Red Sea operational footprint"
+          subtitle="Hurghada · Sahl Hasheesh · Safaga · Marsa Alam — with hotel-zone and mobile capability"
+        >
+          <DataRoomCoverage />
+        </Card>
+      </Section>
+
+      {/* Block 8 — Outpatient Package Framework */}
+      <Section>
+        <Card
+          eyebrow="Outpatient package framework"
+          title="Flat-rate clinical packages"
+          subtitle="One number per clinical presentation · scope agreed before treatment starts"
+          openHref="/section/12"
+          openLabel="Open full catalogue · §12"
+        >
+          <DataRoomPackages />
+        </Card>
+      </Section>
+
+      {/* Block 9 — Pricing Discussion Readiness */}
+      <Section>
+        <PricingReadiness />
+      </Section>
+
+      {/* Block 10 — Decision Points Summary */}
+      <Section>
+        <Card
+          eyebrow="Decisions for today"
+          title="Eight items to land in this meeting"
+          openHref="/section/decisions"
+          openLabel="Open Decision Points"
+        >
+          <DataRoomDecisions />
+        </Card>
+      </Section>
+
+      {/* Block 11 — Closing nav strip */}
+      <Section delay={0.05}>
+        <ClosingNav />
+      </Section>
+
+      {/* Used `fadeUp` constant directly inside Section. */}
+    </article>
+  );
+}
+
+// ─── Block 1 — Hero ────────────────────────────────────────────
+function Hero({
+  eyebrow,
+  title,
+  subtitle,
+  body,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  body: string;
+}) {
+  const words = title.split(' ');
+  return (
+    <header className="mx-auto max-w-3xl text-center">
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: ease.premium }}
+        className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold"
+      >
+        {eyebrow}
+      </motion.p>
+      <motion.h1
+        variants={titleContainer}
+        initial="hidden"
+        animate="visible"
+        className="mt-4 font-display text-4xl font-semibold leading-tight text-white md:text-5xl lg:text-6xl"
+      >
+        {words.map((w, i) => (
+          <motion.span
+            key={`${w}-${i}`}
+            variants={titleWord}
+            className="mr-[0.25em] inline-block"
+          >
+            {w}
+          </motion.span>
+        ))}
+      </motion.h1>
+      {subtitle && (
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6, ease: ease.premium }}
+          className="mt-4 text-base text-ink-soft md:text-lg"
+        >
+          {subtitle}
+        </motion.p>
+      )}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ delay: 1.0, duration: 1.0, ease: ease.premium }}
+        style={{ transformOrigin: 'left center' }}
+        className="gold-rule mx-auto mt-8 w-24"
+      />
+
+      {/* Badges */}
+      <motion.ul
+        variants={staggerTight}
+        initial="hidden"
+        animate="visible"
+        className="mt-8 flex flex-wrap items-center justify-center gap-2"
+      >
+        {BADGES.map((b) => (
+          <motion.li
+            key={b}
+            variants={{
+              hidden: { opacity: 0, scale: 0.92 },
+              visible: {
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.5, ease: ease.premium },
+              },
+            }}
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/30 bg-gold/[0.05] px-2.5 py-1 text-[10px] uppercase tracking-[0.25em] text-gold-soft">
+              <Sparkles size={11} />
+              {b}
+            </span>
+          </motion.li>
+        ))}
+      </motion.ul>
+
+      {body.trim() && (
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6, ease: ease.premium }}
+          className="mx-auto mt-8 max-w-2xl text-sm leading-relaxed text-ice/85 md:text-base"
+        >
+          {body.trim()}
+        </motion.p>
+      )}
+    </header>
+  );
+}
+
+const titleContainer: Variants = {
+  hidden: {},
+  visible: { transition: { delayChildren: 0.4, staggerChildren: 0.08 } },
+};
+const titleWord: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: ease.premium } },
+};
+
+// ─── Block 2 — 6 KPI cards ─────────────────────────────────────
+function SixUpKpis({ items }: { items: KpiItem[] }) {
+  // KpiStrip is built around a 4-up layout. For 6 items we use it on
+  // wider viewports with a custom container class.
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {items.map((k) => (
+        <KpiCard key={k.label} item={k} />
+      ))}
+    </div>
+  );
+}
+
+function KpiCard({ item }: { item: KpiItem }) {
+  const { ref, inView } = useScrollReveal({ threshold: 0.2 });
+  const m = item.value.match(/^(\d[\d,]*\.?\d*)(.*)$/);
+  let display: React.ReactNode = item.value;
+  if (m && inView) {
+    const numStr = m[1].replace(/,/g, '');
+    const suffix = m[2] ?? '';
+    const v = Number(numStr);
+    if (Number.isFinite(v)) {
+      const hasDecimal = numStr.includes('.');
+      const useThousands = m[1].includes(',') || v >= 1000;
+      display = (
+        <CountUp
+          start={0}
+          end={v}
+          duration={1.8}
+          separator={useThousands ? ',' : ''}
+          decimals={hasDecimal ? 2 : 0}
+          preserveValue
+          suffix={suffix}
+          useEasing
+        />
+      );
+    }
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      className="relative overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-4 text-center backdrop-blur-sm transition-colors duration-300 hover:border-gold/40"
+    >
+      <p className="font-display text-2xl font-semibold text-white sm:text-3xl">{display}</p>
+      <p className="mt-2 text-[10px] uppercase leading-tight tracking-[0.22em] text-ice/85">
+        {item.label}
+      </p>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-2 top-2 h-2 w-2 border-l border-t border-gold/40"
+      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-2 right-2 h-2 w-2 border-b border-r border-gold/40"
+      />
+    </motion.div>
+  );
+}
+
+// ─── Generic dashboard card ────────────────────────────────────
+function Card({
+  eyebrow,
+  title,
+  subtitle,
+  insight,
+  openHref,
+  openLabel,
+  compact,
+  children,
+}: {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  insight?: string;
+  openHref?: string;
+  openLabel?: string;
+  compact?: boolean;
+  children: React.ReactNode;
+}) {
+  const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+  return (
+    <motion.section
+      ref={ref}
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      className={`relative overflow-hidden rounded-sm border border-white/10 bg-navy/40 ${
+        compact ? 'p-5' : 'p-6 md:p-7'
+      } backdrop-blur-sm`}
+    >
+      <header className="mb-4">
+        {eyebrow && (
+          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-gold">{eyebrow}</p>
+        )}
+        <h2 className="mt-1 font-display text-lg font-semibold leading-tight text-white md:text-xl">
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-1 text-xs uppercase tracking-[0.22em] text-ice/75">{subtitle}</p>
+        )}
+      </header>
+
+      {children}
+
+      {(insight || openHref) && (
+        <footer className={`mt-4 flex flex-wrap items-center justify-between gap-3`}>
+          {insight ? (
+            <p className="max-w-2xl text-xs italic leading-relaxed text-gold-soft md:text-sm">
+              {insight}
+            </p>
+          ) : (
+            <span />
+          )}
+          {openHref && (
+            <Link
+              href={openHref}
+              className="group inline-flex items-center gap-1.5 rounded-sm border border-gold/40 bg-gold/[0.07] px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
+            >
+              {openLabel ?? 'Open full view'}
+              <ArrowUpRight
+                size={12}
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
+            </Link>
+          )}
+        </footer>
+      )}
+    </motion.section>
+  );
+}
+
+// ─── Block 9 — Pricing Readiness (audience-safe) ───────────────
+function PricingReadiness() {
+  const { ref, inView } = useScrollReveal({ threshold: 0.15 });
+  const items = [
+    {
+      icon: <Layers3 size={16} />,
+      title: 'Package framework first',
+      body: 'Align on scope, categories, and operational fit before discussing numbers.',
+    },
+    {
+      icon: <Briefcase size={16} />,
+      title: 'Pricing confirmation after scope alignment',
+      body: 'Confirm the agreed flat-rate framework once the package perimeter is set.',
+    },
+    {
+      icon: <HeartPulse size={16} />,
+      title: 'Escalation quoted separately',
+      body: 'Inpatient or ER pathway cases are handled outside the outpatient package framework.',
+    },
+  ];
+
+  return (
+    <motion.section
+      ref={ref}
+      variants={fadeUp}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      className="relative overflow-hidden rounded-sm border border-gold/30 bg-gold/[0.04] p-6 backdrop-blur-sm md:p-8"
+    >
+      <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-gold">
+        Pricing discussion readiness
+      </p>
+      <h2 className="mt-1 font-display text-lg font-semibold leading-tight text-white md:text-xl">
+        Pricing presentation can be aligned to the discussion stage
+      </h2>
+      <ul className="mt-5 grid grid-cols-1 gap-3 md:grid-cols-3">
+        {items.map((it) => (
+          <li
+            key={it.title}
+            className="rounded-sm border border-white/10 bg-navy-deep/30 p-4"
+          >
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+              {it.icon}
+            </span>
+            <p className="mt-3 font-display text-sm font-semibold text-white">{it.title}</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-ice/85">{it.body}</p>
+          </li>
+        ))}
+      </ul>
+    </motion.section>
+  );
+}
+
+// ─── Block 11 — Closing nav ────────────────────────────────────
+function ClosingNav() {
+  const links = [
+    { href: '/section/3', label: 'ADAC Track Record', icon: <ClipboardList size={14} /> },
+    { href: '/section/12', label: 'Package Catalogue', icon: <Layers3 size={14} /> },
+    { href: '/section/decisions', label: 'Decision Points', icon: <MapPin size={14} /> },
+  ];
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+      {links.map((l) => (
+        <Link
+          key={l.href}
+          href={l.href}
+          className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-navy/40 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
+        >
+          {l.icon}
+          {l.label}
+          <ArrowUpRight
+            size={12}
+            className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          />
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+// ─── Spacing wrapper ───────────────────────────────────────────
+function Section({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+}) {
+  void delay; // Reserved — currently using per-card scroll reveals.
+  return <div className="mt-10 md:mt-14">{children}</div>;
+}

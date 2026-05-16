@@ -51,7 +51,7 @@ export interface SectionMeta {
   id: string;
   title: string;
   /** Determines the SectionFrame variant + background treatment. */
-  type: 'hero' | 'mixed' | 'dashboard' | 'editorial' | 'flow';
+  type: 'hero' | 'mixed' | 'dashboard' | 'editorial' | 'flow' | 'data-room';
   /** Optional top-level content file (markdown, usually). */
   content?: string;
   subtopics?: SubtopicMeta[];

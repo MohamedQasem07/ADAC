@@ -30,10 +30,16 @@ export function AmbientBackground() {
       aria-hidden
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
-      {(type === 'hero' || type === 'dashboard' || type === 'mixed') && (
+      {(type === 'hero' || type === 'dashboard' || type === 'mixed' || type === 'data-room') && (
         <ParticleField
           density={
-            type === 'hero' ? 50 : type === 'dashboard' ? 30 : 35
+            type === 'hero'
+              ? 50
+              : type === 'dashboard'
+                ? 30
+                : type === 'data-room'
+                  ? 24
+                  : 35
           }
         />
       )}
