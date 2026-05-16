@@ -9,7 +9,7 @@ const nextConfig = {
   basePath,
   assetPrefix: basePath || undefined,
   images: { unoptimized: true },
-  trailingSlash: true,
+  trailingSlash: false,
   reactStrictMode: true,
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,

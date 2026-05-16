@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Search, X } from 'lucide-react';
 import { fallbackPackagesData } from '@/data/fallback';
 import { ease } from '@/lib/motion';
+import { routeToHref } from '@/lib/nav-config';
 import { emitHotkeyToast } from '@/components/layout/HotkeyToast';
 import type { Package, PackageCategory } from '@/types/content';
 import { PriceBadge } from './PriceBadge';
@@ -145,7 +146,7 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
                     }}
                   >
                     <Link
-                      href={`/section/12/${subId}`}
+                      href={routeToHref({ sectionId: '12', subId })}
                       onClick={() => {
                         setOpen(false);
                         setQuery('');

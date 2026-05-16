@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { ease, staggerTight } from '@/lib/motion';
+import { routeToHref } from '@/lib/nav-config';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { SubtopicMeta } from '@/types/content';
 
@@ -45,7 +46,7 @@ export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
         {subtopics.map((sub) => (
           <motion.li key={sub.id} variants={subtopicCard}>
             <Link
-              href={`/section/${sectionId}/${sub.id}`}
+              href={routeToHref({ sectionId, subId: sub.id })}
               className="group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-sm border border-white/10 bg-navy/40 px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
             >
               <div>

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { usePricing } from '@/context/PricingContext';
 import { ease, staggerTight } from '@/lib/motion';
+import { routeToHref } from '@/lib/nav-config';
 import { categoryPriceRange } from '@/lib/pricing';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { Package, PackageCategory } from '@/types/content';
@@ -54,7 +55,7 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
             }}
           >
             <Link
-              href={`/section/${sectionId}/${subId}`}
+              href={routeToHref({ sectionId, subId })}
               className="group relative flex h-full flex-col justify-between overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
             >
               {/* Top-left + bottom-right gold corner accents */}
