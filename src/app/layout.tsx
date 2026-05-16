@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
+import { PresentationShell } from '@/components/layout/PresentationShell';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-navy-deep font-sans text-white antialiased">
-        {children}
+        <PresentationShell>{children}</PresentationShell>
       </body>
     </html>
   );
