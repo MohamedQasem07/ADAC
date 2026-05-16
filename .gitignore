@@ -43,3 +43,6 @@ next-env.d.ts
 
 # OS
 desktop.ini
+
+# Claude Code harness runtime artifacts (worktree-internal locks etc.)
+.claude/
