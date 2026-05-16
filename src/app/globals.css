@@ -145,15 +145,22 @@
   --theme-badge-border: rgba(255, 204, 0, 0.6);
   --theme-badge-text: #ffcc00;
 
-  /* — Page background — dual-brand mood. Dark navy base + strong HMC
-       blue glow zone (top-left) + clear ADAC yellow glow zone
-       (bottom-right). Visible difference vs Premium Navy within one
-       second of switching. — */
+  /* — Page background — Phase 2.4E.3: real split-brand visual mode.
+       The diagonal linear-gradient delivers an instantly visible blue
+       → navy → yellow split (the "HMC × ADAC handshake"), and the
+       radial glow zones add depth without competing with content.
+       Visible difference vs Premium Navy within one second. — */
   --theme-page-bg: #061b34;
   --theme-page-bg-gradient:
-    radial-gradient(60% 55% at 14% 16%, rgba(15, 111, 229, 0.32), transparent 65%),
-    radial-gradient(55% 55% at 86% 84%, rgba(255, 204, 0, 0.18), transparent 65%),
-    radial-gradient(40% 30% at 50% 50%, rgba(15, 111, 229, 0.06), transparent 70%),
+    radial-gradient(48% 50% at 8% 12%, rgba(15, 111, 229, 0.55), transparent 70%),
+    radial-gradient(48% 50% at 92% 88%, rgba(255, 204, 0, 0.28), transparent 70%),
+    linear-gradient(
+      135deg,
+      rgba(15, 111, 229, 0.38) 0%,
+      rgba(6, 24, 47, 0.95) 38%,
+      rgba(6, 24, 47, 0.92) 58%,
+      rgba(255, 204, 0, 0.22) 100%
+    ),
     #061b34;
 
   /* — Surfaces / cards — bluer base so cards read as HMC clinical
@@ -235,5 +242,84 @@ body[data-scroll-locked='true'] {
     transparent 0%,
     rgba(var(--theme-accent-rgb), 0.8) 50%,
     transparent 100%
+  );
+}
+
+/* ─── Phase 2.4E.3 — Aggressive Partnership theme surface overrides ──
+   The earlier phases left ~17 different bg-navy/* and bg-navy-deep/*
+   hardcoded Tailwind classes scattered across the deck, and those
+   classes win over CSS-variable-driven styles because Tailwind
+   declares them as solid colours. Under [data-theme='partnership']
+   we force those surfaces to HMC-blue-tinted equivalents so the
+   whole deck visibly shifts to the dual-brand mood — not just the
+   accent colours.
+
+   Premium Navy is unaffected because these selectors are scoped to
+   html[data-theme='partnership']. */
+html[data-theme='partnership'] .bg-navy-deep      { background-color: #061b34 !important; }
+html[data-theme='partnership'] .bg-navy-deep\/30  { background-color: rgba(11, 38, 76, 0.30) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/40  { background-color: rgba(11, 38, 76, 0.40) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/50  { background-color: rgba(11, 38, 76, 0.50) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/60  { background-color: rgba(11, 38, 76, 0.60) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/70  { background-color: rgba(6, 27, 52, 0.70) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/75  { background-color: rgba(6, 27, 52, 0.75) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/80  { background-color: rgba(6, 27, 52, 0.80) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/85  { background-color: rgba(6, 27, 52, 0.85) !important; }
+html[data-theme='partnership'] .bg-navy-deep\/95  { background-color: rgba(6, 27, 52, 0.95) !important; }
+
+html[data-theme='partnership'] .bg-navy        { background-color: #0a2a4a !important; }
+html[data-theme='partnership'] .bg-navy\/30    { background-color: rgba(15, 47, 92, 0.30) !important; }
+html[data-theme='partnership'] .bg-navy\/40    { background-color: rgba(15, 47, 92, 0.40) !important; }
+html[data-theme='partnership'] .bg-navy\/50    { background-color: rgba(15, 47, 92, 0.50) !important; }
+html[data-theme='partnership'] .bg-navy\/60    { background-color: rgba(15, 47, 92, 0.55) !important; }
+html[data-theme='partnership'] .bg-navy\/80    { background-color: rgba(11, 38, 76, 0.75) !important; }
+html[data-theme='partnership'] .bg-navy\/95    { background-color: rgba(6, 27, 52, 0.92) !important; }
+
+/* Text — anywhere a component still uses `text-navy-deep` (e.g. text
+   inside a yellow CTA pill), keep it readable on yellow under both
+   themes; ADAC pairs yellow with deep black, so we lean toward
+   #0a0a0a in partnership for crisp legibility. */
+html[data-theme='partnership'] .text-navy-deep { color: #0a0a0a !important; }
+
+/* Force any leftover `text-gold` / `text-gold-soft` / `border-gold*`
+   in audience-facing surfaces to the active partnership accent. The
+   2.4E.2 mass-swap converted ~30 components to `text-theme` but any
+   leftover gold references will now still react to the theme. */
+html[data-theme='partnership'] .text-gold       { color: var(--theme-accent) !important; }
+html[data-theme='partnership'] .text-gold-soft  { color: var(--theme-accent-soft) !important; }
+html[data-theme='partnership'] .border-gold     { border-color: var(--theme-accent) !important; }
+html[data-theme='partnership'] .bg-gold         { background-color: var(--theme-accent) !important; }
+
+/* Welcome cover — split-brand side panels. Rendered only under
+   partnership via a data-attribute on the cover root; Premium Navy
+   ignores them. Two vertical halves of soft brand colour fill the
+   viewport behind the lockup so the user sees an unmistakable HMC
+   (blue, left) × ADAC (yellow, right) handshake. */
+html[data-theme='partnership'] [data-welcome-split]::before,
+html[data-theme='partnership'] [data-welcome-split]::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  pointer-events: none;
+  z-index: 0;
+}
+html[data-theme='partnership'] [data-welcome-split]::before {
+  left: 0;
+  background: radial-gradient(
+    60% 80% at 30% 50%,
+    rgba(15, 111, 229, 0.38) 0%,
+    rgba(15, 111, 229, 0.12) 40%,
+    transparent 75%
+  );
+}
+html[data-theme='partnership'] [data-welcome-split]::after {
+  right: 0;
+  background: radial-gradient(
+    60% 80% at 70% 50%,
+    rgba(255, 204, 0, 0.28) 0%,
+    rgba(255, 204, 0, 0.08) 45%,
+    transparent 75%
   );
 }

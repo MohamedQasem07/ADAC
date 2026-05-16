@@ -90,18 +90,30 @@ export function ThemeSwitcher() {
         ref={buttonRef}
         type="button"
         aria-label="Visual Theme"
-        title="Visual Theme"
+        title={`Visual Theme — ${theme === 'partnership' ? 'HMC × ADAC Mode' : 'Premium Navy'}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'group pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-sm border bg-white/[0.04] text-ice/85 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2',
+          'group pointer-events-auto relative inline-flex h-9 w-9 items-center justify-center rounded-sm border bg-white/[0.04] text-ice/85 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2',
           // Theme-aware border + focus ring colours via CSS variables —
           // gold under Premium Navy, ADAC yellow under Partnership.
           'border-white/10 hover:border-[var(--theme-accent)]/55 focus:ring-[var(--theme-accent)]/55'
         )}
       >
         <Sliders size={15} className="transition-colors duration-300 group-hover:text-[var(--theme-accent)]" />
+        {/* Phase 2.4E.3 — tiny dual-color dot in the bottom-right of
+            the switcher button when Partnership is active. HMC blue +
+            ADAC yellow halves. Premium Navy shows nothing here. */}
+        {theme === 'partnership' && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -bottom-0.5 -right-0.5 inline-flex h-[10px] w-[10px] overflow-hidden rounded-full ring-1 ring-navy-deep"
+          >
+            <span className="block h-full w-1/2" style={{ background: '#0F6FE5' }} />
+            <span className="block h-full w-1/2" style={{ background: '#FFCC00' }} />
+          </span>
+        )}
       </button>
 
       {open && (

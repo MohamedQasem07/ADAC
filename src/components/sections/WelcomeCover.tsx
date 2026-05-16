@@ -54,8 +54,11 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
   const words = title.split(' ');
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center px-4 py-16 text-center sm:px-6 md:py-20">
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center">
+    <section
+      data-welcome-split
+      className="relative flex min-h-screen items-center justify-center px-4 py-16 text-center sm:px-6 md:py-20"
+    >
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center">
         {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
