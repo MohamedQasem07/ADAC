@@ -30,13 +30,13 @@ export function PackageCard({ pkg, onClick }: PackageCardProps) {
         <p className="mt-2 font-display text-lg leading-snug text-white">
           {pkg.name}
         </p>
-        <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-ink-soft/80">
+        <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-ice/80">
           {pkg.included}
         </p>
       </div>
       <div className="mt-5 flex items-center justify-between">
         <PriceBadge pkg={pkg} size="sm" />
-        <span className="text-[10px] uppercase tracking-[0.25em] text-ink-soft/50 transition-colors duration-300 group-hover:text-gold">
+        <span className="text-[11px] uppercase tracking-[0.25em] text-ice/75 transition-colors duration-300 group-hover:text-gold">
           View details →
         </span>
       </div>

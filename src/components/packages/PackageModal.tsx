@@ -67,20 +67,20 @@ export function PackageModal({ pkg, onClose }: PackageModalProps) {
             <div className="gold-rule mt-6 w-16" />
 
             <section className="mt-8">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-ink-soft/70">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-ice/85">
                 What&rsquo;s included
               </p>
-              <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-base">
+              <p className="mt-3 text-sm leading-relaxed text-ice/85 md:text-base">
                 {pkg.included}
               </p>
             </section>
 
             <section className="mt-10 flex items-center justify-between border-t border-white/10 pt-6">
               <div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-soft/70">
+                <p className="text-[11px] uppercase tracking-[0.3em] text-ice/85">
                   Flat-rate price
                 </p>
-                <p className="mt-1 text-xs text-ink-soft/60">
+                <p className="mt-1 text-xs text-ice/80">
                   Inclusive of doctor exam · medication · medical report
                 </p>
               </div>

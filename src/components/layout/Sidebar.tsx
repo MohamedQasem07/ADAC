@@ -210,7 +210,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </ul>
         </nav>
 
-        <footer className="border-t border-white/5 px-6 py-4 text-[10px] uppercase tracking-[0.3em] text-ice/55">
+        <footer className="border-t border-white/5 px-6 py-4 text-[11px] uppercase tracking-[0.3em] text-ice/75">
           Press <span className="text-gold">?</span> for shortcuts
         </footer>
       </aside>

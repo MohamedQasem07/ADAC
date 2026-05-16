@@ -31,9 +31,9 @@ export function MarkdownSection({ content, sectionId, subId }: MarkdownSectionPr
       <h1 className="mt-6 font-display text-5xl font-semibold leading-tight text-white md:text-6xl">
         {title}
       </h1>
-      {subtitle && <p className="mt-4 text-lg text-ink-soft">{subtitle}</p>}
+      {subtitle && <p className="mt-4 text-lg text-ice/85">{subtitle}</p>}
       <div className="gold-rule mt-8 w-24" />
-      <div className="prose-invert mt-10 max-w-none text-base leading-relaxed text-ink-soft">
+      <div className="prose-invert mt-10 max-w-none text-base leading-relaxed text-ice/85">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown>
       </div>
     </article>

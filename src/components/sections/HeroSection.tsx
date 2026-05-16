@@ -151,7 +151,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 3.0, duration: 0.7, ease: ease.premium }}
-            className="mt-8 text-lg text-ink-soft md:text-xl"
+            className="mt-8 text-lg text-ice/90 md:text-xl"
           >
             {subtitle}
           </motion.p>
@@ -184,7 +184,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 3.5, duration: 0.7, ease: ease.premium }}
-            className="mt-6 whitespace-pre-wrap text-sm leading-relaxed text-ink-soft/80"
+            className="mt-6 whitespace-pre-wrap text-sm leading-relaxed text-ice/85"
           >
             {body}
           </motion.div>

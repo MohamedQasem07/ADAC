@@ -1,12 +1,16 @@
 ---
-title: "Outpatient Medical Care, Reimagined for ADAC"
-eyebrow: "Partnership Proposal"
-subtitle: "A complete flat-rate framework for the Red Sea region"
-layout: "hero"
+title: "HMC × ADAC"
+subtitle: "Outpatient Medical Care, Reimagined for the Red Sea Region"
+tagline: "A premium outpatient package framework for German travelers across Hurghada, Sahl Hasheesh, Safaga, and the Red Sea resort corridor."
+layout: "welcome"
+eyebrow: "Partnership Opening"
+badges:
+  - "2023–2026 Track Record"
+  - "German Traveler Care"
+  - "Red Sea Coverage"
+  - "Package Framework"
+  - "19 May 2026 · Hurghada"
+footerLines:
+  - "Prepared for ADAC Executive Discussion"
+  - "Hurghada Medical Center · Operations Department"
 ---
-
-Welcome to the 2026 HMC × ADAC partnership review. Over the next 18 sections, we will walk through five years of joint work, the verified ADAC data set, and our proposed flat-rate outpatient framework.
-
-**19 May 2026 · Hurghada, Egypt**
-
-Press **→** to begin.

@@ -34,7 +34,7 @@ export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
 
   return (
     <div ref={ref} className="mx-auto mt-24 w-full max-w-6xl px-8">
-      <p className="mb-6 text-center font-sans text-[11px] uppercase tracking-[0.4em] text-ink-soft/60">
+      <p className="mb-6 text-center font-sans text-[11px] uppercase tracking-[0.4em] text-ice/75">
         Explore details
       </p>
       <motion.ul

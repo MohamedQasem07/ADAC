@@ -13,6 +13,7 @@ import { LayoutAwareSection } from '@/components/sections/LayoutAwareSection';
 import { OverviewSection } from '@/components/sections/OverviewSection';
 import { PackageCatalogueOverview } from '@/components/sections/PackageCatalogueOverview';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
+import { WelcomeCover } from '@/components/sections/WelcomeCover';
 import type { ADACDataset, Package, PackageCategory } from '@/types/content';
 
 export function generateStaticParams() {
@@ -27,7 +28,12 @@ export default function SectionPage({ params }: { params: { id: string } }) {
 
   const content = loadReferencedContent(section.content);
 
-  // Hero treatment for cover and closing.
+  // §1 cover → premium WelcomeCover (partnership lockup, full sequence).
+  if (section.id === '1' && content?.kind === 'markdown') {
+    return <WelcomeCover content={content.data} />;
+  }
+
+  // §18 closing → existing HeroSection (confetti + proposed outcome).
   if (section.type === 'hero' && content?.kind === 'markdown') {
     const fm = content.data.frontmatter;
     return (

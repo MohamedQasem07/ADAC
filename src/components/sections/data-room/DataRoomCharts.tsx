@@ -151,7 +151,7 @@ export function MiniHeatmap() {
                       style={{ background: `rgba(201, 169, 97, ${0.08 + intensity * 0.75})` }}
                       title={`${month} ${year}: ${value ?? '—'}`}
                     >
-                      <span style={{ opacity: value != null ? 1 : 0.3 }}>
+                      <span style={{ opacity: value != null ? 1 : 0.55 }}>
                         {value ?? ''}
                       </span>
                     </div>

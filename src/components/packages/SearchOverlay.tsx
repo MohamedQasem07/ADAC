@@ -116,7 +116,7 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search packages — code, name, or service…"
-                className="flex-1 bg-transparent text-base text-white placeholder-ink-soft/50 focus:outline-none"
+                className="flex-1 bg-transparent text-base text-white placeholder-ice/55 focus:outline-none"
               />
               <button
                 onClick={() => {
@@ -132,7 +132,7 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
             {/* Results */}
             <ul className="mt-3 max-h-[60vh] space-y-1.5 overflow-y-auto">
               {filtered.length === 0 && (
-                <li className="rounded-sm border border-white/5 bg-navy/40 px-5 py-4 text-sm text-ink-soft/60">
+                <li className="rounded-sm border border-white/5 bg-navy/40 px-5 py-4 text-sm text-ice/80">
                   No packages match &ldquo;{query}&rdquo;.
                 </li>
               )}
@@ -173,7 +173,7 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
               })}
             </ul>
 
-            <p className="mt-3 text-center text-[10px] uppercase tracking-[0.3em] text-ink-soft/50">
+            <p className="mt-3 text-center text-[11px] uppercase tracking-[0.3em] text-ice/75">
               {filtered.length} of {packages.length} packages · Esc to close
             </p>
           </motion.div>

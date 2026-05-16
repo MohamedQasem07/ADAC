@@ -50,7 +50,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
         className="mt-12 overflow-hidden rounded-sm border border-white/10 bg-navy/50 backdrop-blur-sm"
       >
         <table className="w-full text-left">
-          <thead className="sticky top-0 bg-navy-deep/80 text-[10px] uppercase tracking-[0.25em] text-ink-soft/70 backdrop-blur-sm">
+          <thead className="sticky top-0 bg-navy-deep/80 text-[10px] uppercase tracking-[0.25em] text-ice/80 backdrop-blur-sm">
             <tr>
               <th className="px-4 py-3 font-medium md:px-6">Category</th>
               <th className="px-4 py-3 font-medium md:px-6">Packages</th>
@@ -103,7 +103,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
                     </AnimatePresence>
                   </td>
                   <td className="hidden px-4 py-4 text-sm md:table-cell md:px-6">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-soft/70">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ice/80">
                       {common.code}
                     </p>
                     <p className="mt-1 text-sm text-ink-soft">{common.name}</p>
@@ -129,7 +129,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
         </table>
       </motion.div>
 
-      <p className="mt-6 text-center text-xs italic text-ink-soft/60">
+      <p className="mt-6 text-center text-xs italic text-ice/80">
         Totals: {categories.length} categories · {totalCount} packages · single flat-rate per case.
       </p>
     </section>

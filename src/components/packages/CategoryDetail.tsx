@@ -56,7 +56,7 @@ export function CategoryDetail({ category, packages }: CategoryDetailProps) {
         <p className="mt-8 text-base leading-relaxed text-ink-soft md:text-lg">
           {category.description}
         </p>
-        <p className="mt-6 text-xs uppercase tracking-[0.3em] text-ink-soft/60">
+        <p className="mt-6 text-xs uppercase tracking-[0.3em] text-ice/75">
           {effective.length} {effective.length === 1 ? 'package' : 'packages'}
         </p>
       </motion.header>

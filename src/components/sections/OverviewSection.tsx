@@ -196,7 +196,7 @@ export function OverviewSection({
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft/90">
                   {summary}
                 </p>
-                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-soft/50">
+                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.3em] text-ice/70">
                   {item.id}
                 </p>
               </Link>

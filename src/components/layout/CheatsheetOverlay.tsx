@@ -79,7 +79,7 @@ export function CheatsheetOverlay() {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-[11px] uppercase tracking-[0.3em] text-ink-soft/50">
+        <p className="mt-8 text-[11px] uppercase tracking-[0.3em] text-ice/75">
           Press ? again or Esc to close
         </p>
       </div>
