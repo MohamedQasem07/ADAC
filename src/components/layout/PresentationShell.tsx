@@ -16,6 +16,7 @@ import { MenuButton } from './MenuButton';
 import { PageTransition } from './PageTransition';
 import { ScenarioIndicator } from './ScenarioIndicator';
 import { SearchOverlay } from '@/components/packages/SearchOverlay';
+import { SideBrandWatermarks } from './SideBrandWatermarks';
 import { Sidebar } from './Sidebar';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
@@ -43,6 +44,7 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
       <PresentationOverridesProvider>
       <PricingProvider>
         <AmbientBackground />
+        <SideBrandWatermarks sidebarOpen={sidebarOpen} />
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         <MenuButton onClick={() => setSidebarOpen(true)} />
