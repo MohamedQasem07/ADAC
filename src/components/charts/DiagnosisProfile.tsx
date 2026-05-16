@@ -11,7 +11,12 @@ import {
   YAxis,
 } from 'recharts';
 import { fallbackADACData } from '@/data/fallback';
-import { CHART_TEXT_SECONDARY, CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
+import {
+  CHART_TEXT_SECONDARY,
+  CHART_TOOLTIP_ITEM_STYLE,
+  CHART_TOOLTIP_LABEL_STYLE,
+  CHART_TOOLTIP_STYLE,
+} from '@/lib/chart-style';
 import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
 
@@ -70,6 +75,8 @@ export function DiagnosisProfile() {
             <Tooltip
               cursor={{ fill: 'rgba(var(--theme-chart-primary-rgb),0.06)' }}
               contentStyle={CHART_TOOLTIP_STYLE}
+              labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+              itemStyle={CHART_TOOLTIP_ITEM_STYLE}
               formatter={(_v: number, _n, p) =>
                 [`${p.payload.count} cases · ${p.payload.pct.toFixed(2)}%`, 'Count']
               }

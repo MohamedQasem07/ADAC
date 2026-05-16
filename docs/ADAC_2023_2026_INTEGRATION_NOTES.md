@@ -71,6 +71,23 @@ Where 2023 / 2026 are relevant, they appear as **supplementary context** (4-year
 
 ---
 
+## 4a. Charts updated in Phase 2.4I (subsequent)
+
+Phase 2.4I builds on the 2.4H data layer (`historicalContext2023_2026` is unchanged). Only visual presentation moved:
+
+| Chart | Update |
+|---|---|
+| §3.1 page | Now renders **`ADACMonthlyGroupedChart`** only. The single-series Year-by-Year bars + `GrowthArrow` overlay + 4-row supplementary heatmap have all been retired. Per-year totals (57 / 103 / 97 / 11) live in a footer strip on the new chart. |
+| §3.2 GermanMonthlyHeatmap | Expanded from 2 rows to 4 rows (2023 / 2024 / 2025 / 2026 YTD). Title: "German Traveler Monthly Flow 2023–2026". Real data only; 2024–2025 values preserved exactly. |
+| Data Room block 3 | `MiniYearlyBars` re-exported as the new `MiniADACMonthlyGrouped` compact grouped chart. |
+| Data Room block 4 | `MiniHeatmap` expanded from 2 → 4 rows. |
+| Data Room block 5 | Cash vs Insurance donut now paired with `Cash2026YTDCard` (9 insurance / 2 cash, n=11). |
+| Data Room block 6 | Age Distribution now paired with `Age2026YTDCard` (1/0/0/3/1/6, n=11). |
+| Data Room structure | Two `SectionDivider` rules added — `4-Year Operational Context · 2023 → 2026 YTD` (above block 3) and `Primary Clinical & Financial Analysis · 2024–2025` (above block 5). |
+| Every Recharts `<Tooltip>` | Now passes `labelStyle={CHART_TOOLTIP_LABEL_STYLE}` and `itemStyle={CHART_TOOLTIP_ITEM_STYLE}` so both the category label and the value items read on the dark glass background. Bug was Recharts inheriting `color: #000` for the label even when `contentStyle.color` was set. |
+
+The 2.4H 4-row ADAC heatmap (`ADACMonthlyHeatmap4Year`) is kept in the codebase as a documented fallback but is no longer mounted on any route — the grouped chart conveys the same monthly seasonality more cleanly.
+
 ## 4. Charts updated in Phase 2.4H
 
 | Chart | Update |

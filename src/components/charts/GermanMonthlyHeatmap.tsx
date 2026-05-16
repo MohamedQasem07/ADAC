@@ -7,53 +7,101 @@ import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { ChartFrame } from './ChartFrame';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const YEARS = ['2024', '2025'];
+
+interface Row {
+  year: string;
+  /** Length 12. `null` = no data / future month. */
+  months: Array<number | null>;
+  total: number;
+}
 
 /**
- * §3.2 — German Patient Monthly Volume (heatmap).
+ * §3.2 — German Traveler Monthly Flow 2023–2026.
  *
- * Per the corrections doc, this chart is GERMAN patients, not ADAC.
- * 12 × 2 grid with gold-intensity ramp. Phase 5.5 will polish the
- * wave-reveal motion (cells animate L→R / T→B with scale 0.5 → 1).
+ * Phase 2.4I expansion: was 2 rows (2024 + 2025) — now 4 rows
+ * (2023 + 2024 + 2025 + 2026 YTD). All values are real extractions:
+ *   - 2024 / 2025 come from the existing `germanMonthly` map (preserved)
+ *   - 2023 comes from `historicalContext2023_2026.germanMonthly2023`
+ *   - 2026 YTD comes from `historicalContext2023_2026.germanMonthly2026YTD`
+ *
+ * This is full German traveler flow across the operation — NOT
+ * ADAC-only. The ADAC clinical/financial analysis window (2024–2025)
+ * is unaffected; the 1,127 denominator used in §3.4 / §3.5 / §3.6 /
+ * §3.7 / §3.8 remains the locked source of truth.
  */
 export function GermanMonthlyHeatmap() {
-  const data = fallbackADACData.germanMonthly;
+  // 2024 + 2025 — preserve the existing values exactly.
+  const legacy = fallbackADACData.germanMonthly as Record<
+    string,
+    Record<string, number | null>
+  >;
+  const months2024 = MONTHS.map((m) => legacy[m]?.['2024'] ?? null);
+  const months2025 = MONTHS.map((m) => legacy[m]?.['2025'] ?? null);
 
-  // Find max value for color scaling.
+  // 2023 + 2026 YTD — from the 2.4H historical context block.
+  const ctx = fallbackADACData.historicalContext2023_2026;
+  const months2023 = (ctx?.germanMonthly2023?.months ?? Array(12).fill(null)) as Array<
+    number | null
+  >;
+  const months2026 = (ctx?.germanMonthly2026YTD?.months ?? Array(12).fill(null)) as Array<
+    number | null
+  >;
+
+  const rows: Row[] = useMemo(
+    () => [
+      { year: '2023', months: months2023, total: ctx?.germanMonthly2023?.total ?? 0 },
+      {
+        year: '2024',
+        months: months2024,
+        total: months2024.reduce<number>((a, v) => a + (v ?? 0), 0),
+      },
+      {
+        year: '2025',
+        months: months2025,
+        total: months2025.reduce<number>((a, v) => a + (v ?? 0), 0),
+      },
+      { year: '2026 YTD', months: months2026, total: ctx?.germanMonthly2026YTD?.total ?? 0 },
+    ],
+    // months2024 / months2025 / months2023 / months2026 are computed once at module-load shape
+    // and `ctx` is a constant import — disabling exhaustive-deps is safe here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   const max = useMemo(() => {
     let m = 0;
-    for (const month of MONTHS) {
-      for (const year of YEARS) {
-        const v = (data as Record<string, Record<string, number | null>>)[month][year];
+    for (const r of rows) {
+      for (const v of r.months) {
         if (v != null && v > m) m = v;
       }
     }
-    return m;
-  }, [data]);
+    return m || 1;
+  }, [rows]);
 
+  const grandTotal = rows.reduce((a, r) => a + r.total, 0);
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
   return (
     <ChartFrame
       subId="3.2"
       eyebrow="§3.2"
-      title="German Patient Monthly Volume"
-      populationLabel="n=1,127 German patients · 2024–2025 monthly"
-      dataWindow="Analysis window 2024–2025"
-      transparencyNote="2023 (n=303) and 2026 YTD (n=86) German monthly extractions are available in the source files but not folded into this primary 2024–2025 heatmap. They are reported in the 4-Year Partnership Context in the Data Room."
-      annotation="Peak season concentration · August through December"
+      title="German Traveler Monthly Flow 2023–2026"
+      populationLabel={`Full German traveler flow across the operation · 2026 YTD only · n=${grandTotal.toLocaleString()} across 4 years`}
+      dataWindow="Historical 2023–2026 · 2026 YTD (Jan–May)"
+      annotation="2026 is year-to-date only. Future months are not included."
+      transparencyNote="Full German traveler flow (not ADAC-only). The locked 2024–2025 ADAC analysis denominator (1,127 German patients in §3.4 / §3.5 / §3.6 / §3.7) is unchanged by this 4-year operational view."
       insight={{
         keyInsight:
-          'German traveler volume is seasonal, with clear concentration in high-demand months across August through December.',
+          'Across four years, German traveler volume holds a clear Aug–Nov peak with consistent spring activity — the seasonal shape is stable and predictable.',
         meaning:
-          'A package framework helps ADAC and HMC manage predictable seasonal peaks with fewer approval delays and steadier case throughput.',
+          'A package framework helps ADAC and HMC plan against this repeating seasonality with fewer approval delays and steadier case throughput.',
       }}
     >
       <div ref={ref} className="overflow-x-auto">
-        <table className="mx-auto w-full">
+        <table className="mx-auto w-full" aria-label="German traveler monthly flow 2023 to 2026 YTD">
           <thead>
             <tr>
-              <th className="w-12" />
+              <th className="w-16" />
               {MONTHS.map((m) => (
                 <th
                   key={m}
@@ -62,43 +110,49 @@ export function GermanMonthlyHeatmap() {
                   {m}
                 </th>
               ))}
+              <th className="w-16 pb-2 text-right text-[11px] font-medium uppercase tracking-[0.18em] text-ice/85">
+                Total
+              </th>
             </tr>
           </thead>
           <tbody>
-            {YEARS.map((year, yi) => (
-              <tr key={year}>
+            {rows.map((row, yi) => (
+              <tr key={row.year}>
                 <th className="pr-3 text-right text-[12px] font-medium uppercase tracking-[0.2em] text-ice/85">
-                  {year}
+                  {row.year}
                 </th>
-                {MONTHS.map((month, mi) => {
-                  const value = (data as Record<string, Record<string, number | null>>)[month][year];
+                {row.months.map((value, mi) => {
                   const intensity = value != null ? value / max : 0;
-                  const delay = inView ? (yi * 12 + mi) * 0.035 : 0;
+                  const delay = inView ? (yi * 12 + mi) * 0.025 : 0;
                   return (
                     <motion.td
-                      key={`${year}-${month}`}
+                      key={`${row.year}-${mi}`}
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
-                      transition={{
-                        delay,
-                        duration: 0.45,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
+                      transition={{ delay, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                       className="relative p-0.5"
                     >
                       <div
-                        className="group relative flex aspect-square min-w-[44px] items-center justify-center rounded-sm border border-white/10 text-[13px] font-semibold text-white transition-shadow duration-300 hover:shadow-gold-glow"
+                        className="group relative flex aspect-square min-w-[40px] items-center justify-center rounded-sm border border-white/10 text-[12px] font-semibold text-white transition-shadow duration-300 hover:shadow-gold-glow"
                         style={{
-                          background: `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})`,
+                          background:
+                            value == null
+                              ? 'rgba(255,255,255,0.02)'
+                              : `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})`,
+                          borderStyle: value == null ? 'dashed' : 'solid',
                         }}
+                        title={value == null ? `${MONTHS[mi]} ${row.year}: not yet reported` : `${MONTHS[mi]} ${row.year}: ${value}`}
                       >
-                        <span style={{ opacity: value != null ? 1 : 0.2 }}>
-                          {value ?? '—'}
+                        <span style={{ opacity: value != null ? 1 : 0.35 }}>
+                          {value == null ? '—' : value}
                         </span>
                       </div>
                     </motion.td>
                   );
                 })}
+                <td className="pl-3 text-right font-mono text-[12px] tracking-[0.1em] text-ice/85">
+                  {row.total.toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -30,7 +30,8 @@
 | 2.4E.2 | Real Partnership visual mode + on-screen theme switcher + hotkey removed + console cleanup |
 | 2.4E.3 | Split HMC × ADAC partnership visual mode polish |
 | 2.4F | Subtopic content expansion + KPI overflow fix + data window labels |
-| **2.4H** | **Integrate ADAC 2023 + 2026 YTD as supplementary 4-year context (this commit)** |
+| 2.4H | Integrate ADAC 2023 + 2026 YTD as supplementary 4-year context |
+| **2.4I** | **Executive Chart Upgrade — grouped monthly chart, 4-row German heatmap, 2026 YTD sibling cards, Data Room regrouping, tooltip readability fix (this commit)** |
 
 ## 3. Current key features
 
@@ -141,6 +142,44 @@ The primary 2024–2025 analysis window is preserved exactly. 2023 and 2026 YTD 
 - `src/content/adac-data.json` + `public/data/adac-data.json`: new `historicalContext2023_2026` block (yearlyVolume, adacMonthly, germanMonthly2023, germanMonthly2026YTD, adac2026YTDClinical, adac2023Clinical, fourYearSummary). **All pre-2.4H fields unchanged.**
 - `docs/data_extraction_2026.txt`: raw Python extraction output from both Excel files. The source-of-truth for every 2023 / 2026 figure shown on the deck.
 - `docs/ADAC_2023_2026_INTEGRATION_NOTES.md`: internal reference covering what is real, what is extrapolated, what is intentionally not shown, what charts are updated, and what next steps unlock if more source data appears.
+
+## 4d. Phase 2.4I — Executive chart upgrade
+
+The 4-year story is now visible everywhere it should be — without compromising the locked 2024–2025 clinical/financial analysis.
+
+### What changed visually
+
+- **`/section/3/3.1`** — the single-series Year-by-Year bar chart and the 4-row supplementary heatmap from 2.4H are both retired. The route now renders **`ADACMonthlyGroupedChart`**: one `<BarChart>` with four series (2023 / 2024 / 2025 / 2026 YTD), real data, 2026 visually distinct with a dashed lighter fill. The animated `+70%` GrowthArrow with the clipped text bug is gone. A per-year totals strip below the bars keeps `57 / 103 / 97 / 11 = 268` clearly visible.
+- **`/section/3/3.2`** — `GermanMonthlyHeatmap` expanded from 2 rows to 4 rows (`2023 / 2024 / 2025 / 2026 YTD`). All values are real extractions (2024–2025 preserved exactly; 2023 + 2026 YTD come from the `historicalContext2023_2026` block landed in 2.4H). 2026 future months render with the dashed-empty cell style.
+- **`/section/data-room`** — three structural improvements:
+  1. **Section dividers.** A "4-Year Operational Context · 2023 → 2026 YTD" eyebrow rule sits above the Historical Performance block; a "Primary Clinical & Financial Analysis · 2024–2025" rule sits above the Cash vs Insurance block. The data-window logic is now visually obvious.
+  2. **`MiniYearlyBars` → `MiniADACMonthlyGrouped`.** The Historical Performance card now shows the compact grouped monthly chart.
+  3. **`MiniHeatmap` → 4 rows.** The German market context card shows the 4-year German traveler monthly flow.
+  4. **2026 YTD sibling cards.** A `Cash2026YTDCard` sits beside the Cash vs Insurance donut (Block 5). An `Age2026YTDCard` sits beside the Age Distribution card in the Clinical Profile grid (Block 6). Each carries the explicit literal `2026 YTD context only — not merged into the 2024–2025 headline analysis.`
+
+### Tooltip readability fix (system-wide)
+
+`chart-style.ts` now exports `CHART_TOOLTIP_LABEL_STYLE` and `CHART_TOOLTIP_ITEM_STYLE`. Every Recharts `<Tooltip>` in the deck passes both. Root cause was Recharts inheriting `color: #000` for the label line on top of the dark glass `contentStyle` — fixed in `chart-style.ts` once, applied across `ADACMonthlyGroupedChart`, `DiagnosisProfile`, `FinancialDonuts`, `AgeDistribution`, `LengthOfStay`, and the Data Room mini charts. Heatmap cells use native `<div title="…">` and are inherently readable. Charts without Recharts Tooltip (Admission stacked bar, MarketShare, GermanVolumeSummary) carry no tooltip text and don't need the fix.
+
+### Charts that intentionally stayed 2024–2025
+
+- §3.3 Diagnosis Profile (n=156)
+- §3.5 Admission Profile (n=156)
+- §3.6 Age Distribution (n=156) — paired with the new `Age2026YTDCard` sibling for context
+- §3.7 Length of Stay (n=156)
+- §3.4 Financial Donuts (n=200) — paired with the new `Cash2026YTDCard` sibling for context
+- §3.8 Market Share Hero (20.37%, n=766)
+
+Each carries the in-place `transparencyNote` already added in 2.4H pointing readers to the 4-Year Context where the wider view exists.
+
+### New / removed files
+
+- **New:** `src/components/charts/ADACMonthlyGroupedChart.tsx` (full + `MiniADACMonthlyGrouped` compact variant), `src/components/sections/data-room/SectionDivider.tsx`, `src/components/sections/data-room/Supplementary2026YTDCard.tsx` (generic card + `Cash2026YTDCard` + `Age2026YTDCard`).
+- **Removed:** `src/components/charts/YearlyVolumeChart.tsx` (the GrowthArrow + single-series bars). `ADACMonthlyHeatmap4Year.tsx` is kept in the codebase as a documented fallback (no longer rendered).
+
+### Stack note (Part A audit)
+
+No new chart or animation library was added. Recharts 2.13 + Framer Motion 11 handled the grouped chart, the null-month gaps, and the entry animation without complaint. Lenis stays disabled.
 
 ## 5. Critical locked rules
 

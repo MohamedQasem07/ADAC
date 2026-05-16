@@ -16,6 +16,8 @@ import {
   CHART_AXIS_LINE,
   CHART_GRID,
   CHART_TEXT_SECONDARY,
+  CHART_TOOLTIP_ITEM_STYLE,
+  CHART_TOOLTIP_LABEL_STYLE,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
 import { useThemeChartColors } from '@/lib/theme-colors';
@@ -80,6 +82,8 @@ export function AgeDistribution() {
             <Tooltip
               cursor={{ fill: 'rgba(var(--theme-chart-primary-rgb),0.06)' }}
               contentStyle={CHART_TOOLTIP_STYLE}
+              labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+              itemStyle={CHART_TOOLTIP_ITEM_STYLE}
               formatter={(_v, _n, p) => [`${p.payload.count} (${p.payload.pct}%)`, 'Count']}
             />
             <Bar

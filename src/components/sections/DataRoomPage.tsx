@@ -30,6 +30,11 @@ import {
   MiniYearlyBars,
 } from './data-room/DataRoomCharts';
 import { FourYearContextCard } from './data-room/FourYearContextCard';
+import { SectionDivider } from './data-room/SectionDivider';
+import {
+  Age2026YTDCard,
+  Cash2026YTDCard,
+} from './data-room/Supplementary2026YTDCard';
 import { DataRoomCoverage } from './data-room/DataRoomCoverage';
 import { DataRoomDecisions } from './data-room/DataRoomDecisions';
 import { DataRoomPackages } from './data-room/DataRoomPackages';
@@ -97,12 +102,18 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         <SixUpKpis items={kpis} />
       </Section>
 
-      {/* Block 3 — Historical ADAC Performance (featured) */}
+      {/* Phase 2.4I — section divider: 4-year operational context */}
+      <SectionDivider
+        eyebrow="4-Year Operational Context"
+        caption="2023 → 2026 YTD"
+      />
+
+      {/* Block 3 — Historical ADAC Performance (now the grouped monthly chart) */}
       <Section>
         <Card
           eyebrow="Historical performance"
-          title="ADAC Case Volume 2023–2026"
-          insight="2024–2025 represents the strongest complete analysis window, with 200 ADAC cases forming the basis for the outpatient package discussion."
+          title="ADAC monthly case pattern · 2023–2026"
+          insight="Across four years, monthly ADAC volume holds a consistent Aug–Nov peak. 2024–2025 remains the primary complete analysis window."
           openHref="/section/3/3.1"
           openLabel="Open full view · §3.1"
           featured
@@ -121,8 +132,8 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_340px]">
           <Card
             eyebrow="Market context"
-            title="German patient monthly volume"
-            subtitle="Not ADAC-only — full German traveler flow across the operation"
+            title="German Traveler Monthly Flow 2023–2026"
+            subtitle="Full German traveler flow across the operation · 2026 YTD only"
             insight="German traveler flow provides the operational context for ADAC demand planning, staffing readiness, and mobile service coverage."
             openHref="/section/3/3.2"
             openLabel="Open full view · §3.2"
@@ -143,26 +154,35 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         </div>
       </Section>
 
-      {/* Block 5 — Payment / Handling Profile */}
+      {/* Phase 2.4I — section divider: primary clinical/financial */}
+      <SectionDivider
+        eyebrow="Primary Clinical & Financial Analysis"
+        caption="2024–2025"
+      />
+
+      {/* Block 5 — Payment / Handling Profile + 2026 YTD sibling */}
       <Section>
-        <Card
-          eyebrow="Payment profile"
-          title="Cash vs Insurance · 2024–2025"
-          insight="The majority of cases in the analysis window were insurance-handled, supporting the value of structured documentation, package clarity, and predictable approval workflows."
-          openHref="/section/3/3.4"
-          openLabel="Open full view · §3.4"
-        >
-          <MiniFinancialDonut />
-        </Card>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_300px]">
+          <Card
+            eyebrow="Payment profile"
+            title="Cash vs Insurance · 2024–2025"
+            insight="The majority of cases in the analysis window were insurance-handled, supporting the value of structured documentation, package clarity, and predictable approval workflows."
+            openHref="/section/3/3.4"
+            openLabel="Open full view · §3.4"
+          >
+            <MiniFinancialDonut />
+          </Card>
+          <Cash2026YTDCard />
+        </div>
       </Section>
 
-      {/* Block 6 — Clinical Profile Grid (2×2) */}
+      {/* Block 6 — Clinical Profile Grid (2×2 → 3-up with the 2026 YTD age sibling) */}
       <Section>
         <p
           className="mb-4 font-mono text-[11px] uppercase tracking-[0.4em]"
           style={{ color: 'var(--theme-accent)' }}
         >
-          Clinical profile
+          Clinical profile · 2024–2025
         </p>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <Card
@@ -184,15 +204,6 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
             <MiniAdmission />
           </Card>
           <Card
-            title="Age distribution"
-            subtitle="156 ADAC admissions"
-            insight="62% seniors · 82% over 40 · higher clinical responsibility, structured triage."
-            openHref="/section/3/3.6"
-            openLabel="Open full · §3.6"
-          >
-            <MiniAge />
-          </Card>
-          <Card
             title="Length of stay"
             subtitle="156 ADAC admissions"
             insight="83% discharged within 48 hours — same-day documentation aligned with ADAC's case closure."
@@ -201,6 +212,19 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
           >
             <MiniLengthOfStay />
           </Card>
+          {/* Age + 2026 YTD sibling pair — visible together so the audience reads them as one story */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_180px]">
+            <Card
+              title="Age distribution"
+              subtitle="156 ADAC admissions"
+              insight="62% seniors · 82% over 40 · higher clinical responsibility, structured triage."
+              openHref="/section/3/3.6"
+              openLabel="Open full · §3.6"
+            >
+              <MiniAge />
+            </Card>
+            <Age2026YTDCard />
+          </div>
         </div>
       </Section>
 

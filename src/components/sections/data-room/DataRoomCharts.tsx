@@ -19,6 +19,8 @@ import { fallbackADACData } from '@/data/fallback';
 import {
   CHART_AXIS_LINE,
   CHART_TEXT_SECONDARY,
+  CHART_TOOLTIP_ITEM_STYLE,
+  CHART_TOOLTIP_LABEL_STYLE,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
@@ -39,83 +41,59 @@ import { useThemeChartColors } from '@/lib/theme-colors';
 const INK = CHART_TEXT_SECONDARY;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const HEATMAP_YEARS = ['2024', '2025'];
+const HEATMAP_YEARS = ['2023', '2024', '2025', '2026 YTD'];
 
-// ─── §3.1 compact ───────────────────────────────────────────────
-export function MiniYearlyBars() {
-  const palette = useThemeChartColors();
-  const GOLD = palette.primary;
-  const GOLD_SOFT = palette.primarySoft;
-  const data = fallbackADACData.yearlyADAC.map((row) => ({
-    year: String(row.year),
-    total: row.total,
-    isYTD: row.note?.includes('YTD') ?? false,
-  }));
-  return (
-    <div style={{ width: '100%', height: 200 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 28, right: 12, left: 0, bottom: 0 }}>
-          <XAxis
-            dataKey="year"
-            tick={{ fill: INK, fontSize: 12, letterSpacing: '0.1em' }}
-            tickLine={false}
-            axisLine={{ stroke: CHART_AXIS_LINE }}
-          />
-          <YAxis hide />
-          <Tooltip
-            cursor={{ fill: 'rgba(201,169,97,0.06)' }}
-            contentStyle={CHART_TOOLTIP_STYLE}
-          />
-          <Bar
-            dataKey="total"
-            radius={[2, 2, 0, 0]}
-            animationDuration={900}
-            animationEasing="ease-out"
-          >
-            {data.map((d) => (
-              <Cell
-                key={d.year}
-                fill={d.isYTD ? GOLD_SOFT : GOLD}
-                fillOpacity={d.isYTD ? 0.5 : 0.92}
-                stroke={d.isYTD ? GOLD : 'transparent'}
-                strokeDasharray={d.isYTD ? '4 3' : undefined}
-              />
-            ))}
-            <LabelList
-              dataKey="total"
-              position="top"
-              fill="#fff"
-              fontSize={13}
-              fontFamily="var(--font-playfair), Georgia, serif"
-            />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
+// ─── §3.1 compact — Phase 2.4I: re-exported from ADACMonthlyGroupedChart ─
+// MiniYearlyBars is kept as a name alias so existing imports continue to
+// work; it now renders the compact grouped monthly chart.
+export { MiniADACMonthlyGrouped as MiniYearlyBars } from '@/components/charts/ADACMonthlyGroupedChart';
 
-// ─── §3.2 compact heatmap ───────────────────────────────────────
+// ─── §3.2 compact heatmap — Phase 2.4I: 4 rows (2023, 2024, 2025, 2026 YTD)
 export function MiniHeatmap() {
-  const data = fallbackADACData.germanMonthly;
+  const legacy = fallbackADACData.germanMonthly as Record<
+    string,
+    Record<string, number | null>
+  >;
+  const ctx = fallbackADACData.historicalContext2023_2026;
+  const months2024 = MONTHS.map((m) => legacy[m]?.['2024'] ?? null);
+  const months2025 = MONTHS.map((m) => legacy[m]?.['2025'] ?? null);
+  const months2023 = (ctx?.germanMonthly2023?.months ?? Array(12).fill(null)) as Array<
+    number | null
+  >;
+  const months2026 = (ctx?.germanMonthly2026YTD?.months ?? Array(12).fill(null)) as Array<
+    number | null
+  >;
+
+  const rows = useMemo(
+    () => [
+      { year: '2023', months: months2023 },
+      { year: '2024', months: months2024 },
+      { year: '2025', months: months2025 },
+      { year: '2026 YTD', months: months2026 },
+    ],
+    // values come from constants resolved on the first render — safe to omit
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   const max = useMemo(() => {
     let m = 0;
-    for (const month of MONTHS) {
-      for (const year of HEATMAP_YEARS) {
-        const v = (data as Record<string, Record<string, number | null>>)[month][year];
+    for (const r of rows) {
+      for (const v of r.months) {
         if (v != null && v > m) m = v;
       }
     }
-    return m;
-  }, [data]);
+    return m || 1;
+  }, [rows]);
+
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
   return (
-    <div ref={ref}>
-      <table className="w-full" aria-label="German patient monthly volume">
+    <div ref={ref} className="overflow-x-auto">
+      <table className="w-full" aria-label="German traveler monthly flow 2023 to 2026 YTD">
         <thead>
           <tr>
-            <th className="w-9" />
+            <th className="w-14" />
             {MONTHS.map((m) => (
               <th
                 key={m}
@@ -127,30 +105,35 @@ export function MiniHeatmap() {
           </tr>
         </thead>
         <tbody>
-          {HEATMAP_YEARS.map((year, yi) => (
-            <tr key={year}>
+          {rows.map((row, yi) => (
+            <tr key={row.year}>
               <th className="pr-2 text-right text-[10px] font-medium uppercase tracking-[0.15em] text-ice/80">
-                {year}
+                {row.year}
               </th>
-              {MONTHS.map((month, mi) => {
-                const value = (data as Record<string, Record<string, number | null>>)[month][year];
+              {row.months.map((value, mi) => {
                 const intensity = value != null ? value / max : 0;
-                const delay = inView ? (yi * 12 + mi) * 0.025 : 0;
+                const delay = inView ? (yi * 12 + mi) * 0.02 : 0;
                 return (
                   <motion.td
-                    key={`${year}-${month}`}
+                    key={`${row.year}-${mi}`}
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
                     transition={{ delay, duration: 0.4, ease: ease.premium }}
                     className="relative p-0.5"
                   >
                     <div
-                      className="relative flex aspect-square min-w-[26px] items-center justify-center rounded-sm border border-white/10 text-[10px] font-semibold text-white"
-                      style={{ background: `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})` }}
-                      title={`${month} ${year}: ${value ?? '—'}`}
+                      className="relative flex aspect-square min-w-[24px] items-center justify-center rounded-sm border border-white/10 text-[10px] font-semibold text-white"
+                      style={{
+                        background:
+                          value == null
+                            ? 'rgba(255,255,255,0.02)'
+                            : `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})`,
+                        borderStyle: value == null ? 'dashed' : 'solid',
+                      }}
+                      title={value == null ? `${MONTHS[mi]} ${row.year}: not yet reported` : `${MONTHS[mi]} ${row.year}: ${value}`}
                     >
-                      <span style={{ opacity: value != null ? 1 : 0.55 }}>
-                        {value ?? ''}
+                      <span style={{ opacity: value != null ? 1 : 0.4 }}>
+                        {value == null ? '—' : value}
                       </span>
                     </div>
                   </motion.td>
@@ -253,7 +236,11 @@ export function MiniFinancialDonut() {
             <Cell />
             <Cell />
           </Pie>
-          <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
+          <Tooltip
+            contentStyle={CHART_TOOLTIP_STYLE}
+            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+          />
         </PieChart>
       </ResponsiveContainer>
       <motion.div
@@ -307,6 +294,8 @@ export function MiniDiagnosis() {
           <Tooltip
             cursor={{ fill: 'rgba(201,169,97,0.06)' }}
             contentStyle={CHART_TOOLTIP_STYLE}
+            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
             formatter={(_v: number, _n, p) => [`${p.payload.count} (${p.payload.pct.toFixed(1)}%)`, 'Cases']}
           />
           <Bar
@@ -413,6 +402,8 @@ export function MiniAge() {
           <Tooltip
             cursor={{ fill: 'rgba(201,169,97,0.06)' }}
             contentStyle={CHART_TOOLTIP_STYLE}
+            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
             formatter={(_v, _n, p) => [`${p.payload.count} (${p.payload.pct}%)`, p.payload.full]}
           />
           <Bar
@@ -469,6 +460,8 @@ export function MiniLengthOfStay() {
           <Tooltip
             cursor={{ fill: 'rgba(201,169,97,0.06)' }}
             contentStyle={CHART_TOOLTIP_STYLE}
+            labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+            itemStyle={CHART_TOOLTIP_ITEM_STYLE}
             formatter={(_v, _n, p) => [`${p.payload.count} cases (${p.payload.pct.toFixed(2)}%)`, 'Admissions']}
           />
           <Bar

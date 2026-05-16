@@ -4,7 +4,11 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import CountUp from 'react-countup';
 import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
-import { CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
+import {
+  CHART_TOOLTIP_ITEM_STYLE,
+  CHART_TOOLTIP_LABEL_STYLE,
+  CHART_TOOLTIP_STYLE,
+} from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { useThemeChartColors } from '@/lib/theme-colors';
@@ -64,7 +68,11 @@ export function FinancialDonuts() {
                 <Cell />
                 <Cell />
               </Pie>
-              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
+              <Tooltip
+                contentStyle={CHART_TOOLTIP_STYLE}
+                labelStyle={CHART_TOOLTIP_LABEL_STYLE}
+                itemStyle={CHART_TOOLTIP_ITEM_STYLE}
+              />
             </PieChart>
           </ResponsiveContainer>
           <motion.div
