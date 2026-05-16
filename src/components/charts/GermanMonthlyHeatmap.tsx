@@ -40,6 +40,7 @@ export function GermanMonthlyHeatmap() {
       title="German Patient Monthly Volume"
       populationLabel="n=1,127 German patients · 2024–2025 monthly"
       dataWindow="Analysis window 2024–2025"
+      transparencyNote="2023 (n=303) and 2026 YTD (n=86) German monthly extractions are available in the source files but not folded into this primary 2024–2025 heatmap. They are reported in the 4-Year Partnership Context in the Data Room."
       annotation="Peak season concentration · August through December"
       insight={{
         keyInsight:

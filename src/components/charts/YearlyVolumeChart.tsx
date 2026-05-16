@@ -51,8 +51,8 @@ export function YearlyVolumeChart() {
       subId="3.1"
       eyebrow="§3.1"
       title="Year-by-Year ADAC Volume"
-      populationLabel="n=268 cases · 2023–2026"
-      dataWindow="Historical 2023–2026 · 2026 YTD"
+      populationLabel="n=268 cases · 2023 + 2024 + 2025 + 2026 YTD"
+      dataWindow="Historical 2023–2026 · 2026 YTD (Jan–May)"
       insight={{
         keyInsight:
           'ADAC case volume shows a stable multi-year relationship, with 2024 and 2025 forming the main analysis window.',

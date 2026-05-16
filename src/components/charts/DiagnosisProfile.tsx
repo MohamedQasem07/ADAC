@@ -42,6 +42,7 @@ export function DiagnosisProfile() {
       title="ADAC Diagnosis Profile"
       populationLabel="n=156 ADAC admissions · 2024–2025"
       dataWindow="Clinical breakdown · 2024–2025"
+      transparencyNote="2023 ADAC source records do not include a Diagnosis column, and 2026 YTD (n=11) free-text records are not coded into these 13 categories. The 4-year diagnosis chart is intentionally not extrapolated."
       annotation="Top 3 categories = 75.6% of admissions"
       insight={{
         keyInsight:

@@ -1,0 +1,177 @@
+============================================================
+ADAC 2026 + 2023 DATA EXTRACTION — REDACTED SUMMARY
+============================================================
+
+Extracted on: 2026-05-17
+Source files (NOT in repo — see .gitignore):
+  - Master_Sheet_New.xlsm (sheet "Master Sheet")
+  - master_sheet_tayb.xlsx (sheet "ورقة1", header row 1)
+
+This file is the aggregated, anonymized output of the Python
+extraction script run against the two source spreadsheets.
+Free-text patient diagnosis narratives are intentionally not
+included here even though the script printed them, to keep
+PHI out of the public repo.
+
+------------------------------------------------------------
+Master_Sheet_New.xlsm loaded: 3161 total rows
+Columns:
+  Data Of visit, Patient Name, Gender, DOB, Nationality, Hotel,
+  Treated At, insured by, Insurance Ref, Our Case Number,
+  Diagnosis, Assistance, Case Statu, invoice Amount, Currency,
+  GOP / Paid Amount, Currency2, Notes2, Year, Month, YearMonth,
+  ParsedDate, NormHotel, NormAssist, NormStatus, OurHotelGroup,
+  Quarter, IsOutstanding, DaysOutstanding
+
+Total ADAC rows in 2024-2026 file: 166
+  (these are the INSURANCE-PAID ADAC monthly cases —
+   2024 cash + 2025 cash sit in older bookkeeping)
+
+ADAC by Year (insurance-paid monthly file):
+  Year   Count
+  2024    72
+  2025    83
+  2026    11
+
+============================================================
+=== 2026 YTD ADAC (n=11) ===
+============================================================
+
+Gender (n=11):
+  Female  6
+  Male    5
+
+Hotels (n=11):
+  Pharaoh Azur                2
+  Tropitel                    2
+  Steigenberger Aqua Magic    1
+  Kaisol Romance              3
+  Pick Albatros Resort        1
+  Dana Beach                  1
+  Mina Mark                   1
+
+Case Status (column "Case Statu"):
+  GOPED       9       (insurance-paid)
+  NO GOP      1       (cash)
+  Not sent    1       (cash, status pending)
+
+Monthly distribution (Jan–May):
+  Jan = 4
+  Feb = 1
+  Mar = 4
+  Apr = 2
+  May = 0
+  Total YTD = 11
+
+Ages (anonymized, "case N: age Y"):
+  case 1: age 36
+  case 2: age 90
+  case 3: age 66
+  case 4: age 27
+  case 5: age 57
+  case 6: age 1
+  case 7: age 81
+  case 8: age 86
+  case 9: age 62
+  case 10: age 65
+  case 11: age 40
+
+Age brackets 2026 (n=11):
+  0–4:    1
+  5–12:   0
+  13–17:  0
+  18–40:  3
+  41–60:  1
+  61+:    6
+  unknown: 0
+
+Diagnoses 2026 (free-text, REDACTED from this file — see
+adac2026YTDClinical.diagnosisNotes in adac-data.json):
+  All 11 cases recorded as multi-system free-text descriptions,
+  not single coded categories. Common patterns observed:
+  GI / Respiratory / Trauma / Vascular-Cellulitis / Cardiac-Multi-system.
+
+Length of stay 2026:
+  unavailable — Master_Sheet_New.xlsm does not include a
+  Discharge Date column for these ADAC rows.
+
+============================================================
+=== German monthly 2026 (Jan–May) — n=86 ===
+============================================================
+  Jan = 23
+  Feb = 11
+  Mar = 22
+  Apr = 22
+  May = 8
+  YTD total = 86
+
+============================================================
+=== 2023 source file (master_sheet_tayb.xlsx) ===
+============================================================
+
+Columns (note: short Arabic-source column names):
+  D, M, Y, Our ref, Name, Nationality, INS, Ref, Assistance,
+  Ref.1, Hotel, Amount, Currency, GOP, GOPed amount, Post,
+  Collected amount, D.1, M.1, Y.1, Commission, collected amount,
+  Notes, Y.2, Unnamed: 24, Case_Date, Paid_Status, Collection_Date,
+  Amount_Num, Collected_Num, MatchIdx
+
+Total ADAC rows in 2023 file: 66
+ADAC by Y:
+  Y=22.0:  7
+  Y=23.0: 57   ← 2023 ADAC
+  Y=24.0:  2   (early 2024 strays before the move to new sheet)
+
+2023 ADAC count: 57 (matches the figure in DATA_UPDATE_2023_2026.md)
+
+2023 ADAC monthly:
+  M=1.0:    7
+  M=2.0:    0  (no rows recorded)
+  M=3.0:    2
+  M=4.0:    8
+  M=5.0:    1
+  M=6.0:    8
+  M=7.0:    6
+  M=8.0:    7
+  M=9.0:    4
+  M=10.0:   3
+  M=11.0:   9
+  M=12.0:   2
+  Total = 57
+
+2023 ADAC hotels:
+  HMC (generic)  53
+  Tropital        3
+  Romance         1
+
+2023 ADAC clinical columns:
+  Diagnosis:      NOT PRESENT in source
+  DOB / age:      NOT PRESENT in source
+  Discharge Date: NOT PRESENT in source
+  Case Status / cash-insurance split: NOT PRESENT
+
+(Therefore 2023 diagnosis / age / LOS / cash-insurance figures
+ are intentionally NOT shown on any chart. The primary
+ clinical charts stay calibrated to 2024–2025, n=156.)
+
+============================================================
+=== German monthly 2023 — n=303 ===
+============================================================
+  M=1.0:  24
+  M=2.0:   9
+  M=3.0:  28
+  M=4.0:  26
+  M=5.0:  16
+  M=6.0:  35
+  M=7.0:  30
+  M=8.0:  27
+  M=9.0:  27
+  M=10.0: 27
+  M=11.0: 39
+  M=12.0: 15
+  Total = 303
+  (matches DATA_UPDATE_2023_2026.md confirmed figure for 2023)
+
+============================================================
+END OF EXTRACTION
+============================================================

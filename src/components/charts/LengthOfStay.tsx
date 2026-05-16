@@ -52,6 +52,7 @@ export function LengthOfStay() {
       title="ADAC Length of Stay"
       populationLabel="n=156 ADAC admissions · 2024–2025"
       dataWindow="Clinical breakdown · 2024–2025"
+      transparencyNote="2023 source records do not include a Discharge Date column, and 2026 YTD records do not yet have one either. Length of stay is therefore only reported across the 2024–2025 admission window."
       annotation="83% of admissions discharged within 48 hours"
       insight={{
         keyInsight:

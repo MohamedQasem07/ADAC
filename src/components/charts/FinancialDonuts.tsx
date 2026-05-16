@@ -32,6 +32,7 @@ export function FinancialDonuts() {
       title="Cash vs Insurance Split"
       populationLabel="n=200 ADAC cases · 2024–2025"
       dataWindow="Analysis window 2024–2025"
+      transparencyNote="2023 source records have no Case Status column for cash/insurance split. 2026 YTD shows 9 insurance (GOPED) / 2 cash from n=11. The headline split stays at 2024–2025 (44 cash / 156 insurance, n=200)."
       annotation="Insurance share grew from 70% → 87% in 2025"
       insight={{
         keyInsight:

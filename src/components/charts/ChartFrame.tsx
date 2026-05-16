@@ -27,6 +27,12 @@ interface ChartFrameProps {
    * time slice than its neighbours.
    */
   dataWindow?: string;
+  /**
+   * Optional transparency footnote rendered below the chart (and above
+   * the insight panel). Use for "2023 source data does not include this
+   * column" / "2026 YTD has too few cases for a stable rate" / similar.
+   */
+  transparencyNote?: string;
   children: ReactNode;
   /** Tighter top padding for non-hero charts. */
   compact?: boolean;
@@ -48,6 +54,7 @@ export function ChartFrame({
   eyebrow,
   insight,
   dataWindow,
+  transparencyNote,
   children,
   compact = false,
 }: ChartFrameProps) {
@@ -125,6 +132,17 @@ export function ChartFrame({
           style={{ color: 'var(--theme-accent-soft)' }}
         >
           {annotation}
+        </motion.p>
+      )}
+
+      {transparencyNote && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 1.55, duration: 0.6, ease: ease.premium }}
+          className="mt-4 text-center text-[11px] leading-relaxed text-ice/65 md:text-xs"
+        >
+          {transparencyNote}
         </motion.p>
       )}
 

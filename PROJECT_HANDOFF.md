@@ -29,7 +29,8 @@
 | 2.4E | Optional Partnership theme system (CSS-var scaffold + Section 3 chart opt-ins) |
 | 2.4E.2 | Real Partnership visual mode + on-screen theme switcher + hotkey removed + console cleanup |
 | 2.4E.3 | Split HMC × ADAC partnership visual mode polish |
-| **2.4F** | **Subtopic content expansion + KPI overflow fix + data window labels (this commit)** |
+| 2.4F | Subtopic content expansion + KPI overflow fix + data window labels |
+| **2.4H** | **Integrate ADAC 2023 + 2026 YTD as supplementary 4-year context (this commit)** |
 
 ## 3. Current key features
 
@@ -103,6 +104,43 @@ The deck mixes two intentionally different windows. The labels make the differen
 | **Clinical breakdown · 2024–2025** | The 156-admission medical subset: diagnosis profile, admission profile, age distribution, length of stay. | The detailed clinical dataset is only complete for the admitted-case 2024–2025 subset. We do not extend it to 2023 or 2026 because the source data does not. |
 
 Rule: **never extrapolate.** If a chart's source data is 2024–2025 only, the chart and its label stay 2024–2025 only. 2023 and 2026 numbers appear only in the yearly volume chart and the historical KPI.
+
+## 4c. Phase 2.4H — Integrate 2023 + 2026 YTD as supplementary 4-year context
+
+The primary 2024–2025 analysis window is preserved exactly. 2023 and 2026 YTD are added only where the source data supports it.
+
+### What is real (extracted from Excel 2026-05-17)
+
+- **2023 ADAC volume:** 57 cases. Monthly Jan–Dec real. Hotels: HMC generic 53, Tropital 3, Romance 1.
+- **2024 ADAC monthly (insurance-paid flow):** 72 cases real (vs. 103 yearly total — the cash subset lives outside this monthly file).
+- **2025 ADAC monthly (insurance-paid flow):** 83 cases real (vs. 97 yearly total).
+- **2026 YTD:** 11 ADAC cases real Jan–May 2026. Ages: 0–4=1 · 18–40=3 · 41–60=1 · 61+=6. Cash/insurance: 9 GOPED / 2 cash. Hotels distributed across the network. Diagnoses are free-text multi-system descriptions.
+- **German monthly 2023:** 303 patients real. Monthly Jan–Dec real.
+- **German monthly 2026 YTD:** 86 patients real, Jan–May.
+
+### What is intentionally not shown (and why)
+
+- 2023 diagnosis, age, length-of-stay, cash/insurance — **source columns do not exist** in `master_sheet_tayb.xlsx`.
+- 2026 length-of-stay — source has no Discharge Date column.
+- 2026 diagnoses coded into the 2024–2025 13-category schema — source is free-text multi-system; coding it would be a judgment call, not a measurement.
+- 4-year merged clinical charts (n=209) — would conflate real n=156 with extrapolated synthesis; rejected for credibility.
+
+### Charts updated in 2.4H
+
+- **§3.1 composed page:** `YearlyVolumePage` now renders the existing 4-year bar chart + a new `ADACMonthlyHeatmap4Year` (4 rows × 12 months, real data, footnote explaining insurance-paid vs total).
+- **Data Room:** new `FourYearContextCard` between Historical Performance (block 3) and Market Context (block 4). Shows 268 hero + per-year bar strip with 2026 marked YTD + honest data-window note.
+- **§3.2–3.8 charts:** each now carries a `transparencyNote` rendered below the chart explaining what is and isn't included for 2023 / 2026.
+- **`ChartFrame`** got an optional `transparencyNote?: string` prop.
+
+### Charts that stayed 2024–2025 (and why)
+
+§3.2 German Monthly Heatmap, §3.3 Diagnosis, §3.4 Financial Donut, §3.5 Admission, §3.6 Age, §3.7 LoS, §3.8 Market Share. Each labelled `Analysis window 2024–2025` or `Clinical breakdown · 2024–2025`. Every chart now carries an in-place transparency note pointing readers to the 4-Year Context card when the wider view exists.
+
+### Data + docs
+
+- `src/content/adac-data.json` + `public/data/adac-data.json`: new `historicalContext2023_2026` block (yearlyVolume, adacMonthly, germanMonthly2023, germanMonthly2026YTD, adac2026YTDClinical, adac2023Clinical, fourYearSummary). **All pre-2.4H fields unchanged.**
+- `docs/data_extraction_2026.txt`: raw Python extraction output from both Excel files. The source-of-truth for every 2023 / 2026 figure shown on the deck.
+- `docs/ADAC_2023_2026_INTEGRATION_NOTES.md`: internal reference covering what is real, what is extrapolated, what is intentionally not shown, what charts are updated, and what next steps unlock if more source data appears.
 
 ## 5. Critical locked rules
 

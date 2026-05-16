@@ -109,5 +109,91 @@
     { "value": "200",    "label": "Cases in 2024–2025" },
     { "value": "1,127",  "label": "German patients 2024–2025" },
     { "value": "20.37%", "label": "Share of insured German cases" }
-  ]
+  ],
+
+  "historicalContext2023_2026": {
+    "summary": "4-year partnership context. The primary analysis window remains 2024–2025 — see fields above. This block adds 2023 and 2026 YTD only where the source data supports it.",
+    "extractionDate": "2026-05-17",
+    "extractionSource": "Master_Sheet_New.xlsm + master_sheet_tayb.xlsx",
+
+    "yearlyVolume": {
+      "label": "ADAC Case Volume 2023–2026",
+      "window": "Jan 2023 – May 2026",
+      "totalCases": 268,
+      "data": [
+        { "year": "2023",     "count": 57, "ytd": false },
+        { "year": "2024",     "count": 103, "ytd": false },
+        { "year": "2025",     "count": 97, "ytd": false },
+        { "year": "2026 YTD", "count": 11, "ytd": true,  "monthsCovered": "Jan–May" }
+      ]
+    },
+
+    "adacMonthly": {
+      "label": "ADAC Monthly Distribution 2023–2026",
+      "window": "Jan 2023 – May 2026",
+      "source": "real",
+      "footnote": "2024 and 2025 monthly rows represent insurance-paid ADAC case flow (72 + 83). Yearly totals 103 / 97 include cash-paid ADAC cases too — see the Yearly Volume chart.",
+      "rows": [
+        { "year": "2023",     "months": [7, 0, 2, 8, 1, 8, 6, 7, 4, 3, 9, 2], "total": 57 },
+        { "year": "2024",     "months": [1, 6, 2, 2, 5, 7, 8, 8, 12, 7, 7, 7], "total": 72 },
+        { "year": "2025",     "months": [4, 5, 6, 2, 8, 8, 3, 10, 9, 7, 12, 9], "total": 83 },
+        { "year": "2026 YTD", "months": [4, 1, 4, 2, 0, null, null, null, null, null, null, null], "total": 11 }
+      ]
+    },
+
+    "germanMonthly2023": {
+      "source": "real",
+      "extractedFrom": "master_sheet_tayb.xlsx",
+      "total": 303,
+      "months": [24, 9, 28, 26, 16, 35, 30, 27, 27, 27, 39, 15]
+    },
+
+    "germanMonthly2026YTD": {
+      "source": "real",
+      "extractedFrom": "Master_Sheet_New.xlsm",
+      "total": 86,
+      "months": [23, 11, 22, 22, 8, null, null, null, null, null, null, null]
+    },
+
+    "adac2026YTDClinical": {
+      "source": "real",
+      "extractedFrom": "Master_Sheet_New.xlsm",
+      "n": 11,
+      "ages": { "0-4": 1, "5-12": 0, "13-17": 0, "18-40": 3, "41-60": 1, "61+": 6 },
+      "financialMix": { "insurance": 9, "cash": 2, "label": "GOPED 9 · No GOP/Not sent 2" },
+      "hotels": [
+        { "name": "Pharaoh Azur", "count": 2 },
+        { "name": "Tropitel", "count": 2 },
+        { "name": "Kaisol Romance", "count": 3 },
+        { "name": "Mina Mark", "count": 1 },
+        { "name": "Dana Beach", "count": 1 },
+        { "name": "Steigenberger Aqua Magic", "count": 1 },
+        { "name": "Pick Albatros Resort", "count": 1 }
+      ],
+      "diagnosisNotes": "2026 source diagnoses are free-text multi-system descriptions, not coded into a single category each. Counts are therefore not mapped to the 13 categories used in the 2024–2025 primary chart. Common patterns: GI, Respiratory, Trauma, Vascular/Cellulitis, Cardiac/Multi-system."
+    },
+
+    "adac2023Clinical": {
+      "source": "real-volume-only",
+      "extractedFrom": "master_sheet_tayb.xlsx",
+      "n": 57,
+      "diagnosisData": "unavailable",
+      "ageData": "unavailable",
+      "losData": "unavailable",
+      "cashInsuranceSplit": "unavailable",
+      "hotels": [
+        { "name": "HMC (generic)", "count": 53 },
+        { "name": "Tropital", "count": 3 },
+        { "name": "Romance", "count": 1 }
+      ],
+      "footnote": "2023 source records do not include a Diagnosis, DOB, Discharge Date, or Case Status column. Monthly counts and hotels are real; clinical breakdowns are intentionally not extrapolated into the primary 2024–2025 charts."
+    },
+
+    "fourYearSummary": {
+      "totalADAC": 268,
+      "primaryAnalysisWindow": "2024–2025 (n=200)",
+      "primaryClinicalBreakdown": "2024–2025 admissions (n=156)",
+      "trendNote": "2024–2025 remains the strongest complete analysis window. 2023 contributes 57 real cases of volume and seasonality; 2026 YTD contributes 11 real cases through May."
+    }
+  }
 }

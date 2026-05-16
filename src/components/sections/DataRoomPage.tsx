@@ -29,6 +29,7 @@ import {
   MiniMarketShare,
   MiniYearlyBars,
 } from './data-room/DataRoomCharts';
+import { FourYearContextCard } from './data-room/FourYearContextCard';
 import { DataRoomCoverage } from './data-room/DataRoomCoverage';
 import { DataRoomDecisions } from './data-room/DataRoomDecisions';
 import { DataRoomPackages } from './data-room/DataRoomPackages';
@@ -108,6 +109,11 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         >
           <MiniYearlyBars />
         </Card>
+      </Section>
+
+      {/* Block 3b — 4-Year Partnership Context (Phase 2.4H) */}
+      <Section delay={0.05}>
+        <FourYearContextCard />
       </Section>
 
       {/* Block 4 — German Traveler Market Context (Heatmap featured + Market Share) */}

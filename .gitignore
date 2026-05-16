@@ -46,3 +46,9 @@ desktop.ini
 
 # Claude Code harness runtime artifacts (worktree-internal locks etc.)
 .claude/
+
+# Raw source data — contains real patient PHI. Never commit.
+Master_Sheet_New.xlsm
+master_sheet_tayb.xlsx
+*.xlsx
+*.xlsm
