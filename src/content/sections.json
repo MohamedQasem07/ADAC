@@ -167,7 +167,8 @@
         { "id": "12.6", "title": "Dental Emergency", "renderer": "package-category", "data": "packages.json#category=6" },
         { "id": "12.7", "title": "Allergic & Skin", "renderer": "package-category", "data": "packages.json#category=7" },
         { "id": "12.8", "title": "Eye Conditions", "renderer": "package-category", "data": "packages.json#category=8" },
-        { "id": "12.9", "title": "Cardiac Outpatient", "renderer": "package-category", "data": "packages.json#category=9" }
+        { "id": "12.9", "title": "Cardiac Outpatient", "renderer": "package-category", "data": "packages.json#category=9" },
+        { "id": "12.10", "title": "Pricing Summary Matrix", "renderer": "pricing-matrix", "data": "packages.json" }
       ]
     },
     {

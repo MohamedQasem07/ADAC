@@ -2,12 +2,13 @@ import { notFound } from 'next/navigation';
 import {
   getAllSections,
   getSectionMeta,
+  getSubtopicSummaries,
   loadReferencedContent,
   readJson,
 } from '@/lib/content-loader';
 import { DashboardOverview } from '@/components/sections/DashboardOverview';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { MarkdownSection } from '@/components/sections/MarkdownSection';
+import { LayoutAwareSection } from '@/components/sections/LayoutAwareSection';
 import { PackageCatalogueOverview } from '@/components/sections/PackageCatalogueOverview';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 import type { ADACDataset, Package, PackageCategory } from '@/types/content';
@@ -71,8 +72,17 @@ export default function SectionPage({ params }: { params: { id: string } }) {
     }
   }
 
+  // Generic layout-aware dispatch for every other section top-level.
   if (content?.kind === 'markdown') {
-    return <MarkdownSection content={content.data} sectionId={section.id} />;
+    const summaries = getSubtopicSummaries(section.id);
+    return (
+      <LayoutAwareSection
+        sectionId={section.id}
+        content={content.data}
+        summaries={summaries}
+        subtopics={section.subtopics ?? []}
+      />
+    );
   }
 
   return <PlaceholderSection section={section} />;

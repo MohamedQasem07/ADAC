@@ -1,21 +1,21 @@
 {
   "regionTitle": "HMC Network · Red Sea Region",
   "zones": [
-    { "id": "safaga",       "name": "Safaga",        "x": 50, "y": 16, "color": "teal" },
-    { "id": "hurghada",     "name": "Hurghada",      "x": 50, "y": 36, "color": "navy" },
-    { "id": "sahl",         "name": "Sahl Hasheesh", "x": 60, "y": 60, "color": "gold" },
-    { "id": "marsaalam",    "name": "Marsa Alam",    "x": 75, "y": 88, "color": "ink" }
+    { "id": "safaga",    "name": "Safaga",        "x": 35, "y": 7,  "color": "teal" },
+    { "id": "hurghada",  "name": "Hurghada",      "x": 42, "y": 16, "color": "navy" },
+    { "id": "sahl",      "name": "Sahl Hasheesh", "x": 58, "y": 33, "color": "gold" },
+    { "id": "marsaalam", "name": "Marsa Alam",    "x": 75, "y": 50, "color": "ink"  }
   ],
   "locations": [
-    { "id": "1",  "number": 1,  "name": "Soma Bay Clinic",            "zone": "Safaga",       "color": "teal", "x": 48, "y": 18, "services": ["GP", "ER", "Pediatric"], "hours": "24/7" },
-    { "id": "2",  "number": 2,  "name": "Pharaoh Azure Hotel",        "zone": "Hurghada",     "color": "navy", "x": 48, "y": 32, "services": ["GP", "Hotel visits"], "hours": "24/7" },
-    { "id": "3",  "number": 3,  "name": "Minamark Hotel",             "zone": "Hurghada",     "color": "navy", "x": 49, "y": 35, "services": ["GP", "Hotel visits"], "hours": "24/7" },
-    { "id": "4",  "number": 4,  "name": "Sheraton Hotel Branch",      "zone": "Hurghada",     "color": "navy", "x": 51, "y": 38, "services": ["GP", "Hotel visits"], "hours": "24/7" },
-    { "id": "5",  "number": 5,  "name": "Al-Kawther Branch",          "zone": "Hurghada",     "color": "navy", "x": 47, "y": 41, "services": ["GP", "Labs", "X-Ray"], "hours": "24/7" },
-    { "id": "6",  "number": 6,  "name": "Tourist Promenade Clinic 1", "zone": "Hurghada",     "color": "navy", "x": 50, "y": 44, "services": ["GP", "ER", "Labs"],   "hours": "24/7" },
-    { "id": "7",  "number": 7,  "name": "Tourist Promenade Clinic 2", "zone": "Hurghada",     "color": "navy", "x": 53, "y": 46, "services": ["GP", "Pediatric"],   "hours": "24/7" },
-    { "id": "8",  "number": 8,  "name": "Sahl Hasheesh Medical Center", "zone": "Sahl Hasheesh", "color": "gold", "x": 60, "y": 58, "services": ["GP", "ER", "Labs", "X-Ray"], "hours": "24/7" },
-    { "id": "9",  "number": 9,  "name": "Kay Soul Romance Clinic",    "zone": "Sahl Hasheesh", "color": "gold", "x": 62, "y": 62, "services": ["GP", "Hotel visits"], "hours": "24/7" },
-    { "id": "10", "number": 10, "name": "Sahl Hasheesh Medical Center 2", "zone": "Sahl Hasheesh", "color": "gold", "x": 64, "y": 65, "services": ["GP", "ER", "Pediatric"], "hours": "24/7" }
+    { "id": "1",  "number": 1,  "name": "Soma Bay Clinic",              "zone": "Safaga",        "color": "teal", "x": 32, "y": 9,  "services": ["GP", "ER", "Pediatric"],         "hours": "24/7" },
+    { "id": "2",  "number": 2,  "name": "Pharaoh Azure Hotel",          "zone": "Hurghada",      "color": "navy", "x": 38, "y": 18, "services": ["GP", "Hotel visits"],            "hours": "24/7" },
+    { "id": "3",  "number": 3,  "name": "Minamark Hotel",               "zone": "Hurghada",      "color": "navy", "x": 41, "y": 20, "services": ["GP", "Hotel visits"],            "hours": "24/7" },
+    { "id": "4",  "number": 4,  "name": "Sheraton Hotel Branch",        "zone": "Hurghada",      "color": "navy", "x": 45, "y": 22, "services": ["GP", "Hotel visits"],            "hours": "24/7" },
+    { "id": "5",  "number": 5,  "name": "Al-Kawther Branch",            "zone": "Hurghada",      "color": "navy", "x": 40, "y": 25, "services": ["GP", "Labs", "X-Ray"],           "hours": "24/7" },
+    { "id": "6",  "number": 6,  "name": "Tourist Promenade Clinic 1",   "zone": "Hurghada",      "color": "navy", "x": 47, "y": 27, "services": ["GP", "ER", "Labs"],              "hours": "24/7" },
+    { "id": "7",  "number": 7,  "name": "Tourist Promenade Clinic 2",   "zone": "Hurghada",      "color": "navy", "x": 50, "y": 30, "services": ["GP", "Pediatric"],               "hours": "24/7" },
+    { "id": "8",  "number": 8,  "name": "Sahl Hasheesh Medical Center", "zone": "Sahl Hasheesh", "color": "gold", "x": 58, "y": 38, "services": ["GP", "ER", "Labs", "X-Ray"],     "hours": "24/7" },
+    { "id": "9",  "number": 9,  "name": "Kay Soul Romance Clinic",      "zone": "Sahl Hasheesh", "color": "gold", "x": 62, "y": 42, "services": ["GP", "Hotel visits"],            "hours": "24/7" },
+    { "id": "10", "number": 10, "name": "Sahl Hasheesh Medical Center 2","zone": "Sahl Hasheesh","color": "gold", "x": 66, "y": 45, "services": ["GP", "ER", "Pediatric"],         "hours": "24/7" }
   ]
 }

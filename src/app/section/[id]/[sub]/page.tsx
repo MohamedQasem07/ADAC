@@ -9,6 +9,8 @@ import {
 import { CHART_REGISTRY } from '@/components/charts';
 import { NetworkMap, type NetworkMapData } from '@/components/map/NetworkMap';
 import { CategoryDetail } from '@/components/packages/CategoryDetail';
+import { PricingMatrix } from '@/components/packages/PricingMatrix';
+import { CardsLayout } from '@/components/sections/layouts/CardsLayout';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 import { SampleReportCard } from '@/components/sections/SampleReportCard';
@@ -72,9 +74,40 @@ export default function SubtopicPage({
     );
   }
 
+  // §12.10 — Pricing Summary Matrix.
+  if (subtopic.renderer === 'pricing-matrix') {
+    const data = readJson<{ categories: PackageCategory[]; packages: Package[] }>(
+      'packages.json'
+    );
+    if (data) {
+      return <PricingMatrix categories={data.categories} packages={data.packages} />;
+    }
+  }
+
   // Sample medical report (§10.1).
   if (subtopic.renderer === 'sample-report') {
     return <SampleReportCard />;
+  }
+
+  // Cards renderer (§2.4 Equipment, §5.5 Response Time).
+  if (subtopic.renderer === 'cards') {
+    const content = loadReferencedContent(subtopic.content);
+    if (content?.kind === 'json') {
+      const data = content.data as {
+        title?: string;
+        eyebrow?: string;
+        summary?: string;
+        items: Array<{ icon?: string; title: string; body: string }>;
+      };
+      return <CardsLayout data={data} />;
+    }
+    return (
+      <PlaceholderSection
+        section={section}
+        subtopic={subtopic}
+        reason="missing-content"
+      />
+    );
   }
 
   // Map renderer (§2.2) — wired in Phase 6.

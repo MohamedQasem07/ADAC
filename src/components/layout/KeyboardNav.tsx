@@ -51,6 +51,22 @@ export function KeyboardNav({ onToggleSidebar }: KeyboardNavProps) {
       // Ignore other modifier combos (Cmd/Ctrl + 1/2/3/F handled elsewhere).
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
+      // Plain-key sidebar toggle (M) — user requested for live presentation.
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        onToggleSidebar();
+        emitHotkeyToast({ keys: 'M', action: 'Toggle menu' });
+        return;
+      }
+
+      // Plain-key fullscreen toggle (F).
+      if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullscreen();
+        emitHotkeyToast({ keys: 'F', action: 'Toggle fullscreen' });
+        return;
+      }
+
       switch (e.key) {
         case 'ArrowRight': {
           const next = nextRoute(current);
@@ -112,4 +128,17 @@ export function KeyboardNav({ onToggleSidebar }: KeyboardNavProps) {
   }, [pathname, router, onToggleSidebar]);
 
   return null;
+}
+
+function toggleFullscreen() {
+  if (typeof document === 'undefined') return;
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.().catch(() => {
+      /* user may have denied or device unsupported — silent */
+    });
+  } else {
+    document.exitFullscreen?.().catch(() => {
+      /* silent */
+    });
+  }
 }

@@ -9,6 +9,7 @@ import { Breadcrumb } from './Breadcrumb';
 import { CheatsheetOverlay } from './CheatsheetOverlay';
 import { HotkeyToast } from './HotkeyToast';
 import { KeyboardNav } from './KeyboardNav';
+import { MenuButton } from './MenuButton';
 import { PageTransition } from './PageTransition';
 import { ScenarioIndicator } from './ScenarioIndicator';
 import { SearchOverlay } from '@/components/packages/SearchOverlay';
@@ -38,6 +39,7 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
       <AmbientBackground />
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
+      <MenuButton onClick={() => setSidebarOpen(true)} />
       <Breadcrumb />
 
       {/* Main slot — section pages render their own SectionFrame later. */}

@@ -101,3 +101,54 @@ export function loadReferencedContent(
   }
   return undefined;
 }
+
+/**
+ * Compact summary of a subtopic — used by grid/flow/timeline layouts
+ * to populate cards without re-reading the full markdown body at runtime.
+ */
+export interface SubtopicSummary {
+  id: string;
+  title: string;
+  summary: string;
+  eyebrow?: string;
+  href: string;
+}
+
+/**
+ * Build a list of compact summaries for a section's subtopics. Reads each
+ * referenced MD file's frontmatter at build time. Falls back to the
+ * subtopic's title from sections.json when no frontmatter summary exists.
+ */
+export function getSubtopicSummaries(sectionId: string): SubtopicSummary[] {
+  const section = getSectionMeta(sectionId);
+  if (!section?.subtopics) return [];
+
+  return section.subtopics.map((sub) => {
+    let summary = sub.title;
+    let eyebrow: string | undefined;
+
+    if (sub.content?.endsWith('.md')) {
+      const md = readMarkdown(sub.content);
+      if (md) {
+        const fmSummary = md.frontmatter.summary;
+        if (typeof fmSummary === 'string' && fmSummary.trim()) {
+          summary = fmSummary;
+        }
+        const fmEyebrow = md.frontmatter.eyebrow;
+        if (typeof fmEyebrow === 'string') eyebrow = fmEyebrow;
+      }
+    } else if (sub.content?.endsWith('.json')) {
+      const j = readJson<{ summary?: string; eyebrow?: string }>(sub.content);
+      if (j?.summary) summary = j.summary;
+      if (j?.eyebrow) eyebrow = j.eyebrow;
+    }
+
+    return {
+      id: sub.id,
+      title: sub.title,
+      summary,
+      eyebrow,
+      href: `/section/${sectionId}/${sub.id}`,
+    };
+  });
+}

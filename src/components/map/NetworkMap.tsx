@@ -90,10 +90,10 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.9, ease: ease.premium }}
-          className="relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-white/10 bg-gradient-to-b from-navy-deep via-navy to-navy-deep"
+          className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-white/10 bg-gradient-to-b from-navy-deep via-navy to-navy-deep"
         >
           <svg
-            viewBox="0 0 100 125"
+            viewBox="0 0 100 56"
             preserveAspectRatio="none"
             className="absolute inset-0 h-full w-full"
             role="img"
@@ -115,27 +115,25 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
             </defs>
 
             {/* Sea (right side) */}
-            <rect width="100" height="125" fill="url(#seaGradient)" />
-            <rect width="100" height="125" fill="url(#waves)" />
+            <rect width="100" height="56" fill="url(#seaGradient)" />
+            <rect width="100" height="56" fill="url(#waves)" />
 
-            {/* Land mass — hand-drawn-style stylized Red Sea western coastline */}
+            {/* Land mass — hand-drawn-style stylized Red Sea western coastline (16:9) */}
             <motion.path
               d="
                 M 0 0
-                L 30 0
-                C 28 8, 32 12, 30 16
-                C 28 22, 36 26, 34 32
-                C 32 38, 40 42, 36 50
-                C 32 58, 44 62, 40 68
-                C 36 76, 48 80, 44 88
-                C 40 98, 50 102, 48 110
-                C 46 118, 56 122, 50 125
-                L 0 125
+                L 25 0
+                C 24 4, 28 6, 26 10
+                C 22 14, 30 16, 28 20
+                C 26 26, 32 30, 30 34
+                C 28 40, 38 44, 32 50
+                C 30 54, 40 55, 32 56
+                L 0 56
                 Z
               "
               fill="rgba(15, 30, 45, 0.7)"
               stroke="rgba(201, 169, 97, 0.35)"
-              strokeWidth="0.25"
+              strokeWidth="0.2"
               initial={{ pathLength: 0 }}
               animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
               transition={{ duration: 1.5, ease: ease.premium }}

@@ -1,0 +1,11 @@
+{
+  "title": "Response Time by Zone",
+  "eyebrow": "§5.5",
+  "summary": "Target response times for hotel-room and mobile-unit dispatch, by tourist zone.",
+  "items": [
+    { "icon": "MapPin",    "title": "Central Hurghada",      "body": "Hotel-room dispatch target: 30–45 min from notification. Six on-zone clinics." },
+    { "icon": "Anchor",    "title": "Sahl Hasheesh",         "body": "Hotel-room dispatch target: 30–45 min. Three on-zone clinics; resort-gate access in place." },
+    { "icon": "Compass",   "title": "Safaga / Soma Bay",     "body": "Dispatch target: 45–60 min via Soma Bay Clinic and northern transport." },
+    { "icon": "Sailboat",  "title": "Marsa Alam (extended)", "body": "On-call physician with remote-triage protocol; semi-ambulance transport when imaging or extended care is needed." }
+  ]
+}

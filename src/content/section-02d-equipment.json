@@ -1,0 +1,17 @@
+{
+  "title": "Portable Medical Equipment",
+  "eyebrow": "§2.4",
+  "summary": "Hotel-room and mobile-unit capability that lets us complete most outpatient workups without moving the traveler.",
+  "items": [
+    { "icon": "Stethoscope",  "title": "Portable doctor kit",      "body": "Vital-signs monitoring, ECG-ready leads, and standard examination tooling carried to every hotel-room visit." },
+    { "icon": "Activity",     "title": "Portable ECG",             "body": "12-lead ECG used for cardiac screening and triage at the patient's location." },
+    { "icon": "Syringe",      "title": "IV therapy station",       "body": "Cannulation, IV bags, electrolyte and anti-emetic preparations — full IV workup on site." },
+    { "icon": "Wind",         "title": "Nebulizer + SpO₂",         "body": "Portable nebulizer with bronchodilator and steroid; pulse-oximetry for respiratory cases." },
+    { "icon": "Bandage",      "title": "Wound-care field kit",     "body": "Sterile suturing trays, dressings, antiseptics, and a tetanus protocol kit — ready for minor surgery." },
+    { "icon": "Zap",          "title": "Portable X-Ray",           "body": "On-site radiography for trauma triage; allows fracture rule-out without ambulance transfer." },
+    { "icon": "Ear",          "title": "Portable ear-wash system", "body": "Therapeutic ear lavage and wax removal performed at the hotel without ENT clinic transfer." },
+    { "icon": "TestTube",     "title": "Point-of-care labs",       "body": "CBC, CRP, electrolytes, troponin — sample at the patient, run in our nearest network lab." },
+    { "icon": "Truck",        "title": "Mobile clinic unit",       "body": "Fully equipped vehicle deployable to hotel gates for cases requiring extended observation." },
+    { "icon": "Ambulance",    "title": "Ambulance + semi-ambulance","body": "Stabilization and transport network for escalation to ER or onward hospital care." }
+  ]
+}
