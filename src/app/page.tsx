@@ -1,20 +1,26 @@
 import { loadReferencedContent, getSectionMeta } from '@/lib/content-loader';
-import { MarkdownSection } from '@/components/sections/MarkdownSection';
-import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
+import { HeroSection } from '@/components/sections/HeroSection';
 
 /**
- * Home (Section 1 cover). Cinematic HeroSection treatment comes in
- * Phase 4 — for now this routes through the same content pipeline as
- * every other section so a single edit to section-01-welcome.md updates
- * the cover live in development.
+ * Home (Section 1 cover). Renders the cinematic HeroSection driven by
+ * frontmatter from `section-01-welcome.md`. Editing the markdown file
+ * updates the cover live in dev.
  */
 export default function HomePage() {
   const section = getSectionMeta('1');
-  if (!section) return null;
+  const content = loadReferencedContent(section?.content);
 
-  const content = loadReferencedContent(section.content);
-  if (content?.kind === 'markdown') {
-    return <MarkdownSection content={content.data} sectionId="1" />;
+  if (content?.kind !== 'markdown') {
+    return null;
   }
-  return <PlaceholderSection section={section} />;
+  const fm = content.data.frontmatter;
+  return (
+    <HeroSection
+      variant="cover"
+      eyebrow={fm.eyebrow ?? 'Partnership Proposal'}
+      title={fm.title ?? 'HMC × ADAC'}
+      subtitle={fm.subtitle}
+      body={content.data.body}
+    />
+  );
 }

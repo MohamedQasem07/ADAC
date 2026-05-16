@@ -4,6 +4,7 @@ import {
   getSectionMeta,
   loadReferencedContent,
 } from '@/lib/content-loader';
+import { HeroSection } from '@/components/sections/HeroSection';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 
@@ -18,6 +19,20 @@ export default function SectionPage({ params }: { params: { id: string } }) {
   if (!section) notFound();
 
   const content = loadReferencedContent(section.content);
+
+  // Hero treatment for cover and closing.
+  if (section.type === 'hero' && content?.kind === 'markdown') {
+    const fm = content.data.frontmatter;
+    return (
+      <HeroSection
+        variant={section.id === '18' ? 'closing' : 'cover'}
+        eyebrow={fm.eyebrow}
+        title={fm.title ?? section.title}
+        subtitle={fm.subtitle}
+        body={content.data.body}
+      />
+    );
+  }
 
   if (content?.kind === 'markdown') {
     return <MarkdownSection content={content.data} sectionId={section.id} />;
