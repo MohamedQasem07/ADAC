@@ -11,10 +11,12 @@ import {
   Clock,
   FileText,
   Layers,
+  LayoutDashboard,
   Map,
   MessagesSquare,
   Phone,
   ShieldCheck,
+  Sparkles,
   Stethoscope,
   Tag,
   Target,
@@ -94,6 +96,46 @@ export function OverviewSection({
         )}
         <div className="gold-rule mx-auto mt-8 w-24" />
       </header>
+
+      {/* Data Room CTA — visible only on the Presentation Overview page,
+          not on the Decision Points page that reuses this renderer. */}
+      {keyPrefix === 'overview' && (
+        <div className="mx-auto mt-12 max-w-4xl px-8">
+          <Link
+            href="/section/data-room"
+            className="group relative flex flex-col items-start gap-4 overflow-hidden rounded-sm border border-gold/40 bg-gradient-to-br from-gold/[0.10] via-gold/[0.04] to-transparent px-6 py-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-card-hover sm:flex-row sm:items-center sm:gap-6"
+          >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/60"
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/60"
+            />
+            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-gold/50 bg-gold/15 text-gold shadow-[0_0_24px_rgba(201,169,97,0.2)]">
+              <LayoutDashboard size={20} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.4em] text-gold">
+                <Sparkles size={11} />
+                Executive view
+              </p>
+              <p className="mt-1 font-display text-xl font-semibold leading-tight text-white sm:text-2xl">
+                Open Executive Data Room
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-ice/85">
+                View the full ADAC data, package framework, coverage, and decision dashboard
+                — one consolidated boardroom page.
+              </p>
+            </div>
+            <ArrowUpRight
+              size={20}
+              className="shrink-0 text-gold transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+      )}
 
       <motion.ul
         ref={ref}

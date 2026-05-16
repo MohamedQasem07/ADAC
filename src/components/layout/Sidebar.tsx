@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Sparkles } from 'lucide-react';
 import {
   getAllSectionsClient,
   parsePathname,
@@ -17,9 +17,36 @@ interface SidebarProps {
 }
 
 /**
- * Left-edge collapsible navigation listing all 18 sections with their
- * subtopics. The cover (§1) hides the sidebar by default; opening it
+ * Map string-id sections (overview, data-room, decisions) to a tight
+ * 2–4 char badge so they don't overflow the fixed-width code column.
+ * Numeric sections keep their number unchanged. Anything not mapped
+ * falls back to "§•" so we never render an ugly cramped string.
+ */
+const BADGE_BY_ID: Record<string, string> = {
+  overview: 'OVR',
+  'data-room': 'DR',
+  decisions: 'DEC',
+};
+
+function badgeFor(id: string): string {
+  if (BADGE_BY_ID[id]) return BADGE_BY_ID[id];
+  // Numeric (e.g. "1" through "18") — show as-is
+  if (/^\d+$/.test(id)) return id;
+  // Fallback — first 3 letters uppercase
+  return id.slice(0, 3).toUpperCase();
+}
+
+/**
+ * Left-edge collapsible navigation listing all sections with their
+ * subtopics. Cover (§1) hides the sidebar by default; opening it
  * mid-deck animates in from the left with a backdrop dim.
+ *
+ * Layout (rewritten 2.4C):
+ *   - Fixed 48 px code badge column with letter-spacing safely contained
+ *   - Title column flex-1 with min-w-0 + truncate so long titles never
+ *     collide with the badge or the caret
+ *   - Active rows: stronger gold left border + white title + gold badge
+ *   - Executive Data Room gets a small "Exec" gold pill so it's findable
  */
 export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname() || '/';
@@ -46,11 +73,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         )}
       />
 
-      {/* Panel */}
+      {/* Panel — slightly wider than 2.4B (20rem → 22rem) to accommodate
+          the bigger code badge and the new Exec pill without cramping. */}
       <aside
         aria-label="Section navigation"
         className={cn(
-          'fixed bottom-0 left-0 top-0 z-50 flex w-[min(20rem,calc(100vw-1rem))] flex-col border-r border-white/10 bg-navy-deep/95 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'fixed bottom-0 left-0 top-0 z-50 flex w-[min(22rem,calc(100vw-1rem))] flex-col border-r border-white/10 bg-navy-deep/95 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -63,18 +91,20 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-0.5">
             {sections.map((s) => {
-              const isActive = current.sectionId === s.id;
+              const isActive = current.sectionId === s.id && !current.subId;
               const hasSubs = (s.subtopics?.length ?? 0) > 0;
               const isOpen = expanded[s.id] ?? false;
+              const badge = badgeFor(s.id);
+              const isDataRoom = s.id === 'data-room';
 
               return (
                 <li key={s.id}>
                   <div
                     className={cn(
-                      'group relative flex items-center rounded-sm transition-colors',
-                      isActive && !current.subId
-                        ? 'bg-white/5 text-gold'
-                        : 'text-ink-soft hover:bg-white/5 hover:text-gold'
+                      'group relative flex items-stretch rounded-sm transition-colors',
+                      isActive
+                        ? 'bg-gold/10 text-gold'
+                        : 'text-ice/85 hover:bg-white/5 hover:text-gold'
                     )}
                   >
                     {/* Active gold bar */}
@@ -90,18 +120,49 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     <Link
                       href={routeToHref({ sectionId: s.id })}
                       onClick={onClose}
-                      className="flex-1 px-4 py-2 text-left text-sm"
+                      className="flex flex-1 items-center gap-3 px-3 py-2 text-left text-sm min-w-0"
                     >
-                      <span className="mr-3 inline-block w-6 text-[10px] uppercase tracking-widest text-ink-soft/60">
-                        §{s.id}
+                      {/* Code badge — fixed width, never overlaps */}
+                      <span
+                        className={cn(
+                          'inline-flex w-12 shrink-0 items-center justify-center rounded-sm border px-1 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em]',
+                          isActive
+                            ? 'border-gold/50 bg-gold/15 text-gold'
+                            : 'border-white/10 bg-white/[0.03] text-ice/65 group-hover:border-gold/30 group-hover:text-gold'
+                        )}
+                      >
+                        {badge}
                       </span>
-                      {s.title}
+                      {/* Title — flex-1, min-w-0 so it truncates instead of overlapping */}
+                      <span
+                        className={cn(
+                          'min-w-0 flex-1 truncate',
+                          isActive ? 'text-white font-medium' : ''
+                        )}
+                      >
+                        {s.title}
+                      </span>
+                      {/* Executive accent for the Data Room */}
+                      {isDataRoom && (
+                        <span
+                          aria-label="Executive view"
+                          className={cn(
+                            'shrink-0 inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[9px] uppercase tracking-[0.18em]',
+                            isActive
+                              ? 'border-gold/60 bg-gold/15 text-gold'
+                              : 'border-gold/35 bg-gold/[0.05] text-gold/85 group-hover:border-gold/55'
+                          )}
+                        >
+                          <Sparkles size={9} />
+                          Exec
+                        </span>
+                      )}
                     </Link>
                     {hasSubs && (
                       <button
                         onClick={() => toggle(s.id)}
                         aria-label={isOpen ? 'Collapse subtopics' : 'Expand subtopics'}
-                        className="px-3 py-2 text-ink-soft/50 transition-transform duration-300 hover:text-gold"
+                        className="shrink-0 px-3 py-2 text-ice/50 transition-transform duration-300 hover:text-gold"
                       >
                         <ChevronRight
                           size={14}
@@ -114,7 +175,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                   {hasSubs && (
                     <ul
                       className={cn(
-                        'overflow-hidden pl-12 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+                        'overflow-hidden pl-[3.75rem] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
                         isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
                       )}
                     >
@@ -127,16 +188,16 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                               href={routeToHref({ sectionId: s.id, subId: sub.id })}
                               onClick={onClose}
                               className={cn(
-                                'flex items-baseline gap-2 px-3 py-1.5 text-xs transition-colors',
+                                'flex items-baseline gap-2 px-3 py-1.5 text-xs transition-colors min-w-0',
                                 subActive
                                   ? 'text-gold'
-                                  : 'text-ink-soft/70 hover:text-gold'
+                                  : 'text-ice/75 hover:text-gold'
                               )}
                             >
-                              <span className="text-[10px] uppercase tracking-widest text-ink-soft/40">
+                              <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.15em] text-ice/45">
                                 {sub.id}
                               </span>
-                              <span>{sub.title}</span>
+                              <span className="min-w-0 flex-1 truncate">{sub.title}</span>
                             </Link>
                           </li>
                         );
@@ -149,7 +210,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </ul>
         </nav>
 
-        <footer className="border-t border-white/5 px-6 py-4 text-[10px] uppercase tracking-[0.3em] text-ink-soft/50">
+        <footer className="border-t border-white/5 px-6 py-4 text-[10px] uppercase tracking-[0.3em] text-ice/55">
           Press <span className="text-gold">?</span> for shortcuts
         </footer>
       </aside>

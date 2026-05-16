@@ -10,6 +10,7 @@ import {
   HeartPulse,
   Layers3,
   MapPin,
+  ShieldCheck,
   Sparkles,
 } from 'lucide-react';
 import { fallbackPackagesData } from '@/data/fallback';
@@ -70,11 +71,12 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
   const { applyPackages } = useOverrides();
   const packageCount = applyPackages(fallbackPackagesData.packages as Package[]).length;
 
-  const kpis: KpiItem[] = [
-    { value: '268', label: 'ADAC cases 2023–2026' },
-    { value: '200', label: 'Cases in 2024–2025' },
-    { value: '1,127', label: 'German patients 2024–2025' },
-    { value: '20.37%', label: 'Share of insured German cases' },
+  // KPI items with `highlight` flag — important values get gold treatment.
+  const kpis: Array<KpiItem & { highlight?: boolean }> = [
+    { value: '268', label: 'ADAC cases 2023–2026', highlight: true },
+    { value: '200', label: 'Cases in 2024–2025', highlight: true },
+    { value: '1,127', label: 'German patients 2024–2025', highlight: true },
+    { value: '20.37%', label: 'Share of insured German cases', highlight: true },
     { value: String(fallbackPackagesData.categories.length), label: 'Package categories' },
     { value: String(packageCount), label: 'Active packages' },
   ];
@@ -94,7 +96,7 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         <SixUpKpis items={kpis} />
       </Section>
 
-      {/* Block 3 — Historical ADAC Performance */}
+      {/* Block 3 — Historical ADAC Performance (featured) */}
       <Section>
         <Card
           eyebrow="Historical performance"
@@ -102,14 +104,15 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
           insight="2024–2025 represents the strongest complete analysis window, with 200 ADAC cases forming the basis for the outpatient package discussion."
           openHref="/section/3/3.1"
           openLabel="Open full view · §3.1"
+          featured
         >
           <MiniYearlyBars />
         </Card>
       </Section>
 
-      {/* Block 4 — German Traveler Market Context (Heatmap + Market Share) */}
+      {/* Block 4 — German Traveler Market Context (Heatmap featured + Market Share) */}
       <Section>
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_320px]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_340px]">
           <Card
             eyebrow="Market context"
             title="German patient monthly volume"
@@ -117,13 +120,14 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
             insight="German traveler flow provides the operational context for ADAC demand planning, staffing readiness, and mobile service coverage."
             openHref="/section/3/3.2"
             openLabel="Open full view · §3.2"
+            featured
           >
             <MiniHeatmap />
           </Card>
           <Card
             eyebrow="Market share"
             title="ADAC share of insured German cases"
-            insight="ADAC is the largest single German insurance partner in our portfolio — roughly 1 in every 5 insured German patients."
+            insight="ADAC is the largest single German insurance partner — roughly 1 in every 5 insured German patients."
             openHref="/section/3/3.8"
             openLabel="Open full view · §3.8"
             compact
@@ -202,7 +206,7 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
         </Card>
       </Section>
 
-      {/* Block 8 — Outpatient Package Framework */}
+      {/* Block 8 — Outpatient Package Framework (featured) */}
       <Section>
         <Card
           eyebrow="Outpatient package framework"
@@ -210,6 +214,7 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
           subtitle="One number per clinical presentation · scope agreed before treatment starts"
           openHref="/section/12"
           openLabel="Open full catalogue · §12"
+          featured
         >
           <DataRoomPackages />
         </Card>
@@ -256,12 +261,22 @@ function Hero({
 }) {
   const words = title.split(' ');
   return (
-    <header className="mx-auto max-w-3xl text-center">
+    <header className="relative mx-auto max-w-4xl text-center">
+      {/* Soft gold halo behind hero — subtle, non-distracting */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-[120%] -translate-x-1/2 opacity-50"
+        style={{
+          background:
+            'radial-gradient(50% 60% at 50% 30%, rgba(201,169,97,0.22) 0%, rgba(201,169,97,0.06) 35%, transparent 70%)',
+        }}
+      />
+
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: ease.premium }}
-        className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold"
+        className="font-sans text-[11px] uppercase tracking-[0.55em] text-gold"
       >
         {eyebrow}
       </motion.p>
@@ -269,7 +284,7 @@ function Hero({
         variants={titleContainer}
         initial="hidden"
         animate="visible"
-        className="mt-4 font-display text-4xl font-semibold leading-tight text-white md:text-5xl lg:text-6xl"
+        className="mt-5 font-display text-5xl font-semibold leading-[1.05] text-white md:text-6xl lg:text-7xl"
       >
         {words.map((w, i) => (
           <motion.span
@@ -281,30 +296,41 @@ function Hero({
           </motion.span>
         ))}
       </motion.h1>
-      {subtitle && (
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6, ease: ease.premium }}
-          className="mt-4 text-base text-ink-soft md:text-lg"
-        >
-          {subtitle}
-        </motion.p>
-      )}
       <motion.div
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ delay: 1.0, duration: 1.0, ease: ease.premium }}
-        style={{ transformOrigin: 'left center' }}
-        className="gold-rule mx-auto mt-8 w-24"
+        style={{ transformOrigin: 'center' }}
+        className="gold-rule mx-auto mt-6 w-32"
       />
+      {subtitle && (
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85, duration: 0.6, ease: ease.premium }}
+          className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-ice/90 md:text-lg"
+        >
+          {subtitle}
+        </motion.p>
+      )}
+
+      {/* Trust line — verified-since chip */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.05, duration: 0.6, ease: ease.premium }}
+        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/[0.06] px-4 py-1.5 text-[11px] uppercase tracking-[0.3em] text-gold-soft"
+      >
+        <ShieldCheck size={12} />
+        Numbers verified against the 2025 ADAC Partnership Overview
+      </motion.p>
 
       {/* Badges */}
       <motion.ul
         variants={staggerTight}
         initial="hidden"
         animate="visible"
-        className="mt-8 flex flex-wrap items-center justify-center gap-2"
+        className="mt-7 flex flex-wrap items-center justify-center gap-2"
       >
         {BADGES.map((b) => (
           <motion.li
@@ -318,7 +344,7 @@ function Hero({
               },
             }}
           >
-            <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/30 bg-gold/[0.05] px-2.5 py-1 text-[10px] uppercase tracking-[0.25em] text-gold-soft">
+            <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/30 bg-gold/[0.05] px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-gold-soft">
               <Sparkles size={11} />
               {b}
             </span>
@@ -331,7 +357,7 @@ function Hero({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.6, ease: ease.premium }}
-          className="mx-auto mt-8 max-w-2xl text-sm leading-relaxed text-ice/85 md:text-base"
+          className="mx-auto mt-8 max-w-2xl text-sm leading-relaxed text-ice/80 md:text-base"
         >
           {body.trim()}
         </motion.p>
@@ -350,9 +376,9 @@ const titleWord: Variants = {
 };
 
 // ─── Block 2 — 6 KPI cards ─────────────────────────────────────
-function SixUpKpis({ items }: { items: KpiItem[] }) {
-  // KpiStrip is built around a 4-up layout. For 6 items we use it on
-  // wider viewports with a custom container class.
+function SixUpKpis({ items }: { items: Array<KpiItem & { highlight?: boolean }> }) {
+  // 4 large highlighted KPIs on the left/top, 2 secondary KPIs on the right.
+  // At narrow widths everything stacks 2-up.
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {items.map((k) => (
@@ -362,7 +388,7 @@ function SixUpKpis({ items }: { items: KpiItem[] }) {
   );
 }
 
-function KpiCard({ item }: { item: KpiItem }) {
+function KpiCard({ item }: { item: KpiItem & { highlight?: boolean } }) {
   const { ref, inView } = useScrollReveal({ threshold: 0.2 });
   const m = item.value.match(/^(\d[\d,]*\.?\d*)(.*)$/);
   let display: React.ReactNode = item.value;
@@ -377,7 +403,7 @@ function KpiCard({ item }: { item: KpiItem }) {
         <CountUp
           start={0}
           end={v}
-          duration={1.8}
+          duration={2.0}
           separator={useThousands ? ',' : ''}
           decimals={hasDecimal ? 2 : 0}
           preserveValue
@@ -388,25 +414,52 @@ function KpiCard({ item }: { item: KpiItem }) {
     }
   }
 
+  const isHighlighted = item.highlight;
+
   return (
     <motion.div
       ref={ref}
       variants={fadeUp}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      className="relative overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-4 text-center backdrop-blur-sm transition-colors duration-300 hover:border-gold/40"
+      className={`relative overflow-hidden rounded-sm border p-5 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 ${
+        isHighlighted
+          ? 'border-gold/40 bg-gradient-to-br from-gold/[0.10] via-navy/40 to-navy/40 shadow-[0_0_24px_rgba(201,169,97,0.08)] hover:border-gold/60 hover:shadow-[0_0_32px_rgba(201,169,97,0.18)]'
+          : 'border-white/10 bg-navy/40 hover:border-gold/40'
+      }`}
     >
-      <p className="font-display text-2xl font-semibold text-white sm:text-3xl">{display}</p>
-      <p className="mt-2 text-[10px] uppercase leading-tight tracking-[0.22em] text-ice/85">
+      <p
+        className={`font-display font-semibold leading-none ${
+          isHighlighted
+            ? 'text-3xl text-gold sm:text-4xl lg:text-[2.5rem]'
+            : 'text-2xl text-white sm:text-3xl'
+        }`}
+        style={
+          isHighlighted
+            ? { filter: 'drop-shadow(0 0 14px rgba(201,169,97,0.28))' }
+            : undefined
+        }
+      >
+        {display}
+      </p>
+      <p
+        className={`mt-3 text-[10px] uppercase leading-tight tracking-[0.22em] ${
+          isHighlighted ? 'text-ice/90' : 'text-ice/80'
+        }`}
+      >
         {item.label}
       </p>
       <span
         aria-hidden
-        className="pointer-events-none absolute left-2 top-2 h-2 w-2 border-l border-t border-gold/40"
+        className={`pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t ${
+          isHighlighted ? 'border-gold/70' : 'border-gold/40'
+        }`}
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-2 right-2 h-2 w-2 border-b border-r border-gold/40"
+        className={`pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r ${
+          isHighlighted ? 'border-gold/70' : 'border-gold/40'
+        }`}
       />
     </motion.div>
   );
@@ -421,6 +474,7 @@ function Card({
   openHref,
   openLabel,
   compact,
+  featured,
   children,
 }: {
   eyebrow?: string;
@@ -430,6 +484,8 @@ function Card({
   openHref?: string;
   openLabel?: string;
   compact?: boolean;
+  /** Featured cards get larger type + a subtle gold halo on hover. */
+  featured?: boolean;
   children: React.ReactNode;
 }) {
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
@@ -439,28 +495,52 @@ function Card({
       variants={fadeUp}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      className={`relative overflow-hidden rounded-sm border border-white/10 bg-navy/40 ${
-        compact ? 'p-5' : 'p-6 md:p-7'
-      } backdrop-blur-sm`}
+      className={`group relative overflow-hidden rounded-sm border backdrop-blur-sm transition-all duration-300 ${
+        featured
+          ? 'border-white/15 bg-gradient-to-br from-navy/55 via-navy/45 to-navy/40 p-7 hover:border-gold/45 hover:shadow-[0_0_32px_rgba(201,169,97,0.12)] md:p-9'
+          : compact
+            ? 'border-white/10 bg-navy/40 p-5 hover:border-gold/40'
+            : 'border-white/10 bg-navy/40 p-6 hover:border-gold/40 md:p-7'
+      }`}
     >
-      <header className="mb-4">
+      <header className="mb-5">
         {eyebrow && (
-          <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-gold">{eyebrow}</p>
+          <p
+            className={`font-mono uppercase tracking-[0.4em] text-gold ${
+              featured ? 'text-[11px]' : 'text-[10px] tracking-[0.35em]'
+            }`}
+          >
+            {eyebrow}
+          </p>
         )}
-        <h2 className="mt-1 font-display text-lg font-semibold leading-tight text-white md:text-xl">
+        <h2
+          className={`mt-1.5 font-display font-semibold leading-tight text-white ${
+            featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
+          }`}
+        >
           {title}
         </h2>
         {subtitle && (
-          <p className="mt-1 text-xs uppercase tracking-[0.22em] text-ice/75">{subtitle}</p>
+          <p
+            className={`mt-1.5 uppercase tracking-[0.22em] text-ice/80 ${
+              featured ? 'text-[13px]' : 'text-xs'
+            }`}
+          >
+            {subtitle}
+          </p>
         )}
       </header>
 
       {children}
 
       {(insight || openHref) && (
-        <footer className={`mt-4 flex flex-wrap items-center justify-between gap-3`}>
+        <footer className="mt-5 flex flex-wrap items-center justify-between gap-3">
           {insight ? (
-            <p className="max-w-2xl text-xs italic leading-relaxed text-gold-soft md:text-sm">
+            <p
+              className={`max-w-2xl italic leading-relaxed text-gold-soft ${
+                featured ? 'text-sm md:text-base' : 'text-xs md:text-sm'
+              }`}
+            >
               {insight}
             </p>
           ) : (
@@ -469,12 +549,12 @@ function Card({
           {openHref && (
             <Link
               href={openHref}
-              className="group inline-flex items-center gap-1.5 rounded-sm border border-gold/40 bg-gold/[0.07] px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
+              className="group/btn inline-flex items-center gap-1.5 rounded-sm border border-gold/40 bg-gold/[0.07] px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
             >
               {openLabel ?? 'Open full view'}
               <ArrowUpRight
                 size={12}
-                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                className="transition-transform duration-300 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5"
               />
             </Link>
           )}
