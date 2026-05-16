@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface BrandHeaderProps {
@@ -16,34 +16,18 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const LOGO_SRC = `${BASE_PATH}/brand/hmc-logo-white.png`;
 
 /**
- * Renders the HMC mark. If `public/brand/hmc-logo-white.png` exists, it
- * is rendered at full opacity; otherwise the component falls back to a
- * typographic Playfair "HMC" wordmark so the deck is never blocked by
- * a missing asset. Detection runs once per mount.
+ * Renders the HMC mark from `public/brand/hmc-logo-white.png`.
+ * If the asset is removed or fails to load, the component falls back to a
+ * typographic Playfair "HMC" wordmark so the deck is never blocked.
  *
  * On `variant="light"`, a navy-medium header strip wraps the white logo
  * so it reads correctly on light backgrounds (per the spec).
  */
 export function BrandHeader({ variant = 'dark', height = 32, className }: BrandHeaderProps) {
-  const [hasLogo, setHasLogo] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    // Probe the asset. On 404 we fall back to typography.
-    fetch(LOGO_SRC, { method: 'HEAD' })
-      .then((res) => {
-        if (!cancelled) setHasLogo(res.ok);
-      })
-      .catch(() => {
-        if (!cancelled) setHasLogo(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const [logoFailed, setLogoFailed] = useState(false);
 
   const logoOrFallback =
-    hasLogo === true ? (
+    !logoFailed ? (
       <Image
         src={LOGO_SRC}
         alt="Hurghada Medical Center"
@@ -51,6 +35,7 @@ export function BrandHeader({ variant = 'dark', height = 32, className }: BrandH
         height={height}
         priority
         unoptimized
+        onError={() => setLogoFailed(true)}
         style={{ height, width: 'auto' }}
       />
     ) : (
