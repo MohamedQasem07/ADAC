@@ -9,5 +9,8 @@ layout: "hero"
 2. **Launch a 3-month pilot starting July 2026.**
 3. **Joint review in October 2026.**
 
+**Today's proposed outcome**
+Agree on the outpatient package pilot framework and nominate ADAC and HMC operational contacts to finalize scope, reporting format, and launch preparation.
+
 Hurghada Medical Center · Operations Department
 ceo@hurghadamedicalcenter.com

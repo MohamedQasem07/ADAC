@@ -56,8 +56,13 @@ export default function SectionPage({ params }: { params: { id: string } }) {
     );
   }
 
-  // Presentation Overview (agenda) — id "overview", JSON-backed.
-  if (section.id === 'overview' && content?.kind === 'json') {
+  // Card-grid sections backed by a JSON file with `items`:
+  //   - "overview"  → Presentation Overview (agenda)
+  //   - "decisions" → Decision Points for Today
+  if (
+    (section.id === 'overview' || section.id === 'decisions') &&
+    content?.kind === 'json'
+  ) {
     const data = content.data as {
       title: string;
       eyebrow?: string;

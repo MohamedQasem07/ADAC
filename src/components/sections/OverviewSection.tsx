@@ -3,15 +3,21 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
+  AlertTriangle,
   ArrowUpRight,
   BarChart3,
   Building2,
+  Calendar,
+  Clock,
   FileText,
   Layers,
   Map,
   MessagesSquare,
+  Phone,
+  ShieldCheck,
   Stethoscope,
   Tag,
+  Target,
   type LucideIcon,
 } from 'lucide-react';
 import { ease, staggerTight } from '@/lib/motion';
@@ -33,14 +39,20 @@ interface OverviewData {
 }
 
 const ICONS: Record<string, LucideIcon> = {
+  AlertTriangle,
   BarChart3,
   Building2,
+  Calendar,
+  Clock,
   FileText,
   Layers,
   Map,
   MessagesSquare,
+  Phone,
+  ShieldCheck,
   Stethoscope,
   Tag,
+  Target,
 };
 
 /**

@@ -233,6 +233,13 @@
       ]
     },
     {
+      "id": "decisions",
+      "title": "Decision Points for Today",
+      "type": "editorial",
+      "content": "section-decisions.json",
+      "group": "Partnership"
+    },
+    {
       "id": "17",
       "title": "Discussion Points",
       "type": "editorial",

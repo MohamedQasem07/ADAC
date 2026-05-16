@@ -5,6 +5,6 @@ subtitle: "Notification ack ≤ 15 min · Triage decision ≤ 30 min · Median o
 layout: "grid-4"
 ---
 
-Speed of response is the first measure of partnership quality. HMC commits to four operational SLAs published in writing, monitored continuously, and reported back to ADAC monthly.
+Speed of response is the first measure of partnership quality. HMC publishes four operational targets — written, monitored continuously, and reported back to ADAC monthly.
 
-Press **↓** to explore each commitment.
+Press **↓** to explore each target.

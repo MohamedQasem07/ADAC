@@ -5,4 +5,4 @@ subtitle: "Cost predictability · Faster claims · Fewer disputes · Better pati
 layout: "grid-6"
 ---
 
-Each benefit maps to an operational mechanism — not a marketing claim. Press **↓** to explore the evidence for each.
+Each benefit maps to an operational mechanism documented elsewhere in this deck. Press **↓** to explore the evidence for each.

@@ -5,6 +5,6 @@ subtitle: "Red flags → ER transfer → ambulance → assistance-company notifi
 layout: "editorial"
 ---
 
-The flat-rate framework covers outpatient care. The moment clinical red flags appear — ECG changes, hemodynamic instability, SpO₂ < 94%, unresolved chest pain, severe dehydration unresponsive to IV, signs of acute abdomen, pediatric < 1 year — escalation is automatic and ADAC is notified inside 15 minutes.
+The flat-rate framework covers outpatient care. The moment clinical red flags appear, escalation is automatic and ADAC is notified inside 15 minutes — full criteria below.
 
 Press **↓** to review each red-flag class.

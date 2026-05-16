@@ -1,0 +1,64 @@
+{
+  "title": "Decision Points for Today",
+  "eyebrow": "Meeting outcomes",
+  "subtitle": "Eight concrete decisions to leave the table with — each card opens the relevant context page.",
+  "summary": "Eight concrete decisions for today's meeting — package scope, pricing, pre-authorization, channels, reporting, escalation, pilot duration, and success metrics.",
+  "items": [
+    {
+      "id": "01",
+      "icon": "Layers",
+      "title": "Package Scope",
+      "summary": "Which outpatient scenarios should be included in the pilot?",
+      "href": "/section/12"
+    },
+    {
+      "id": "02",
+      "icon": "Tag",
+      "title": "Pricing Range",
+      "summary": "Which package pricing scenario should be used as the negotiation baseline?",
+      "href": "/section/12/12.10"
+    },
+    {
+      "id": "03",
+      "icon": "ShieldCheck",
+      "title": "Pre-authorization Threshold",
+      "summary": "Which cases require prior approval before treatment? Default proposal: above EUR 250.",
+      "href": "/section/13/13.4"
+    },
+    {
+      "id": "04",
+      "icon": "Phone",
+      "title": "Communication Channel",
+      "summary": "Which email, phone, and assistance channel becomes the operational route?",
+      "href": "/section/9/9.2"
+    },
+    {
+      "id": "05",
+      "icon": "Calendar",
+      "title": "Reporting Frequency",
+      "summary": "Same-day case reports — plus weekly digest and monthly performance? Confirmed cadence today.",
+      "href": "/section/9/9.3"
+    },
+    {
+      "id": "06",
+      "icon": "AlertTriangle",
+      "title": "Escalation Pathway",
+      "summary": "When should outpatient care move to ER or hospital admission? Confirmed red-flag list.",
+      "href": "/section/11"
+    },
+    {
+      "id": "07",
+      "icon": "Clock",
+      "title": "Pilot Duration",
+      "summary": "Confirm the proposed three-month pilot, July through September 2026.",
+      "href": "/section/14/14.3"
+    },
+    {
+      "id": "08",
+      "icon": "Target",
+      "title": "Success Metrics",
+      "summary": "Response time, documentation time, dispute rate, and AG Holder feedback.",
+      "href": "/section/9/9.4"
+    }
+  ]
+}
