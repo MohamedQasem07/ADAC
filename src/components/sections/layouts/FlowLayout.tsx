@@ -16,8 +16,8 @@ interface FlowLayoutProps {
 
 /**
  * Section top-level rendered as a numbered horizontal stepper. Wraps
- * onto a second row at >5 steps. Used for §7 Patient Journey (7 steps)
- * and §8 Medical Triage (4 steps).
+ * onto a second row at >5 steps. Used for آ§7 Patient Journey (7 steps)
+ * and آ§8 Medical Triage (4 steps).
  */
 export function FlowLayout({ content, summaries }: FlowLayoutProps) {
   const { ref, inView } = useScrollReveal({ threshold: 0.08 });
@@ -27,7 +27,7 @@ export function FlowLayout({ content, summaries }: FlowLayoutProps) {
     <section className="min-h-screen px-4 py-24">
       <header className="mx-auto max-w-3xl px-4 text-center">
         {frontmatter.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {frontmatter.eyebrow as string}
           </p>
         )}
@@ -68,10 +68,10 @@ export function FlowLayout({ content, summaries }: FlowLayoutProps) {
           >
             <Link
               href={sub.href}
-              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover"
             >
               <div className="flex items-center gap-4">
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10 font-display text-lg font-semibold text-gold">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-theme/40 bg-theme/10 font-display text-lg font-semibold text-theme">
                   {i + 1}
                 </span>
                 <p className="font-display text-base leading-snug text-white">
@@ -88,3 +88,4 @@ export function FlowLayout({ content, summaries }: FlowLayoutProps) {
     </section>
   );
 }
+

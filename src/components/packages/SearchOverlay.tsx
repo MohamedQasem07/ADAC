@@ -109,8 +109,13 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
             className="w-full max-w-2xl"
           >
             {/* Input */}
-            <div className="flex items-center gap-3 rounded-sm border border-gold/30 bg-navy/95 px-5 py-4 shadow-card-hover">
-              <Search size={18} className="text-gold" />
+            <div
+              className="flex items-center gap-3 rounded-sm border bg-navy/95 px-5 py-4 shadow-card-hover"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+              }}
+            >
+              <Search size={18} style={{ color: 'var(--theme-accent)' }} />
               <input
                 ref={inputRef}
                 value={query}
@@ -123,7 +128,13 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
                   setOpen(false);
                   setQuery('');
                 }}
-                className="text-ink-soft transition-colors hover:text-gold"
+                className="text-ink-soft transition-colors"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'var(--theme-accent)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '';
+                }}
               >
                 <X size={16} />
               </button>
@@ -156,10 +167,20 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
                         setOpen(false);
                         setQuery('');
                       }}
-                      className="group flex items-center justify-between gap-4 rounded-sm border border-white/5 bg-navy/80 px-5 py-3 transition-colors hover:border-gold/40"
+                      className="group flex items-center justify-between gap-4 rounded-sm border border-white/5 bg-navy/80 px-5 py-3 transition-colors"
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor =
+                          'color-mix(in srgb, var(--theme-accent) 40%, transparent)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = '';
+                      }}
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/80">
+                        <p
+                          className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                          style={{ color: 'color-mix(in srgb, var(--theme-accent) 80%, transparent)' }}
+                        >
                           {p.code} · {cat?.name}
                         </p>
                         <p className="mt-1 truncate font-display text-base text-white">

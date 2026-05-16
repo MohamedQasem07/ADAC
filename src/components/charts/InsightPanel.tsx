@@ -18,10 +18,11 @@ interface InsightPanelProps {
 /**
  * Two-card insight panel rendered under every Section 3 chart.
  *
- *   Card 1 — Key Insight (what the data shows)
- *   Card 2 — What this means for ADAC (operational implication)
+ *   Card 1 — Key Insight  (accent — gold / ADAC yellow)
+ *   Card 2 — What this means for ADAC  (neutral navy)
  *
- * Concise by design: 80–140 words max combined. Projector-readable.
+ * Theme-aware (Phase 2.4E.2): accent card uses --theme-accent so the
+ * panel reads as HMC × ADAC dual-brand under Partnership.
  */
 export function InsightPanel({ insight, inView }: InsightPanelProps) {
   return (
@@ -35,7 +36,7 @@ export function InsightPanel({ insight, inView }: InsightPanelProps) {
         icon={<Lightbulb size={16} />}
         label="Key insight"
         body={insight.keyInsight}
-        accent="gold"
+        accent="accent"
       />
       <Card
         icon={<Target size={16} />}
@@ -56,30 +57,52 @@ function Card({
   icon: React.ReactNode;
   label: string;
   body: string;
-  accent: 'gold' | 'navy';
+  accent: 'accent' | 'navy';
 }) {
+  const isAccent = accent === 'accent';
   return (
     <div
-      className={`relative overflow-hidden rounded-sm border p-5 backdrop-blur-sm ${
-        accent === 'gold'
-          ? 'border-gold/30 bg-gold/[0.04]'
-          : 'border-white/15 bg-navy-deep/40'
-      }`}
+      className="relative overflow-hidden rounded-sm border p-5 backdrop-blur-sm"
+      style={
+        isAccent
+          ? {
+              borderColor:
+                'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+              background:
+                'color-mix(in srgb, var(--theme-accent) 4%, transparent)',
+            }
+          : {
+              borderColor: 'rgba(255,255,255,0.15)',
+              background: 'rgba(10,25,41,0.4)',
+            }
+      }
     >
       <div className="flex items-center gap-2.5">
         <span
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-sm border ${
-            accent === 'gold'
-              ? 'border-gold/40 bg-gold/10 text-gold'
-              : 'border-white/15 bg-white/5 text-ice'
-          }`}
+          className="inline-flex h-7 w-7 items-center justify-center rounded-sm border"
+          style={
+            isAccent
+              ? {
+                  borderColor:
+                    'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                  background:
+                    'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                  color: 'var(--theme-accent)',
+                }
+              : {
+                  borderColor: 'rgba(255,255,255,0.15)',
+                  background: 'rgba(255,255,255,0.05)',
+                  color: '#f4f8fc',
+                }
+          }
         >
           {icon}
         </span>
         <p
-          className={`font-mono text-[10px] uppercase tracking-[0.3em] ${
-            accent === 'gold' ? 'text-gold' : 'text-ice/80'
-          }`}
+          className="font-mono text-[10px] uppercase tracking-[0.3em]"
+          style={{
+            color: isAccent ? 'var(--theme-accent)' : 'rgba(244,248,252,0.8)',
+          }}
         >
           {label}
         </p>

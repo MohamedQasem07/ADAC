@@ -16,6 +16,14 @@ const config: Config = {
           DEFAULT: '#C9A961',
           soft: '#E0C988',
         },
+        // Theme-aware accent token (Phase 2.4E.2) — uses the
+        // --theme-accent-rgb CSS variable so Tailwind's opacity modifier
+        // works (`text-theme/40`, `bg-theme/10`, `border-theme/50`).
+        // Premium Navy: gold (201,169,97). Partnership: ADAC yellow
+        // (255,210,0). Drop-in replacement for `gold` in any
+        // audience-facing component that should follow the active
+        // visual theme.
+        theme: 'rgb(var(--theme-accent-rgb) / <alpha-value>)',
         ice: '#F4F8FC',
         ink: {
           dark: '#0F1B2D',

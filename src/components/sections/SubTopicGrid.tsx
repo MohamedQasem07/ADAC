@@ -24,7 +24,7 @@ const subtopicCard = {
 
 /**
  * Drill-down card grid shown below a section's top-level content. Each
- * card links to /section/X/Y. Press `↓` from the section top to jump
+ * card links to /section/X/Y. Press `â†“` from the section top to jump
  * straight to the first subtopic; click to jump to a specific one.
  */
 export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
@@ -47,10 +47,10 @@ export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
           <motion.li key={sub.id} variants={subtopicCard}>
             <Link
               href={routeToHref({ sectionId, subId: sub.id })}
-              className="group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-sm border border-white/10 bg-navy/40 px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+              className="group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-sm border border-white/10 bg-navy/40 px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover"
             >
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/80">
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-theme/80">
                   {sub.id}
                 </p>
                 <p className="mt-1.5 font-display text-base leading-snug text-white">
@@ -59,7 +59,7 @@ export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
               </div>
               <ArrowUpRight
                 size={16}
-                className="mt-1 shrink-0 text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                className="mt-1 shrink-0 text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-theme"
               />
             </Link>
           </motion.li>
@@ -68,3 +68,4 @@ export function SubTopicGrid({ sectionId, subtopics }: SubTopicGridProps) {
     </div>
   );
 }
+

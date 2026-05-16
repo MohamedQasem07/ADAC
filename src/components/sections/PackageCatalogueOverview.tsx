@@ -16,9 +16,9 @@ interface PackageCatalogueOverviewProps {
 }
 
 /**
- * §12 top-level: editorial header + 3×3 category grid.
+ * آ§12 top-level: editorial header + 3أ—3 category grid.
  * The hidden Cmd/Ctrl+1/2/3 toggle affects the per-category price range
- * shown on each card — it crossfades automatically.
+ * shown on each card â€” it crossfades automatically.
  */
 export function PackageCatalogueOverview({
   sectionId,
@@ -39,7 +39,7 @@ export function PackageCatalogueOverview({
         className="mx-auto mb-16 max-w-3xl px-8 text-center"
       >
         {fm.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {fm.eyebrow}
           </p>
         )}
@@ -61,3 +61,4 @@ export function PackageCatalogueOverview({
     </section>
   );
 }
+

@@ -23,7 +23,7 @@ export function PlaceholderSection({
 
   return (
     <article className="mx-auto flex min-h-[60vh] max-w-3xl flex-col justify-center px-8 py-24">
-      <p className="font-sans text-xs uppercase tracking-[0.4em] text-gold/70">Section {id}</p>
+      <p className="font-sans text-xs uppercase tracking-[0.4em] text-theme/70">Section {id}</p>
       <h1 className="mt-6 font-display text-5xl font-semibold leading-tight text-white md:text-6xl">
         {title}
       </h1>
@@ -34,8 +34,9 @@ export function PlaceholderSection({
           : `Renderer "${renderer}" is wired in a later build phase.`}
       </p>
       <p className="mt-2 text-xs uppercase tracking-widest text-ink-soft/60">
-        Placeholder · phase 2 stub
+        Placeholder آ· phase 2 stub
       </p>
     </article>
   );
 }
+

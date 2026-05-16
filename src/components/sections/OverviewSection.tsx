@@ -84,7 +84,10 @@ export function OverviewSection({
     <section className="min-h-screen px-4 py-24">
       <header className="mx-auto max-w-3xl px-4 text-center">
         {data.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p
+            className="font-sans text-[11px] uppercase tracking-[0.5em]"
+            style={{ color: 'var(--theme-accent)' }}
+          >
             {data.eyebrow}
           </p>
         )}
@@ -103,21 +106,56 @@ export function OverviewSection({
         <div className="mx-auto mt-12 max-w-4xl px-8">
           <Link
             href="/section/data-room"
-            className="group relative flex flex-col items-start gap-4 overflow-hidden rounded-sm border border-gold/40 bg-gradient-to-br from-gold/[0.10] via-gold/[0.04] to-transparent px-6 py-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/70 hover:shadow-card-hover sm:flex-row sm:items-center sm:gap-6"
+            className="group relative flex flex-col items-start gap-4 overflow-hidden rounded-sm border bg-gradient-to-br from-transparent to-transparent px-6 py-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover sm:flex-row sm:items-center sm:gap-6"
+            style={{
+              borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+              background:
+                'linear-gradient(135deg, color-mix(in srgb, var(--theme-accent) 10%, transparent), color-mix(in srgb, var(--theme-accent) 4%, transparent), transparent)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor =
+                'color-mix(in srgb, var(--theme-accent) 70%, transparent)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor =
+                'color-mix(in srgb, var(--theme-accent) 40%, transparent)';
+            }}
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/60"
+              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t"
+              style={{
+                borderColor:
+                  'color-mix(in srgb, var(--theme-accent) 60%, transparent)',
+              }}
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/60"
+              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r"
+              style={{
+                borderColor:
+                  'color-mix(in srgb, var(--theme-accent) 60%, transparent)',
+              }}
             />
-            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border border-gold/50 bg-gold/15 text-gold shadow-[0_0_24px_rgba(201,169,97,0.2)]">
+            <span
+              className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border"
+              style={{
+                borderColor:
+                  'color-mix(in srgb, var(--theme-accent) 50%, transparent)',
+                background:
+                  'color-mix(in srgb, var(--theme-accent) 15%, transparent)',
+                color: 'var(--theme-accent)',
+                boxShadow:
+                  '0 0 24px color-mix(in srgb, var(--theme-accent) 20%, transparent)',
+              }}
+            >
               <LayoutDashboard size={20} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.4em] text-gold">
+              <p
+                className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.4em]"
+                style={{ color: 'var(--theme-accent)' }}
+              >
                 <Sparkles size={11} />
                 Executive view
               </p>
@@ -131,7 +169,8 @@ export function OverviewSection({
             </div>
             <ArrowUpRight
               size={20}
-              className="shrink-0 text-gold transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              className="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              style={{ color: 'var(--theme-accent)' }}
             />
           </Link>
         </div>
@@ -163,30 +202,55 @@ export function OverviewSection({
             >
               <Link
                 href={item.href}
-                className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+                className="group relative flex h-full flex-col overflow-hidden rounded-sm border bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+                style={{ borderColor: 'var(--theme-card-border)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+                }}
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                  }}
                 />
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                  }}
                 />
 
                 <div className="flex items-start justify-between">
                   {Icon ? (
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+                    <span
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-sm border"
+                      style={{
+                        borderColor:
+                          'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+                        background:
+                          'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                        color: 'var(--theme-accent)',
+                      }}
+                    >
                       <Icon size={18} />
                     </span>
                   ) : (
-                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+                    <span
+                      className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                      style={{ color: 'var(--theme-accent)' }}
+                    >
                       {item.id}
                     </span>
                   )}
                   <ArrowUpRight
                     size={14}
-                    className="text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                    className="text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </div>
 

@@ -13,18 +13,18 @@ interface WelcomeCoverProps {
 }
 
 /**
- * Welcome / Cover page (§1) — Partnership Opening.
+ * Welcome / Cover page (آ§1) â€” Partnership Opening.
  *
- * Hero element is the HMC × ADAC partnership lockup. Sequence is tuned
+ * Hero element is the HMC أ— ADAC partnership lockup. Sequence is tuned
  * to be obviously visible at projector distance:
  *
  *   t+0.00   Background visible
  *   t+0.10   Eyebrow "Partnership Opening" fades in
  *   t+0.25   HMC slides from x:-100, ADAC slides from x:+100
- *            (both with scale 0.92→1, duration 0.9 s)
- *   t+1.10   Vertical gold rule draws (scaleY 0→1, 0.7 s)
- *   t+1.35   × mark fades + bounces in
- *   t+1.65   Title "HMC × ADAC" word-stagger (Playfair)
+ *            (both with scale 0.92â†’1, duration 0.9 s)
+ *   t+1.10   Vertical gold rule draws (scaleY 0â†’1, 0.7 s)
+ *   t+1.35   أ— mark fades + bounces in
+ *   t+1.65   Title "HMC أ— ADAC" word-stagger (Playfair)
  *   t+2.20   Subtitle fades up
  *   t+2.45   Tagline fades up
  *   t+2.70   5 badges stagger in (60 ms apart)
@@ -37,14 +37,14 @@ interface WelcomeCoverProps {
 export function WelcomeCover({ content }: WelcomeCoverProps) {
   const fm = content.frontmatter;
   const eyebrow = (fm.eyebrow as string) ?? 'Partnership Opening';
-  const title = (fm.title as string) ?? 'HMC × ADAC';
+  const title = (fm.title as string) ?? 'HMC أ— ADAC';
   const subtitle = (fm.subtitle as string) ?? '';
   const tagline = (fm.tagline as string) ?? '';
   const badges = Array.isArray(fm.badges) ? (fm.badges as string[]) : [];
   const footerLines = Array.isArray(fm.footerLines) ? (fm.footerLines as string[]) : [];
 
   // CTA visible only once the title has landed, so the audience reads
-  // the lockup → title sequence before the button calls them to act.
+  // the lockup â†’ title sequence before the button calls them to act.
   const [showCTA, setShowCTA] = useState(false);
   useEffect(() => {
     const t = window.setTimeout(() => setShowCTA(true), 3250);
@@ -61,12 +61,12 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease: ease.premium }}
-          className="font-sans text-[11px] uppercase tracking-[0.55em] text-gold sm:text-xs"
+          className="font-sans text-[11px] uppercase tracking-[0.55em] text-theme sm:text-xs"
         >
           {eyebrow}
         </motion.p>
 
-        {/* Partnership lockup — the main opening event. Two theme-aware
+        {/* Partnership lockup â€” the main opening event. Two theme-aware
             radial glows sit behind it (left = HMC side, right = ADAC
             side). Under premium-navy both glows are gold/identical;
             under the partnership theme the left becomes HMC blue and
@@ -93,7 +93,7 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           <PartnershipLockup />
         </div>
 
-        {/* Title — comes in AFTER the logos meet and the connector draws */}
+        {/* Title â€” comes in AFTER the logos meet and the connector draws */}
         <motion.h1
           variants={titleContainer}
           initial="hidden"
@@ -237,3 +237,4 @@ const badgeItem: Variants = {
   hidden: { opacity: 0, scale: 0.94 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.45, ease: ease.premium } },
 };
+

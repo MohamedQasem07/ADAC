@@ -17,9 +17,9 @@ interface DashboardOverviewProps {
 }
 
 /**
- * Top-level layout for a "dashboard" section type (e.g. §3 Partnership
- * Track Record). Renders KPI strip → markdown heading/body → subtopic
- * drill-down grid. Press `↓` to navigate to the first chart.
+ * Top-level layout for a "dashboard" section type (e.g. آ§3 Partnership
+ * Track Record). Renders KPI strip â†’ markdown heading/body â†’ subtopic
+ * drill-down grid. Press `â†“` to navigate to the first chart.
  */
 export function DashboardOverview({
   sectionId,
@@ -40,7 +40,7 @@ export function DashboardOverview({
         className="mx-auto max-w-3xl px-4 text-center"
       >
         {fm.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {fm.eyebrow}
           </p>
         )}
@@ -72,3 +72,4 @@ export function DashboardOverview({
     </section>
   );
 }
+

@@ -48,7 +48,7 @@ interface NetworkMapProps {
 
 /**
  * Hand-illustrated Red Sea network map. Stylized SVG coastline draws
- * via stroke-dasharray over 1.5s; 10 numbered pins drop N→S with bounce
+ * via stroke-dasharray over 1.5s; 10 numbered pins drop Nâ†’S with bounce
  * ease; each pin pulse-glows once on arrival. Clicking a pin opens a
  * side panel slide-in with details.
  */
@@ -56,7 +56,7 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
   const [selected, setSelected] = useState<MapLocation | null>(null);
   const { ref, inView } = useScrollReveal({ threshold: 0.15 });
 
-  // Sort N→S for staggered drop-in.
+  // Sort Nâ†’S for staggered drop-in.
   const orderedPins = [...data.locations].sort((a, b) => a.y - b.y);
 
   return (
@@ -118,7 +118,7 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
             <rect width="100" height="56" fill="url(#seaGradient)" />
             <rect width="100" height="56" fill="url(#waves)" />
 
-            {/* Land mass — hand-drawn-style stylized Red Sea western coastline (16:9) */}
+            {/* Land mass â€” hand-drawn-style stylized Red Sea western coastline (16:9) */}
             <motion.path
               d="
                 M 0 0
@@ -160,7 +160,7 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
               </motion.text>
             ))}
 
-            {/* Pins (drop-in N→S with bounce, then one-shot pulse) */}
+            {/* Pins (drop-in Nâ†’S with bounce, then one-shot pulse) */}
             {orderedPins.map((loc, i) => (
               <motion.g
                 key={loc.id}
@@ -256,7 +256,7 @@ export function NetworkMap({ data, title, populationLabel, annotation }: Network
       </motion.div>
 
       {annotation && (
-        <p className="mt-6 text-center text-sm italic text-gold-soft">{annotation}</p>
+        <p className="mt-6 text-center text-sm italic text-[var(--theme-accent-soft)]">{annotation}</p>
       )}
     </section>
   );
@@ -276,11 +276,11 @@ function LocationPanel({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 40 }}
       transition={{ duration: 0.5, ease: ease.premium }}
-      className="pointer-events-auto absolute right-4 top-4 z-10 w-72 rounded-sm border border-gold/40 bg-navy-deep/95 p-5 shadow-card-hover backdrop-blur-md"
+      className="pointer-events-auto absolute right-4 top-4 z-10 w-72 rounded-sm border border-theme/40 bg-navy-deep/95 p-5 shadow-card-hover backdrop-blur-md"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-theme">
             Location {location.number}
           </p>
           <h3 className="mt-1 font-display text-lg text-white">{location.name}</h3>
@@ -290,7 +290,7 @@ function LocationPanel({
         </div>
         <button
           onClick={onClose}
-          className="text-ink-soft transition-colors hover:text-gold"
+          className="text-ink-soft transition-colors hover:text-theme"
           aria-label="Close details"
         >
           <X size={16} />
@@ -319,3 +319,4 @@ function LocationPanel({
     </motion.aside>
   );
 }
+

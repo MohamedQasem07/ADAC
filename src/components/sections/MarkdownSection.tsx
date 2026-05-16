@@ -26,7 +26,12 @@ export function MarkdownSection({ content, sectionId, subId }: MarkdownSectionPr
   return (
     <article className="mx-auto max-w-3xl px-8 py-24">
       {eyebrow && (
-        <p className="font-sans text-xs uppercase tracking-[0.4em] text-gold">{eyebrow}</p>
+        <p
+          className="font-sans text-xs uppercase tracking-[0.4em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
+          {eyebrow}
+        </p>
       )}
       <h1 className="mt-6 font-display text-5xl font-semibold leading-tight text-white md:text-6xl">
         {title}

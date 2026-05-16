@@ -33,7 +33,12 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
   return (
     <section ref={ref} className="mx-auto w-full max-w-6xl px-6 py-24">
       <header className="mx-auto max-w-3xl text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-gold">§12.10</p>
+        <p
+          className="font-mono text-[10px] uppercase tracking-[0.4em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
+          §12.10
+        </p>
         <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
           Pricing Summary Matrix
         </h1>

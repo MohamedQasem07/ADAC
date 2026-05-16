@@ -15,7 +15,7 @@ interface TimelineLayoutProps {
 }
 
 /**
- * Horizontal phase timeline — used for §14 Roadmap (May / June / Jul-Sep / October 2026).
+ * Horizontal phase timeline â€” used for آ§14 Roadmap (May / June / Jul-Sep / October 2026).
  * Each phase is a numbered card on a horizontal track with a dashed gold connector.
  */
 export function TimelineLayout({ content, summaries }: TimelineLayoutProps) {
@@ -26,7 +26,7 @@ export function TimelineLayout({ content, summaries }: TimelineLayoutProps) {
     <section className="min-h-screen px-4 py-24">
       <header className="mx-auto max-w-3xl px-4 text-center">
         {frontmatter.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {frontmatter.eyebrow as string}
           </p>
         )}
@@ -77,12 +77,12 @@ export function TimelineLayout({ content, summaries }: TimelineLayoutProps) {
             >
               <Link
                 href={sub.href}
-                className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+                className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover"
               >
                 {/* Phase dot on the connector */}
                 <span
                   aria-hidden
-                  className="mx-auto -mt-12 mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full border border-gold/40 bg-navy-deep font-display text-2xl font-semibold text-gold"
+                  className="mx-auto -mt-12 mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full border border-theme/40 bg-navy-deep font-display text-2xl font-semibold text-theme"
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -100,3 +100,4 @@ export function TimelineLayout({ content, summaries }: TimelineLayoutProps) {
     </section>
   );
 }
+

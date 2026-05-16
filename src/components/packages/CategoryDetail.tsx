@@ -46,7 +46,10 @@ export function CategoryDetail({ category, packages }: CategoryDetailProps) {
         transition={{ duration: 0.8, ease: ease.premium }}
         className="mx-auto max-w-3xl text-center"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.4em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
           Category {category.id} · {category.code}
         </p>
         <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-white md:text-5xl">
@@ -72,7 +75,10 @@ export function CategoryDetail({ category, packages }: CategoryDetailProps) {
                 transition={{ duration: 0.7, ease: ease.premium }}
                 className="mb-6 flex items-baseline gap-3 font-display text-xl text-white"
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-gold">
+                <span
+                  className="font-mono text-[10px] uppercase tracking-[0.4em]"
+                  style={{ color: 'var(--theme-accent)' }}
+                >
                   {category.code}.{subsection.id}
                 </span>
                 <span>{subsection.title}</span>

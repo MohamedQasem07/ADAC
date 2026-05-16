@@ -23,17 +23,17 @@ interface HeroSectionProps {
 }
 
 /**
- * Cinematic §1 cover and §18 closing. The exact 4-second opener
+ * Cinematic آ§1 cover and آ§18 closing. The exact 4-second opener
  * choreography from the spec:
  *
- *   0.0s  logo fades in (opacity 0→1, scale 0.95→1, 1.2s)
+ *   0.0s  logo fades in (opacity 0â†’1, scale 0.95â†’1, 1.2s)
  *   0.5s  ambient particles already drifting (no opacity transition needed)
  *   1.0s  eyebrow types/word-staggers in
  *   1.4s  title words stagger in (Playfair, 80 ms between words)
- *   2.6s  gold underline draws left → right (1.2 s, ease.premium)
+ *   2.6s  gold underline draws left â†’ right (1.2 s, ease.premium)
  *   3.0s  subtitle fades in
  *   3.5s  body/date fades in
- *   4.5s  "Press → to begin" appears, auto-hides at 9.5s
+ *   4.5s  "Press â†’ to begin" appears, auto-hides at 9.5s
  *
  * Closing (variant="closing") plays the same sequence in mirror order
  * and, on full reveal, fires a minimal 5-8-particle gold canvas-confetti
@@ -62,7 +62,7 @@ export function HeroSection({
     };
   }, [variant]);
 
-  // Trigger the confetti burst on §18 once the closing animation lands.
+  // Trigger the confetti burst on آ§18 once the closing animation lands.
   useEffect(() => {
     if (variant !== 'closing') return;
     const t = window.setTimeout(() => {
@@ -111,7 +111,7 @@ export function HeroSection({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.7, ease: ease.premium }}
-            className="font-sans text-xs uppercase tracking-[0.5em] text-gold"
+            className="font-sans text-xs uppercase tracking-[0.5em] text-theme"
           >
             {eyebrow}
           </motion.p>
@@ -136,7 +136,7 @@ export function HeroSection({
           ))}
         </motion.h1>
 
-        {/* Gold underline — draws left→right */}
+        {/* Gold underline â€” draws leftâ†’right */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -167,7 +167,7 @@ export function HeroSection({
           >
             <Link
               href="/section/overview"
-              className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/50 bg-gold px-7 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-navy-deep shadow-[0_18px_55px_rgba(201,169,97,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_24px_70px_rgba(201,169,97,0.32)] focus:outline-none focus:ring-2 focus:ring-gold-soft focus:ring-offset-2 focus:ring-offset-navy-deep"
+              className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-theme/50 bg-theme px-7 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-navy-deep shadow-[0_18px_55px_rgba(201,169,97,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--theme-accent-soft)] hover:shadow-[0_24px_70px_rgba(201,169,97,0.32)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-accent-soft)] focus:ring-offset-2 focus:ring-offset-navy-deep"
             >
               {pressHint ?? 'Start Presentation'}
               <ArrowRight
@@ -190,20 +190,20 @@ export function HeroSection({
           </motion.div>
         )}
 
-        {/* Closing — Today's proposed outcome highlight */}
+        {/* Closing â€” Today's proposed outcome highlight */}
         {variant === 'closing' && closingOutcome && (
           <motion.aside
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 4.0, duration: 0.7, ease: ease.premium }}
-            className="mx-auto mt-10 max-w-2xl rounded-sm border border-gold/40 bg-gold/[0.06] p-5 text-left"
+            className="mx-auto mt-10 max-w-2xl rounded-sm border border-theme/40 bg-theme/[0.06] p-5 text-left"
           >
             <div className="flex items-start gap-3">
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-theme/40 bg-theme/10 text-theme">
                 <Target size={16} />
               </span>
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+                <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-theme">
                   Today&rsquo;s proposed outcome
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-ice/90 md:text-base">
@@ -236,3 +236,4 @@ const titleWord: Variants = {
     transition: { duration: 0.8, ease: ease.premium },
   },
 };
+

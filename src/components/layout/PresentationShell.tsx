@@ -17,6 +17,7 @@ import { PageTransition } from './PageTransition';
 import { ScenarioIndicator } from './ScenarioIndicator';
 import { SearchOverlay } from '@/components/packages/SearchOverlay';
 import { Sidebar } from './Sidebar';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 /**
  * Top-level client shell. Mounts the pricing provider, the keyboard
@@ -45,6 +46,7 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         <MenuButton onClick={() => setSidebarOpen(true)} />
+        <ThemeSwitcher />
         <Breadcrumb />
 
         {/* Main slot — section pages render their own SectionFrame later. */}

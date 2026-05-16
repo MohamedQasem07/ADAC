@@ -15,26 +15,27 @@ import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
 import {
   CHART_AXIS_LINE,
-  CHART_GOLD,
   CHART_GRID,
   CHART_TEXT_SECONDARY,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = CHART_GOLD;
 const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.7 — ADAC Length of Stay (histogram).
  *
- * Days 1–15 with counts. 77 (1d) + 53 (2d) = 130 cases = 83% short stay.
- * Spec animation: bars grow up sequentially; curly brace SVG annotation
- * draws above the 1-day + 2-day bars (Phase 5.5).
+ * Theme-aware (Phase 2.4E.2): primary bars + "83%" callout follow the
+ * active theme (gold under Premium Navy, ADAC yellow under
+ * Partnership).
  */
 export function LengthOfStay() {
+  const palette = useThemeChartColors();
+  const PRIMARY = palette.primary;
   const data = fallbackADACData.lengthOfStay.map((d) => ({
     days: d.days,
     count: d.count,
@@ -84,7 +85,7 @@ export function LengthOfStay() {
               width={36}
             />
             <Tooltip
-              cursor={{ fill: 'rgba(201,169,97,0.06)' }}
+              cursor={{ fill: 'rgba(var(--theme-chart-primary-rgb),0.06)' }}
               contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(_v, _n, p) => [`${p.payload.count} cases (${p.payload.pct.toFixed(2)}%)`, 'Admissions']}
             />
@@ -97,7 +98,7 @@ export function LengthOfStay() {
               {data.map((d) => (
                 <Cell
                   key={d.days}
-                  fill={GOLD}
+                  fill={PRIMARY}
                   fillOpacity={d.isShort ? 1 : 0.55}
                 />
               ))}
@@ -120,8 +121,18 @@ export function LengthOfStay() {
           className="pointer-events-none absolute left-[6%] top-0 text-center"
           style={{ width: '12%' }}
         >
-          <p className="font-display text-2xl text-gold">83%</p>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-gold">within 48 h</p>
+          <p
+            className="font-display text-2xl"
+            style={{ color: 'var(--theme-accent)' }}
+          >
+            83%
+          </p>
+          <p
+            className="text-[11px] uppercase tracking-[0.3em]"
+            style={{ color: 'var(--theme-accent)' }}
+          >
+            within 48 h
+          </p>
         </motion.div>
       </div>
     </ChartFrame>

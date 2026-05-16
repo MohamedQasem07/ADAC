@@ -67,21 +67,40 @@ export function DataRoomDecisions() {
             >
               <Link
                 href={item.href}
-                className="group flex h-full flex-col rounded-sm border border-white/10 bg-navy/40 p-3.5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/40"
+                className="group flex h-full flex-col rounded-sm border bg-navy/40 p-3.5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5"
+                style={{ borderColor: 'var(--theme-card-border)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+                }}
               >
                 <div className="flex items-center justify-between">
                   {Icon ? (
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+                    <span
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-sm border"
+                      style={{
+                        borderColor:
+                          'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+                        background:
+                          'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                        color: 'var(--theme-accent)',
+                      }}
+                    >
                       <Icon size={14} />
                     </span>
                   ) : (
-                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+                    <span
+                      className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                      style={{ color: 'var(--theme-accent)' }}
+                    >
                       {item.id}
                     </span>
                   )}
                   <ArrowUpRight
                     size={12}
-                    className="text-ice/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                    className="text-ice/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </div>
                 <p className="mt-2.5 font-display text-sm leading-snug text-white">

@@ -14,25 +14,26 @@ import {
 import { fallbackADACData } from '@/data/fallback';
 import {
   CHART_AXIS_LINE,
-  CHART_GOLD,
-  CHART_GOLD_SOFT,
   CHART_GRID,
   CHART_TEXT_SECONDARY,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = CHART_GOLD;
-const GOLD_GLOW = CHART_GOLD_SOFT;
 const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.6 — ADAC Age Distribution.
  *
- * 6 age buckets. 61+ Seniors dominate at 62.20%; that bar gets a gold
- * glow accent on settle (Phase 5.5).
+ * 6 age buckets. 61+ Seniors dominate at 62.20%; that bar gets a soft
+ * accent glow. Theme-aware (Phase 2.4E.2) — primary + primary-soft
+ * follow the active theme.
  */
 export function AgeDistribution() {
+  const palette = useThemeChartColors();
+  const PRIMARY = palette.primary;
+  const PRIMARY_SOFT = palette.primarySoft;
   const data = fallbackADACData.ageProfile.map((d) => ({
     name: d.group,
     count: d.count,
@@ -75,7 +76,7 @@ export function AgeDistribution() {
               width={36}
             />
             <Tooltip
-              cursor={{ fill: 'rgba(201,169,97,0.06)' }}
+              cursor={{ fill: 'rgba(var(--theme-chart-primary-rgb),0.06)' }}
               contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(_v, _n, p) => [`${p.payload.count} (${p.payload.pct}%)`, 'Count']}
             />
@@ -88,9 +89,13 @@ export function AgeDistribution() {
               {data.map((d) => (
                 <Cell
                   key={d.name}
-                  fill={d.isDominant ? GOLD_GLOW : GOLD}
+                  fill={d.isDominant ? PRIMARY_SOFT : PRIMARY}
                   fillOpacity={d.isDominant ? 1 : 0.65}
-                  style={d.isDominant ? { filter: 'drop-shadow(0 0 12px rgba(201,169,97,0.45))' } : undefined}
+                  style={
+                    d.isDominant
+                      ? { filter: 'drop-shadow(0 0 12px rgba(var(--theme-chart-primary-rgb),0.45))' }
+                      : undefined
+                  }
                 />
               ))}
               <LabelList

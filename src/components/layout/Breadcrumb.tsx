@@ -11,13 +11,13 @@ import {
 
 /**
  * Top breadcrumb. Hidden on the cover (§1) so the opener stays clean.
- * Renders "Section X · Subtopic Y" with the section title clickable.
+ * Accent color (current subtopic + hover) is theme-aware via
+ * --theme-accent.
  */
 export function Breadcrumb() {
   const pathname = usePathname() || '/';
   const route = parsePathname(pathname);
 
-  // Hide on the cover screen.
   if (route.sectionId === '1' && !route.subId) return null;
 
   const sectionTitle = getSectionTitle(route.sectionId);
@@ -32,14 +32,25 @@ export function Breadcrumb() {
         <span className="shrink-0 text-ice/75">§{route.sectionId}</span>
         <Link
           href={routeToHref({ sectionId: route.sectionId })}
-          className="min-w-0 truncate text-ink-soft transition-colors hover:text-gold"
+          className="min-w-0 truncate text-ink-soft transition-colors"
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--theme-accent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = '';
+          }}
         >
           {sectionTitle}
         </Link>
         {subTitle && (
           <>
             <span className="shrink-0 text-ice/55">·</span>
-            <span className="min-w-0 truncate text-gold">{subTitle}</span>
+            <span
+              className="min-w-0 truncate"
+              style={{ color: 'var(--theme-accent)' }}
+            >
+              {subTitle}
+            </span>
           </>
         )}
       </div>

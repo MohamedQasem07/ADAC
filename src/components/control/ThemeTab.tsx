@@ -26,9 +26,9 @@ const OPTIONS: ThemeOption[] = [
     id: 'partnership',
     label: 'HMC × ADAC Partnership',
     description:
-      'Optional. ADAC yellow CTAs, HMC blue accents, medical cyan secondary. Dual-brand feel.',
-    swatchA: '#2F80ED',
-    swatchB: '#FFD200',
+      'Optional. Real dual-brand visual mode — HMC blue surfaces and glow + ADAC yellow accents and CTAs.',
+    swatchA: '#0F6FE5',
+    swatchB: '#FFCC00',
     swatchC: '#54C7E8',
   },
 ];
@@ -38,8 +38,8 @@ const OPTIONS: ThemeOption[] = [
  *
  * Two-card chooser for the optional visual theme. Premium Navy is the
  * default and the safe rollback target; partnership is opt-in. The
- * Ctrl/Cmd+Shift+T hotkey performs the same toggle without opening
- * this panel.
+ * top-right on-screen Visual Theme switcher performs the same toggle
+ * without opening this panel.
  */
 export function ThemeTab() {
   const { theme, setTheme } = useVisualTheme();
@@ -59,11 +59,9 @@ export function ThemeTab() {
               Local visual setting only — does not change content or data.
             </p>
             <p className="mt-1 text-xs text-ice/80">
-              Theme persists in this browser via localStorage. Use{' '}
-              <kbd className="rounded-sm border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-gold">
-                Ctrl+Shift+T
-              </kbd>{' '}
-              for the same toggle anywhere in the deck.
+              Theme persists in this browser via localStorage. The
+              top-right Visual Theme switcher applies the same change
+              from anywhere in the deck.
             </p>
           </div>
         </div>

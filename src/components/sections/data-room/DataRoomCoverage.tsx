@@ -81,7 +81,7 @@ export function DataRoomCoverage() {
               L 0 100 Z
             "
             fill="rgba(15,30,45,0.7)"
-            stroke="rgba(201,169,97,0.4)"
+            stroke="rgba(var(--theme-accent-rgb),0.4)"
             strokeWidth="0.35"
             initial={{ pathLength: 0 }}
             animate={inView ? { pathLength: 1 } : { pathLength: 0 }}
@@ -104,14 +104,17 @@ export function DataRoomCoverage() {
               aria-hidden
               className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 inline-block h-3 w-3 rounded-full opacity-60 animate-[pulseRing_2.4s_ease-out_infinite]"
               style={{
-                boxShadow: '0 0 0 0 rgba(201,169,97,0.55)',
+                boxShadow: '0 0 0 0 rgba(var(--theme-accent-rgb),0.55)',
                 background: 'transparent',
               }}
             />
             {/* Dot */}
             <span
-              className="relative inline-block h-2.5 w-2.5 rounded-full bg-gold"
-              style={{ boxShadow: '0 0 6px rgba(201,169,97,0.6)' }}
+              className="relative inline-block h-2.5 w-2.5 rounded-full"
+              style={{
+                background: 'var(--theme-accent)',
+                boxShadow: '0 0 6px rgba(var(--theme-accent-rgb),0.6)',
+              }}
             />
             {/* Label */}
             <p
@@ -129,15 +132,15 @@ export function DataRoomCoverage() {
         <style jsx>{`
           @keyframes pulseRing {
             0% {
-              box-shadow: 0 0 0 0 rgba(201, 169, 97, 0.55);
+              box-shadow: 0 0 0 0 rgba(var(--theme-accent-rgb), 0.55);
               opacity: 0.7;
             }
             70% {
-              box-shadow: 0 0 0 14px rgba(201, 169, 97, 0);
+              box-shadow: 0 0 0 14px rgba(var(--theme-accent-rgb), 0);
               opacity: 0;
             }
             100% {
-              box-shadow: 0 0 0 0 rgba(201, 169, 97, 0);
+              box-shadow: 0 0 0 0 rgba(var(--theme-accent-rgb), 0);
               opacity: 0;
             }
           }
@@ -155,7 +158,16 @@ export function DataRoomCoverage() {
               transition={{ delay: 0.4 + i * 0.1, duration: 0.55, ease: ease.premium }}
               className="rounded-sm border border-white/10 bg-navy/40 p-4"
             >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+              <span
+                className="inline-flex h-8 w-8 items-center justify-center rounded-sm border"
+                style={{
+                  borderColor:
+                    'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+                  background:
+                    'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                  color: 'var(--theme-accent)',
+                }}
+              >
                 {m.icon}
               </span>
               <p className="mt-3 font-display text-sm text-white">{m.title}</p>
@@ -169,7 +181,20 @@ export function DataRoomCoverage() {
         </p>
         <Link
           href="/section/2/2.2"
-          className="group inline-flex items-center gap-2 rounded-sm border border-gold/40 bg-gold/10 px-3 py-2 text-[11px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/20"
+          className="group inline-flex items-center gap-2 rounded-sm border px-3 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors"
+          style={{
+            borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+            background: 'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+            color: 'var(--theme-accent)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              'color-mix(in srgb, var(--theme-accent) 20%, transparent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              'color-mix(in srgb, var(--theme-accent) 10%, transparent)';
+          }}
         >
           Open full network map
           <ArrowUpRight

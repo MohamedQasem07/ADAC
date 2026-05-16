@@ -5,20 +5,24 @@ import CountUp from 'react-countup';
 import { fallbackADACData } from '@/data/fallback';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
-
-const GOLD = '#C9A961';
-const ROYAL = '#2E75B6';
-const TEAL = '#0096B4';
 
 /**
  * §3.5 — Admission Profile (stacked horizontal bar).
  *
  * 74% Normal Room · 15% ICU · ~10% Surgery (5 surgery tiers merged).
- * Spec animation: total bar width fills first, segments slide in L→R,
- *                 percentages count up (Phase 5.5).
+ *
+ * Theme-aware (Phase 2.4E.2): primary = ADAC/main (gold or yellow),
+ * ICU = HMC blue / royal blue (secondary), Surgery = teal / cyan
+ * (tertiary). ICU keeps the blue tone under both themes — it signals
+ * the medical-operational dimension and stays consistent.
  */
 export function AdmissionProfile() {
+  const palette = useThemeChartColors();
+  const PRIMARY = palette.primary;
+  const BLUE = palette.secondary;
+  const TEAL = palette.tertiary;
   const ap = fallbackADACData.admissionProfile;
   const surgeryCount =
     ap.majorSurgery.count +
@@ -37,8 +41,8 @@ export function AdmissionProfile() {
   );
 
   const segments = [
-    { label: 'Normal Room', count: ap.normalRoom.count, pct: ap.normalRoom.pct, color: GOLD },
-    { label: 'ICU',         count: ap.icu.count,         pct: ap.icu.pct,         color: ROYAL },
+    { label: 'Normal Room', count: ap.normalRoom.count, pct: ap.normalRoom.pct, color: PRIMARY },
+    { label: 'ICU',         count: ap.icu.count,         pct: ap.icu.pct,         color: BLUE },
     { label: 'Surgery',     count: surgeryCount,         pct: surgeryPct,         color: TEAL },
   ];
 

@@ -19,8 +19,6 @@ interface SidebarProps {
 /**
  * Map string-id sections (overview, data-room, decisions) to a tight
  * 2–4 char badge so they don't overflow the fixed-width code column.
- * Numeric sections keep their number unchanged. Anything not mapped
- * falls back to "§•" so we never render an ugly cramped string.
  */
 const BADGE_BY_ID: Record<string, string> = {
   overview: 'OVR',
@@ -30,30 +28,21 @@ const BADGE_BY_ID: Record<string, string> = {
 
 function badgeFor(id: string): string {
   if (BADGE_BY_ID[id]) return BADGE_BY_ID[id];
-  // Numeric (e.g. "1" through "18") — show as-is
   if (/^\d+$/.test(id)) return id;
-  // Fallback — first 3 letters uppercase
   return id.slice(0, 3).toUpperCase();
 }
 
 /**
- * Left-edge collapsible navigation listing all sections with their
- * subtopics. Cover (§1) hides the sidebar by default; opening it
- * mid-deck animates in from the left with a backdrop dim.
- *
- * Layout (rewritten 2.4C):
- *   - Fixed 48 px code badge column with letter-spacing safely contained
- *   - Title column flex-1 with min-w-0 + truncate so long titles never
- *     collide with the badge or the caret
- *   - Active rows: stronger gold left border + white title + gold badge
- *   - Executive Data Room gets a small "Exec" gold pill so it's findable
+ * Left-edge collapsible navigation. Theme-aware (Phase 2.4E.2) — uses
+ * --theme-sidebar-* and --theme-accent CSS variables so the entire
+ * sidebar (background, active row, code badge, hover, footer accent)
+ * shifts between Premium Navy and HMC × ADAC Partnership modes.
  */
 export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname() || '/';
   const current = parsePathname(pathname);
   const sections = getAllSectionsClient();
 
-  // Track which sections are expanded. The current section auto-expands.
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => ({
     [current.sectionId]: true,
   }));
@@ -68,22 +57,28 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         aria-hidden
         onClick={onClose}
         className={cn(
-          'fixed inset-0 z-40 bg-navy-deep/40 backdrop-blur-sm transition-opacity duration-500',
+          'fixed inset-0 z-40 backdrop-blur-sm transition-opacity duration-500',
           open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
+        style={{ background: 'var(--theme-sidebar-backdrop)' }}
       />
 
-      {/* Panel — slightly wider than 2.4B (20rem → 22rem) to accommodate
-          the bigger code badge and the new Exec pill without cramping. */}
+      {/* Panel */}
       <aside
         aria-label="Section navigation"
         className={cn(
-          'fixed bottom-0 left-0 top-0 z-50 flex w-[min(22rem,calc(100vw-1rem))] flex-col border-r border-white/10 bg-navy-deep/95 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'fixed bottom-0 left-0 top-0 z-50 flex w-[min(22rem,calc(100vw-1rem))] flex-col border-r border-white/10 backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
+        style={{ background: 'var(--theme-sidebar-bg)' }}
       >
         <header className="border-b border-white/5 px-6 py-6">
-          <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold">HMC × ADAC</p>
+          <p
+            className="font-sans text-[10px] uppercase tracking-[0.4em]"
+            style={{ color: 'var(--theme-accent)' }}
+          >
+            HMC × ADAC
+          </p>
           <p className="mt-1 font-display text-base text-white">Partnership Proposal</p>
           <p className="mt-0.5 text-xs text-ink-soft/70">19 May 2026 · Hurghada</p>
         </header>
@@ -103,37 +98,54 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                     className={cn(
                       'group relative flex items-stretch rounded-sm transition-colors',
                       isActive
-                        ? 'bg-gold/10 text-gold'
-                        : 'text-ice/85 hover:bg-white/5 hover:text-gold'
+                        ? 'text-white'
+                        : 'text-ice/85 hover:bg-white/5'
                     )}
+                    style={
+                      isActive
+                        ? { background: 'var(--theme-sidebar-active-bg)' }
+                        : undefined
+                    }
                   >
-                    {/* Active gold bar */}
+                    {/* Active left accent bar */}
                     <span
                       aria-hidden
                       className={cn(
-                        'absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-gold transition-all duration-300',
+                        'absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r transition-all duration-300',
                         isActive
                           ? 'opacity-100 scale-y-100'
                           : 'opacity-0 scale-y-50 group-hover:opacity-60 group-hover:scale-y-100'
                       )}
+                      style={{ background: 'var(--theme-sidebar-active-border)' }}
                     />
                     <Link
                       href={routeToHref({ sectionId: s.id })}
                       onClick={onClose}
                       className="flex flex-1 items-center gap-3 px-3 py-2 text-left text-sm min-w-0"
                     >
-                      {/* Code badge — fixed width, never overlaps */}
+                      {/* Code badge */}
                       <span
                         className={cn(
-                          'inline-flex w-12 shrink-0 items-center justify-center rounded-sm border px-1 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em]',
-                          isActive
-                            ? 'border-gold/50 bg-gold/15 text-gold'
-                            : 'border-white/10 bg-white/[0.03] text-ice/65 group-hover:border-gold/30 group-hover:text-gold'
+                          'inline-flex w-12 shrink-0 items-center justify-center rounded-sm border px-1 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-colors'
                         )}
+                        style={
+                          isActive
+                            ? {
+                                borderColor:
+                                  'color-mix(in srgb, var(--theme-accent) 50%, transparent)',
+                                background: 'var(--theme-sidebar-active-bg)',
+                                color: 'var(--theme-sidebar-active-text)',
+                              }
+                            : {
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                background: 'rgba(255,255,255,0.03)',
+                                color: 'rgba(244,248,252,0.65)',
+                              }
+                        }
                       >
                         {badge}
                       </span>
-                      {/* Title — flex-1, min-w-0 so it truncates instead of overlapping */}
+                      {/* Title */}
                       <span
                         className={cn(
                           'min-w-0 flex-1 truncate',
@@ -142,9 +154,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       >
                         {s.title}
                       </span>
-                      {/* Executive accent for the Data Room — theme-aware
-                          (gold under premium-navy, ADAC yellow under
-                          partnership). */}
+                      {/* Executive accent for the Data Room */}
                       {isDataRoom && (
                         <span
                           aria-label="Executive view"
@@ -164,7 +174,14 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       <button
                         onClick={() => toggle(s.id)}
                         aria-label={isOpen ? 'Collapse subtopics' : 'Expand subtopics'}
-                        className="shrink-0 px-3 py-2 text-ice/50 transition-transform duration-300 hover:text-gold"
+                        className="shrink-0 px-3 py-2 text-ice/50 transition-colors duration-300"
+                        style={{}}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = 'var(--theme-accent)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '';
+                        }}
                       >
                         <ChevronRight
                           size={14}
@@ -191,10 +208,23 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                               onClick={onClose}
                               className={cn(
                                 'flex items-baseline gap-2 px-3 py-1.5 text-xs transition-colors min-w-0',
-                                subActive
-                                  ? 'text-gold'
-                                  : 'text-ice/75 hover:text-gold'
+                                subActive ? '' : 'text-ice/75'
                               )}
+                              style={
+                                subActive
+                                  ? { color: 'var(--theme-sidebar-active-text)' }
+                                  : undefined
+                              }
+                              onMouseEnter={(e) => {
+                                if (!subActive) {
+                                  e.currentTarget.style.color = 'var(--theme-accent)';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!subActive) {
+                                  e.currentTarget.style.color = '';
+                                }
+                              }}
                             >
                               <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.15em] text-ice/45">
                                 {sub.id}
@@ -213,7 +243,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         <footer className="border-t border-white/5 px-6 py-4 text-[11px] uppercase tracking-[0.3em] text-ice/75">
-          Press <span className="text-gold">?</span> for shortcuts
+          Press <span style={{ color: 'var(--theme-accent)' }}>?</span> for shortcuts
         </footer>
       </aside>
     </>

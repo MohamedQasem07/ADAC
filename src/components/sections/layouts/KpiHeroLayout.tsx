@@ -12,7 +12,7 @@ interface KpiHeroLayoutProps {
 
 /**
  * Section top-level with a KPI strip pulled from frontmatter.stats.
- * Used for §2 "About HMC" (10 locations · 24/7 · 5+ years · 4 languages).
+ * Used for آ§2 "About HMC" (10 locations آ· 24/7 آ· 5+ years آ· 4 languages).
  */
 export function KpiHeroLayout({ sectionId, content, subtopics }: KpiHeroLayoutProps) {
   const { frontmatter, body } = content;
@@ -26,7 +26,7 @@ export function KpiHeroLayout({ sectionId, content, subtopics }: KpiHeroLayoutPr
     <section className="min-h-screen px-4 py-24">
       <header className="mx-auto max-w-3xl px-4 text-center">
         {frontmatter.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {frontmatter.eyebrow as string}
           </p>
         )}
@@ -57,3 +57,4 @@ export function KpiHeroLayout({ sectionId, content, subtopics }: KpiHeroLayoutPr
     </section>
   );
 }
+

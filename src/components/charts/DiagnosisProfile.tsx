@@ -11,19 +11,24 @@ import {
   YAxis,
 } from 'recharts';
 import { fallbackADACData } from '@/data/fallback';
-import { CHART_GOLD, CHART_TEXT_SECONDARY, CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
+import { CHART_TEXT_SECONDARY, CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = CHART_GOLD;
 const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.3 — ADAC Diagnosis Profile.
  *
  * 13 categories sorted desc, GI top at 39.10%. Horizontal bars grow
- * L→R from 0; top diagnosis first with 80 ms stagger (Phase 5.5).
+ * L→R from 0; top diagnosis first with 80 ms stagger.
+ *
+ * Theme-aware (Phase 2.4E.2): primary bars take `palette.primary` —
+ * gold under Premium Navy, ADAC yellow under Partnership.
  */
 export function DiagnosisProfile() {
+  const palette = useThemeChartColors();
+  const PRIMARY = palette.primary;
   const data = fallbackADACData.diagnosisProfile.map((d) => ({
     name: d.category,
     pct: d.pct,
@@ -61,7 +66,7 @@ export function DiagnosisProfile() {
               axisLine={false}
             />
             <Tooltip
-              cursor={{ fill: 'rgba(201,169,97,0.06)' }}
+              cursor={{ fill: 'rgba(var(--theme-chart-primary-rgb),0.06)' }}
               contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(_v: number, _n, p) =>
                 [`${p.payload.count} cases · ${p.payload.pct.toFixed(2)}%`, 'Count']
@@ -76,7 +81,7 @@ export function DiagnosisProfile() {
               {data.map((_, i) => (
                 <Cell
                   key={i}
-                  fill={GOLD}
+                  fill={PRIMARY}
                   fillOpacity={Math.max(0.4, 1 - i * 0.045)}
                 />
               ))}

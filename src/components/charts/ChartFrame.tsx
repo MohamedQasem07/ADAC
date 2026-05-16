@@ -65,7 +65,10 @@ export function ChartFrame({
         transition={{ duration: 0.7, ease: ease.premium }}
         className="mb-6"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+        <p
+          className="font-mono text-[11px] uppercase tracking-[0.4em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
           {eyebrow ?? `§${subId}`}
         </p>
         <h2 className="mt-2 font-display text-3xl font-semibold leading-tight text-white md:text-4xl">
@@ -85,7 +88,8 @@ export function ChartFrame({
         initial={{ opacity: 0, y: 32 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
         transition={{ delay: 0.25, duration: 0.8, ease: ease.premium }}
-        className="relative rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm md:p-10"
+        className="relative rounded-sm border bg-navy/40 p-6 backdrop-blur-sm md:p-10"
+        style={{ borderColor: 'var(--theme-card-border)' }}
       >
         {children}
       </motion.div>
@@ -95,7 +99,8 @@ export function ChartFrame({
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: 1.4, duration: 0.7, ease: ease.premium }}
-          className="mt-6 text-center text-sm italic text-gold-soft md:text-base"
+          className="mt-6 text-center text-sm italic md:text-base"
+          style={{ color: 'var(--theme-accent-soft)' }}
         >
           {annotation}
         </motion.p>

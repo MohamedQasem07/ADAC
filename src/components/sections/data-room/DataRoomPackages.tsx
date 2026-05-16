@@ -38,9 +38,9 @@ export function DataRoomPackages() {
       {/* Header line */}
       <div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
         <p className="font-display text-base text-white md:text-lg">
-          <span className="text-gold">{totalCount}</span> packages ·{' '}
-          <span className="text-gold">{categories.length}</span> categories · flat-rate
-          framework
+          <span style={{ color: 'var(--theme-accent)' }}>{totalCount}</span> packages ·{' '}
+          <span style={{ color: 'var(--theme-accent)' }}>{categories.length}</span>{' '}
+          categories · flat-rate framework
         </p>
         <p className="text-[11px] uppercase tracking-[0.25em] text-ice/70">
           Mode of delivery does not change the package price
@@ -74,23 +74,41 @@ export function DataRoomPackages() {
             >
               <Link
                 href={`/section/12/${subId}`}
-                className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+                className="group relative flex h-full flex-col overflow-hidden rounded-sm border bg-navy/40 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+                style={{ borderColor: 'var(--theme-card-border)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+                }}
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    borderColor:
+                      'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                  }}
                 />
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    borderColor:
+                      'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                  }}
                 />
                 <div className="flex items-baseline justify-between">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+                  <p
+                    className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                    style={{ color: 'var(--theme-accent)' }}
+                  >
                     {i + 1} · {cat.code}
                   </p>
                   <ArrowUpRight
                     size={12}
-                    className="text-ice/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                    className="text-ice/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </div>
                 <p className="mt-2 font-display text-sm leading-snug text-white">
@@ -102,8 +120,11 @@ export function DataRoomPackages() {
                   </p>
                   <p
                     className={`font-display text-xs ${
-                      isNegotiation ? 'text-ice/90 italic' : 'text-gold-soft'
+                      isNegotiation ? 'text-ice/90 italic' : ''
                     }`}
+                    style={
+                      isNegotiation ? undefined : { color: 'var(--theme-accent-soft)' }
+                    }
                     title={isNegotiation ? 'Package-based rate — to be finalized' : undefined}
                   >
                     {isNegotiation ? 'To be agreed' : range}

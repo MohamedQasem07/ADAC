@@ -16,26 +16,82 @@
   --text-medium: #4a5568;
   --text-soft: #7a8b9d;
 
-  /* ─── Phase 2.4E — Optional visual theme tokens ────────────────
+  /* ─── Phase 2.4E.2 — Real visual theme tokens ──────────────────
      Default values map to the current Premium Navy theme, so any
      component that consumes these vars renders unchanged when no
      [data-theme] override is set on <html>. The Partnership theme
-     overrides these in the [data-theme='partnership'] block below. */
+     overrides these in the [data-theme='partnership'] block below.
+     Premium Navy is the default; Partnership is opt-in. */
+
+  /* — Accents — */
   --theme-accent: #c9a961;
   --theme-accent-soft: #e0c988;
   --theme-accent-rgb: 201, 169, 97;
+
+  /* — CTAs — */
   --theme-cta-bg: #c9a961;
   --theme-cta-bg-hover: #e0c988;
   --theme-cta-text: #0a1929;
   --theme-cta-glow: rgba(201, 169, 97, 0.28);
   --theme-cta-glow-strong: rgba(201, 169, 97, 0.4);
+
+  /* — Welcome / connector glows — */
   --theme-glow-hmc: rgba(201, 169, 97, 0.18);
   --theme-glow-adac: rgba(201, 169, 97, 0.18);
+  --theme-connector-from: #c9a961;
+  --theme-connector-to: #c9a961;
+
+  /* — Badges — */
   --theme-badge-bg: rgba(201, 169, 97, 0.07);
   --theme-badge-border: rgba(201, 169, 97, 0.35);
   --theme-badge-text: #e0c988;
-  --theme-connector-from: #c9a961;
-  --theme-connector-to: #c9a961;
+
+  /* — Page background — */
+  --theme-page-bg: #0a1929;
+  --theme-page-bg-gradient:
+    radial-gradient(60% 70% at 50% 0%, rgba(46, 117, 182, 0.06), transparent 60%),
+    #0a1929;
+
+  /* — Surfaces / cards — */
+  --theme-surface: rgba(255, 255, 255, 0.03);
+  --theme-surface-elevated: rgba(255, 255, 255, 0.05);
+  --theme-card-bg: rgba(13, 27, 42, 0.4);
+  --theme-card-border: rgba(255, 255, 255, 0.1);
+  --theme-card-hover-border: rgba(201, 169, 97, 0.4);
+  --theme-card-hover-glow: rgba(201, 169, 97, 0.18);
+
+  /* — Text — */
+  --theme-text-main: #f4f8fc;
+  --theme-text-muted: #b8c7d6;
+
+  /* — Sidebar — */
+  --theme-sidebar-bg: rgba(10, 25, 41, 0.95);
+  --theme-sidebar-backdrop: rgba(10, 25, 41, 0.4);
+  --theme-sidebar-active-bg: rgba(201, 169, 97, 0.1);
+  --theme-sidebar-active-border: #c9a961;
+  --theme-sidebar-active-text: #e0c988;
+
+  /* — Gradients — */
+  --theme-gradient-hero: linear-gradient(
+    135deg,
+    rgba(201, 169, 97, 0.1),
+    transparent 60%
+  );
+  --theme-gradient-card: linear-gradient(
+    135deg,
+    rgba(201, 169, 97, 0.05),
+    transparent
+  );
+
+  /* — Literal brand tokens (the same in BOTH themes — used by
+       components that always need an HMC blue, HMC red or ADAC yellow
+       regardless of which theme is active, e.g. clinical/escalation
+       badges, medical-framework callouts). — */
+  --theme-hmc-blue: #2f80ed;
+  --theme-hmc-red: #c63838;
+  --theme-adac-yellow: #ffd200;
+
+  /* — Charts (consumed by useThemeChartColors + a few inline styles) — */
   --theme-chart-primary: #c9a961;
   --theme-chart-primary-soft: #e0c988;
   --theme-chart-primary-rgb: 201, 169, 97;
@@ -47,31 +103,101 @@
   --theme-chart-text-secondary: #b8c7d6;
 }
 
-/* HMC × ADAC Partnership theme — HMC blue + ADAC yellow + medical
-   cyan + subtle red. Opt-in only via localStorage hmc-adac-visual-
-   theme-v1 = 'partnership' or the Ctrl/Cmd+Shift+T toggle. */
+/* HMC × ADAC Partnership theme — a real dual-brand visual mode that
+   blends ADAC's official yellow (#FFCC00, the iconic Gelber Engel
+   yellow used across adac.de) with Hurghada Medical Center's medical
+   blue identity. Opt-in only via localStorage hmc-adac-visual-theme-v1
+   = 'partnership', the on-screen Visual Theme switcher (top-right),
+   or the Control Mode Theme tab. */
 [data-theme='partnership'] {
-  --theme-accent: #ffd200;
-  --theme-accent-soft: #ffdf45;
-  --theme-accent-rgb: 255, 210, 0;
-  --theme-cta-bg: #ffd200;
-  --theme-cta-bg-hover: #ffdf45;
-  --theme-cta-text: #111111;
-  --theme-cta-glow: rgba(255, 210, 0, 0.32);
-  --theme-cta-glow-strong: rgba(255, 210, 0, 0.48);
-  --theme-glow-hmc: rgba(31, 111, 229, 0.22);
-  --theme-glow-adac: rgba(255, 210, 0, 0.22);
-  --theme-badge-bg: rgba(31, 111, 229, 0.1);
-  --theme-badge-border: rgba(255, 210, 0, 0.55);
-  --theme-badge-text: #ffd200;
-  --theme-connector-from: #2f80ed;
-  --theme-connector-to: #ffd200;
-  --theme-chart-primary: #ffd200;
-  --theme-chart-primary-soft: #e5b800;
-  --theme-chart-primary-rgb: 255, 210, 0;
-  --theme-chart-secondary: #2f80ed;
+  /* — Brand literals (the same in both themes; used by components
+       that always need an HMC blue, HMC red or ADAC yellow regardless
+       of theme — re-asserted here so the partnership block is the
+       single source of HMC × ADAC truth). — */
+  --theme-hmc-blue: #0f6fe5;
+  --theme-hmc-red: #c63838;
+  --theme-adac-yellow: #ffcc00;
+
+  /* — Accents — primary accent is ADAC yellow (official #FFCC00). — */
+  --theme-accent: #ffcc00;
+  --theme-accent-soft: #ffd84d;
+  --theme-accent-rgb: 255, 204, 0;
+
+  /* — CTAs — ADAC yellow fill, near-black text (ADAC pairs yellow
+       with deep black/dark across their site). — */
+  --theme-cta-bg: #ffcc00;
+  --theme-cta-bg-hover: #ffd84d;
+  --theme-cta-text: #0a0a0a;
+  --theme-cta-glow: rgba(255, 204, 0, 0.34);
+  --theme-cta-glow-strong: rgba(255, 204, 0, 0.5);
+
+  /* — Welcome / connector glows — HMC side glows blue, ADAC side
+       glows yellow; the central connector runs HMC blue → ADAC
+       yellow so the dual-brand handshake reads instantly. — */
+  --theme-glow-hmc: rgba(15, 111, 229, 0.4);
+  --theme-glow-adac: rgba(255, 204, 0, 0.34);
+  --theme-connector-from: #0f6fe5;
+  --theme-connector-to: #ffcc00;
+
+  /* — Badges — HMC blue tint with ADAC yellow border + text, so each
+       badge is itself a tiny dual-brand object. — */
+  --theme-badge-bg: rgba(15, 111, 229, 0.16);
+  --theme-badge-border: rgba(255, 204, 0, 0.6);
+  --theme-badge-text: #ffcc00;
+
+  /* — Page background — dual-brand mood. Dark navy base + strong HMC
+       blue glow zone (top-left) + clear ADAC yellow glow zone
+       (bottom-right). Visible difference vs Premium Navy within one
+       second of switching. — */
+  --theme-page-bg: #061b34;
+  --theme-page-bg-gradient:
+    radial-gradient(60% 55% at 14% 16%, rgba(15, 111, 229, 0.32), transparent 65%),
+    radial-gradient(55% 55% at 86% 84%, rgba(255, 204, 0, 0.18), transparent 65%),
+    radial-gradient(40% 30% at 50% 50%, rgba(15, 111, 229, 0.06), transparent 70%),
+    #061b34;
+
+  /* — Surfaces / cards — bluer base so cards read as HMC clinical
+       surfaces, with ADAC yellow border accents. — */
+  --theme-surface: rgba(15, 111, 229, 0.08);
+  --theme-surface-elevated: rgba(15, 111, 229, 0.14);
+  --theme-card-bg: rgba(11, 38, 76, 0.6);
+  --theme-card-border: rgba(255, 204, 0, 0.24);
+  --theme-card-hover-border: rgba(255, 204, 0, 0.6);
+  --theme-card-hover-glow: rgba(255, 204, 0, 0.22);
+
+  /* — Text — slightly brighter muted tone to keep readability on the
+       blue-heavy background. — */
+  --theme-text-main: #f7fafc;
+  --theme-text-muted: #d7e2ef;
+
+  /* — Sidebar — blue glass surface, ADAC yellow active row. — */
+  --theme-sidebar-bg: rgba(6, 27, 52, 0.94);
+  --theme-sidebar-backdrop: rgba(6, 27, 52, 0.55);
+  --theme-sidebar-active-bg: rgba(255, 204, 0, 0.12);
+  --theme-sidebar-active-border: #ffcc00;
+  --theme-sidebar-active-text: #ffcc00;
+
+  /* — Gradients — */
+  --theme-gradient-hero: linear-gradient(
+    135deg,
+    rgba(15, 111, 229, 0.22),
+    rgba(255, 204, 0, 0.14) 60%,
+    transparent
+  );
+  --theme-gradient-card: linear-gradient(
+    135deg,
+    rgba(15, 111, 229, 0.1),
+    rgba(255, 204, 0, 0.06)
+  );
+
+  /* — Charts — primary = ADAC yellow, secondary = HMC blue, tertiary
+       = medical cyan, danger = sober HMC red for ICU/critical. — */
+  --theme-chart-primary: #ffcc00;
+  --theme-chart-primary-soft: #ffd84d;
+  --theme-chart-primary-rgb: 255, 204, 0;
+  --theme-chart-secondary: #0f6fe5;
   --theme-chart-tertiary: #54c7e8;
-  --theme-chart-danger: #e74747;
+  --theme-chart-danger: #c63838;
   --theme-chart-cyan: #54c7e8;
   --theme-chart-text: #f7fafc;
   --theme-chart-text-secondary: #d7e2ef;
@@ -83,8 +209,9 @@ body {
   overflow-x: hidden;
   /* Native vertical scroll — explicit so no library re-disables it. */
   overflow-y: auto;
-  background: var(--navy-deep);
-  color: var(--white);
+  background: var(--theme-page-bg-gradient);
+  background-attachment: fixed;
+  color: var(--theme-text-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -95,17 +222,18 @@ body[data-scroll-locked='true'] {
 }
 
 ::selection {
-  background: rgba(201, 169, 97, 0.35);
+  background: rgba(var(--theme-accent-rgb), 0.35);
   color: #fff;
 }
 
-/* Premium horizontal-rule pattern used as section dividers */
+/* Premium horizontal-rule pattern used as section dividers — switches
+   from gold to ADAC yellow under partnership via --theme-accent-rgb. */
 .gold-rule {
   height: 2px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 169, 97, 0.8) 50%,
+    rgba(var(--theme-accent-rgb), 0.8) 50%,
     transparent 100%
   );
 }

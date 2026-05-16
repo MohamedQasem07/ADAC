@@ -63,20 +63,39 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
           >
             <Link
               href={routeToHref({ sectionId, subId })}
-              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-sm border bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+              style={{ borderColor: 'var(--theme-card-border)' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+              }}
             >
-              {/* Top-left + bottom-right gold corner accents */}
-              <span aria-hidden className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
-              <span aria-hidden className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100" />
+              {/* Top-left + bottom-right theme-accent corner marks */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)' }}
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)' }}
+              />
 
               <div>
                 <div className="flex items-baseline justify-between">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+                  <p
+                    className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                    style={{ color: 'var(--theme-accent)' }}
+                  >
                     {i + 1} · {cat.code}
                   </p>
                   <ArrowUpRight
                     size={14}
-                    className="text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                    className="text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    style={{}}
                   />
                 </div>
                 <h3 className="mt-3 font-display text-2xl leading-tight text-white">

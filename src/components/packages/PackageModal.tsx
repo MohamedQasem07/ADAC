@@ -13,8 +13,8 @@ interface PackageModalProps {
 }
 
 /**
- * Full-screen package modal. Slides up from bottom with backdrop blur
- * fade. Esc closes. Locks body scroll while open.
+ * Full-screen package modal. Theme-aware (Phase 2.4E.2) — border,
+ * code, gold rule, and close-button hover follow --theme-accent.
  */
 export function PackageModal({ pkg, onClose }: PackageModalProps) {
   useEffect(() => {
@@ -50,17 +50,32 @@ export function PackageModal({ pkg, onClose }: PackageModalProps) {
             exit={{ y: 80, opacity: 0 }}
             transition={{ duration: 0.5, ease: ease.premium }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl rounded-t-sm border border-gold/30 bg-navy/95 p-8 shadow-card-hover backdrop-blur-md sm:rounded-sm sm:p-10"
+            className="relative w-full max-w-2xl rounded-t-sm border bg-navy/95 p-8 shadow-card-hover backdrop-blur-md sm:rounded-sm sm:p-10"
+            style={{
+              borderColor:
+                'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+            }}
           >
             <button
               onClick={onClose}
               aria-label="Close"
-              className="absolute right-5 top-5 text-ink-soft transition-colors hover:text-gold"
+              className="absolute right-5 top-5 text-ink-soft transition-colors"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--theme-accent)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '';
+              }}
             >
               <X size={18} />
             </button>
 
-            <p className="font-mono text-xs uppercase tracking-[0.4em] text-gold">{pkg.code}</p>
+            <p
+              className="font-mono text-xs uppercase tracking-[0.4em]"
+              style={{ color: 'var(--theme-accent)' }}
+            >
+              {pkg.code}
+            </p>
             <h2 className="mt-2 font-display text-3xl leading-tight text-white md:text-4xl">
               {pkg.name}
             </h2>

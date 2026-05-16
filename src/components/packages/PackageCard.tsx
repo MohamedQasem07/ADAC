@@ -12,8 +12,8 @@ interface PackageCardProps {
 
 /**
  * Single package card. Click → opens PackageModal with full details.
- * Includes code (gold mono), name (Playfair), included excerpt (Inter),
- * price badge (animated on scenario change).
+ * Theme-aware (Phase 2.4E.2) — code, border, hover, and "View details
+ * →" hover all consume --theme-accent / --theme-card-* tokens.
  */
 export function PackageCard({ pkg, onClick }: PackageCardProps) {
   return (
@@ -21,10 +21,20 @@ export function PackageCard({ pkg, onClick }: PackageCardProps) {
       onClick={onClick}
       whileHover={{ y: -4, scale: 1.015 }}
       transition={{ duration: 0.3, ease: ease.premium }}
-      className="group relative flex w-full flex-col justify-between overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-5 text-left backdrop-blur-sm transition-shadow duration-300 hover:border-gold/50 hover:shadow-card-hover"
+      className="group relative flex w-full flex-col justify-between overflow-hidden rounded-sm border bg-navy/40 p-5 text-left backdrop-blur-sm transition-shadow duration-300 hover:shadow-card-hover"
+      style={{ borderColor: 'var(--theme-card-border)' }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+      }}
     >
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/80">
+        <p
+          className="font-mono text-[10px] uppercase tracking-[0.3em]"
+          style={{ color: 'color-mix(in srgb, var(--theme-accent) 80%, transparent)' }}
+        >
           {pkg.code}
         </p>
         <p className="mt-2 font-display text-lg leading-snug text-white">
@@ -36,7 +46,9 @@ export function PackageCard({ pkg, onClick }: PackageCardProps) {
       </div>
       <div className="mt-5 flex items-center justify-between">
         <PriceBadge pkg={pkg} size="sm" />
-        <span className="text-[11px] uppercase tracking-[0.25em] text-ice/75 transition-colors duration-300 group-hover:text-gold">
+        <span
+          className="text-[11px] uppercase tracking-[0.25em] text-ice/75 transition-colors duration-300"
+        >
           View details →
         </span>
       </div>

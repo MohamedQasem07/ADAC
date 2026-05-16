@@ -152,7 +152,10 @@ export function DataRoomPage({ content }: DataRoomPageProps) {
 
       {/* Block 6 — Clinical Profile Grid (2×2) */}
       <Section>
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+        <p
+          className="mb-4 font-mono text-[11px] uppercase tracking-[0.4em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
           Clinical profile
         </p>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -268,7 +271,7 @@ function Hero({
         className="pointer-events-none absolute left-1/2 top-0 -z-10 h-72 w-[120%] -translate-x-1/2 opacity-50"
         style={{
           background:
-            'radial-gradient(50% 60% at 50% 30%, rgba(201,169,97,0.22) 0%, rgba(201,169,97,0.06) 35%, transparent 70%)',
+            'radial-gradient(50% 60% at 50% 30%, rgba(var(--theme-accent-rgb),0.22) 0%, rgba(var(--theme-accent-rgb),0.06) 35%, transparent 70%)',
         }}
       />
 
@@ -276,7 +279,8 @@ function Hero({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: ease.premium }}
-        className="font-sans text-[11px] uppercase tracking-[0.55em] text-gold"
+        className="font-sans text-[11px] uppercase tracking-[0.55em]"
+        style={{ color: 'var(--theme-accent)' }}
       >
         {eyebrow}
       </motion.p>
@@ -319,7 +323,12 @@ function Hero({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.05, duration: 0.6, ease: ease.premium }}
-        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/[0.06] px-4 py-1.5 text-[11px] uppercase tracking-[0.3em] text-gold-soft"
+        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] uppercase tracking-[0.3em]"
+        style={{
+          borderColor: 'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+          background: 'color-mix(in srgb, var(--theme-accent) 6%, transparent)',
+          color: 'var(--theme-accent-soft)',
+        }}
       >
         <ShieldCheck size={12} />
         Numbers verified against the 2025 ADAC Partnership Overview
@@ -344,7 +353,14 @@ function Hero({
               },
             }}
           >
-            <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/30 bg-gold/[0.05] px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-gold-soft">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1 text-[10px] uppercase tracking-[0.25em]"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+                background: 'color-mix(in srgb, var(--theme-accent) 5%, transparent)',
+                color: 'var(--theme-accent-soft)',
+              }}
+            >
               <Sparkles size={11} />
               {b}
             </span>
@@ -422,21 +438,52 @@ function KpiCard({ item }: { item: KpiItem & { highlight?: boolean } }) {
       variants={fadeUp}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      className={`relative overflow-hidden rounded-sm border p-5 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 ${
+      className="relative overflow-hidden rounded-sm border p-5 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5"
+      style={
         isHighlighted
-          ? 'border-gold/40 bg-gradient-to-br from-gold/[0.10] via-navy/40 to-navy/40 shadow-[0_0_24px_rgba(201,169,97,0.08)] hover:border-gold/60 hover:shadow-[0_0_32px_rgba(201,169,97,0.18)]'
-          : 'border-white/10 bg-navy/40 hover:border-gold/40'
-      }`}
+          ? {
+              borderColor:
+                'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+              background:
+                'linear-gradient(135deg, color-mix(in srgb, var(--theme-accent) 10%, transparent), rgba(13,27,42,0.4) 60%, rgba(13,27,42,0.4))',
+              boxShadow:
+                '0 0 24px color-mix(in srgb, var(--theme-accent) 8%, transparent)',
+            }
+          : {
+              borderColor: 'var(--theme-card-border)',
+              background: 'rgba(13,27,42,0.4)',
+            }
+      }
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+        if (isHighlighted) {
+          e.currentTarget.style.boxShadow =
+            '0 0 32px color-mix(in srgb, var(--theme-accent) 18%, transparent)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = isHighlighted
+          ? 'color-mix(in srgb, var(--theme-accent) 40%, transparent)'
+          : 'var(--theme-card-border)';
+        if (isHighlighted) {
+          e.currentTarget.style.boxShadow =
+            '0 0 24px color-mix(in srgb, var(--theme-accent) 8%, transparent)';
+        }
+      }}
     >
       <p
         className={`font-display font-semibold leading-none ${
           isHighlighted
-            ? 'text-3xl text-gold sm:text-4xl lg:text-[2.5rem]'
+            ? 'text-3xl sm:text-4xl lg:text-[2.5rem]'
             : 'text-2xl text-white sm:text-3xl'
         }`}
         style={
           isHighlighted
-            ? { filter: 'drop-shadow(0 0 14px rgba(201,169,97,0.28))' }
+            ? {
+                color: 'var(--theme-accent)',
+                filter:
+                  'drop-shadow(0 0 14px rgba(var(--theme-accent-rgb),0.28))',
+              }
             : undefined
         }
       >
@@ -451,15 +498,21 @@ function KpiCard({ item }: { item: KpiItem & { highlight?: boolean } }) {
       </p>
       <span
         aria-hidden
-        className={`pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t ${
-          isHighlighted ? 'border-gold/70' : 'border-gold/40'
-        }`}
+        className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 border-l border-t"
+        style={{
+          borderColor: `color-mix(in srgb, var(--theme-accent) ${
+            isHighlighted ? 70 : 40
+          }%, transparent)`,
+        }}
       />
       <span
         aria-hidden
-        className={`pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r ${
-          isHighlighted ? 'border-gold/70' : 'border-gold/40'
-        }`}
+        className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 border-b border-r"
+        style={{
+          borderColor: `color-mix(in srgb, var(--theme-accent) ${
+            isHighlighted ? 70 : 40
+          }%, transparent)`,
+        }}
       />
     </motion.div>
   );
@@ -497,18 +550,35 @@ function Card({
       animate={inView ? 'visible' : 'hidden'}
       className={`group relative overflow-hidden rounded-sm border backdrop-blur-sm transition-all duration-300 ${
         featured
-          ? 'border-white/15 bg-gradient-to-br from-navy/55 via-navy/45 to-navy/40 p-7 hover:border-gold/45 hover:shadow-[0_0_32px_rgba(201,169,97,0.12)] md:p-9'
+          ? 'bg-gradient-to-br from-navy/55 via-navy/45 to-navy/40 p-7 md:p-9'
           : compact
-            ? 'border-white/10 bg-navy/40 p-5 hover:border-gold/40'
-            : 'border-white/10 bg-navy/40 p-6 hover:border-gold/40 md:p-7'
+            ? 'bg-navy/40 p-5'
+            : 'bg-navy/40 p-6 md:p-7'
       }`}
+      style={{
+        borderColor: featured ? 'rgba(255,255,255,0.15)' : 'var(--theme-card-border)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+        if (featured) {
+          e.currentTarget.style.boxShadow =
+            '0 0 32px color-mix(in srgb, var(--theme-accent) 12%, transparent)';
+        }
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = featured
+          ? 'rgba(255,255,255,0.15)'
+          : 'var(--theme-card-border)';
+        if (featured) e.currentTarget.style.boxShadow = '';
+      }}
     >
       <header className="mb-5">
         {eyebrow && (
           <p
-            className={`font-mono uppercase tracking-[0.4em] text-gold ${
+            className={`font-mono uppercase tracking-[0.4em] ${
               featured ? 'text-[11px]' : 'text-[10px] tracking-[0.35em]'
             }`}
+            style={{ color: 'var(--theme-accent)' }}
           >
             {eyebrow}
           </p>
@@ -537,9 +607,10 @@ function Card({
         <footer className="mt-5 flex flex-wrap items-center justify-between gap-3">
           {insight ? (
             <p
-              className={`max-w-2xl italic leading-relaxed text-gold-soft ${
+              className={`max-w-2xl italic leading-relaxed ${
                 featured ? 'text-sm md:text-base' : 'text-xs md:text-sm'
               }`}
+              style={{ color: 'var(--theme-accent-soft)' }}
             >
               {insight}
             </p>
@@ -549,7 +620,20 @@ function Card({
           {openHref && (
             <Link
               href={openHref}
-              className="group/btn inline-flex items-center gap-1.5 rounded-sm border border-gold/40 bg-gold/[0.07] px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
+              className="group/btn inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] transition-colors"
+              style={{
+                borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                background: 'color-mix(in srgb, var(--theme-accent) 7%, transparent)',
+                color: 'var(--theme-accent)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background =
+                  'color-mix(in srgb, var(--theme-accent) 15%, transparent)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background =
+                  'color-mix(in srgb, var(--theme-accent) 7%, transparent)';
+              }}
             >
               {openLabel ?? 'Open full view'}
               <ArrowUpRight
@@ -591,9 +675,16 @@ function PricingReadiness() {
       variants={fadeUp}
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
-      className="relative overflow-hidden rounded-sm border border-gold/30 bg-gold/[0.04] p-6 backdrop-blur-sm md:p-8"
+      className="relative overflow-hidden rounded-sm border p-6 backdrop-blur-sm md:p-8"
+      style={{
+        borderColor: 'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+        background: 'color-mix(in srgb, var(--theme-accent) 4%, transparent)',
+      }}
     >
-      <p className="font-mono text-[10px] uppercase tracking-[0.35em] text-gold">
+      <p
+        className="font-mono text-[10px] uppercase tracking-[0.35em]"
+        style={{ color: 'var(--theme-accent)' }}
+      >
         Pricing discussion readiness
       </p>
       <h2 className="mt-1 font-display text-lg font-semibold leading-tight text-white md:text-xl">
@@ -605,7 +696,16 @@ function PricingReadiness() {
             key={it.title}
             className="rounded-sm border border-white/10 bg-navy-deep/30 p-4"
           >
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+            <span
+              className="inline-flex h-8 w-8 items-center justify-center rounded-sm border"
+              style={{
+                borderColor:
+                  'color-mix(in srgb, var(--theme-accent) 30%, transparent)',
+                background:
+                  'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                color: 'var(--theme-accent)',
+              }}
+            >
               {it.icon}
             </span>
             <p className="mt-3 font-display text-sm font-semibold text-white">{it.title}</p>
@@ -630,7 +730,18 @@ function ClosingNav() {
         <Link
           key={l.href}
           href={l.href}
-          className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-navy/40 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-gold transition-colors hover:bg-gold/15"
+          className="group inline-flex items-center gap-2 rounded-full border bg-navy/40 px-4 py-2 text-[11px] uppercase tracking-[0.25em] transition-colors"
+          style={{
+            borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+            color: 'var(--theme-accent)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              'color-mix(in srgb, var(--theme-accent) 15%, transparent)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '';
+          }}
         >
           {l.icon}
           {l.label}

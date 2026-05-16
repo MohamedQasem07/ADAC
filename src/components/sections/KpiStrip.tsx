@@ -29,7 +29,10 @@ export function KpiStrip({ items, eyebrow }: KpiStripProps) {
   return (
     <div ref={ref} className="mx-auto w-full max-w-6xl px-8">
       {eyebrow && (
-        <p className="mb-6 text-center font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+        <p
+          className="mb-6 text-center font-sans text-[11px] uppercase tracking-[0.5em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
           {eyebrow}
         </p>
       )}
@@ -43,7 +46,14 @@ export function KpiStrip({ items, eyebrow }: KpiStripProps) {
           <motion.div
             key={kpi.label}
             variants={kpiCard}
-            className="group relative overflow-hidden rounded-sm border border-white/10 bg-navy/40 px-6 py-8 backdrop-blur-sm transition-colors duration-300 hover:border-gold/40"
+            className="group relative overflow-hidden rounded-sm border bg-navy/40 px-6 py-8 backdrop-blur-sm transition-colors duration-300"
+            style={{ borderColor: 'var(--theme-card-border)' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--theme-card-hover-border)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--theme-card-border)';
+            }}
           >
             <div className="text-center">
               <p className="font-display text-4xl font-semibold tracking-tight text-white md:text-5xl lg:text-6xl">
@@ -53,14 +63,16 @@ export function KpiStrip({ items, eyebrow }: KpiStripProps) {
                 {kpi.label}
               </p>
             </div>
-            {/* Top-left + bottom-right gold corner accents */}
+            {/* Top-left + bottom-right theme-accent corner marks */}
             <span
               aria-hidden
-              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/40 transition-opacity duration-300 group-hover:opacity-100"
+              className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t transition-opacity duration-300 group-hover:opacity-100"
+              style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)' }}
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/40 transition-opacity duration-300 group-hover:opacity-100"
+              className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r transition-opacity duration-300 group-hover:opacity-100"
+              style={{ borderColor: 'color-mix(in srgb, var(--theme-accent) 40%, transparent)' }}
             />
           </motion.div>
         ))}

@@ -66,7 +66,7 @@ export function CardsLayout({ data }: { data: CardsLayoutData }) {
     <section ref={ref} className="mx-auto w-full max-w-6xl px-8 py-24">
       <header className="mx-auto max-w-3xl text-center">
         {data.eyebrow && (
-          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-theme">
             {data.eyebrow}
           </p>
         )}
@@ -100,18 +100,18 @@ export function CardsLayout({ data }: { data: CardsLayoutData }) {
                   transition: { duration: 0.65, ease: ease.premium },
                 },
               }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover"
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-theme/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
               />
               <span
                 aria-hidden
-                className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-theme/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
               />
               {Icon && (
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-theme/30 bg-theme/10 text-theme">
                   <Icon size={18} />
                 </span>
               )}
