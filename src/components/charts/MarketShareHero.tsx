@@ -44,12 +44,32 @@ export function MarketShareHero() {
           transition={{ duration: 1, ease: ease.premium }}
           className="relative flex flex-col items-center"
         >
-          <p
+          <motion.p
             className="font-display font-semibold leading-none tracking-tight text-gold md:text-[10rem] lg:text-[12rem]"
             style={{
               fontSize: 'clamp(5rem, 14vw, 12rem)',
-              filter: inView ? 'drop-shadow(0 0 32px rgba(201,169,97,0.35))' : 'none',
-              transition: 'filter 1.2s ease',
+            }}
+            initial={{
+              filter: 'drop-shadow(0 0 0px rgba(201,169,97,0))',
+              scale: 0.97,
+            }}
+            animate={
+              inView
+                ? {
+                    filter: [
+                      'drop-shadow(0 0 0px rgba(201,169,97,0))',
+                      'drop-shadow(0 0 56px rgba(201,169,97,0.55))',
+                      'drop-shadow(0 0 32px rgba(201,169,97,0.32))',
+                    ],
+                    scale: [0.97, 1.02, 1],
+                  }
+                : undefined
+            }
+            transition={{
+              delay: 0.5,
+              duration: 1.8,
+              ease: ease.premium,
+              times: [0, 0.55, 1],
             }}
           >
             {inView ? (
@@ -64,7 +84,7 @@ export function MarketShareHero() {
             ) : (
               '0%'
             )}
-          </p>
+          </motion.p>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
