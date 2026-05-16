@@ -1,8 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { Package, PackageCategory } from '@/types/content';
@@ -22,14 +23,19 @@ interface CategoryDetailProps {
 export function CategoryDetail({ category, packages }: CategoryDetailProps) {
   const [open, setOpen] = useState<Package | null>(null);
   const { ref, inView } = useScrollReveal({ threshold: 0.08 });
+  const { applyPackages } = useOverrides();
+
+  // Apply presenter overrides — disabled/removed packages drop out,
+  // name/included/prices use overridden values where present.
+  const effective = useMemo(() => applyPackages(packages), [applyPackages, packages]);
 
   // Group by section if the category has subsections.
   const grouped = category.subsections
     ? category.subsections.map((sub) => ({
         subsection: sub,
-        items: packages.filter((p) => p.section === sub.id),
+        items: effective.filter((p) => p.section === sub.id),
       }))
-    : [{ subsection: null, items: packages }];
+    : [{ subsection: null, items: effective }];
 
   return (
     <section ref={ref} className="mx-auto w-full max-w-6xl px-8 py-24">
@@ -51,7 +57,7 @@ export function CategoryDetail({ category, packages }: CategoryDetailProps) {
           {category.description}
         </p>
         <p className="mt-6 text-xs uppercase tracking-[0.3em] text-ink-soft/60">
-          {packages.length} {packages.length === 1 ? 'package' : 'packages'}
+          {effective.length} {effective.length === 1 ? 'package' : 'packages'}
         </p>
       </motion.header>
 

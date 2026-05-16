@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { type ReactNode } from 'react';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { InsightPanel, type ChartInsight } from './InsightPanel';
@@ -43,6 +44,15 @@ export function ChartFrame({
   compact = false,
 }: ChartFrameProps) {
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+  const { textOf } = useOverrides();
+
+  // Apply presenter text overrides for chart-insight cards.
+  const overriddenInsight: ChartInsight | undefined = insight
+    ? {
+        keyInsight: textOf(`chart.${subId}.keyInsight`, insight.keyInsight),
+        meaning: textOf(`chart.${subId}.meaning`, insight.meaning),
+      }
+    : undefined;
 
   return (
     <section
@@ -91,7 +101,7 @@ export function ChartFrame({
         </motion.p>
       )}
 
-      {insight && <InsightPanel insight={insight} inView={inView} />}
+      {overriddenInsight && <InsightPanel insight={overriddenInsight} inView={inView} />}
     </section>
   );
 }

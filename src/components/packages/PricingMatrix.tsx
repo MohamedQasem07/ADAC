@@ -1,7 +1,9 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { useMemo } from 'react';
 import { usePricing } from '@/context/PricingContext';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease } from '@/lib/motion';
 import { categoryPriceRange } from '@/lib/pricing';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
@@ -20,7 +22,13 @@ interface PricingMatrixProps {
  */
 export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
   const { scenario } = usePricing();
+  const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+
+  // Apply overrides — disabled packages drop out, names/prices use the
+  // edited values, counts reflect the visible audience deck.
+  const effective = useMemo(() => applyPackages(packages), [applyPackages, packages]);
+  const totalCount = effective.length;
 
   return (
     <section ref={ref} className="mx-auto w-full max-w-6xl px-6 py-24">
@@ -30,7 +38,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
           Pricing Summary Matrix
         </h1>
         <p className="mt-3 text-base text-ink-soft md:text-lg">
-          9 categories, 65 packages — one number per clinical presentation.
+          {categories.length} categories, {totalCount} packages — one number per clinical presentation.
         </p>
         <div className="gold-rule mx-auto mt-8 w-24" />
       </header>
@@ -53,7 +61,8 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
           </thead>
           <tbody>
             {categories.map((cat) => {
-              const catPkgs = packages.filter((p) => p.category === cat.id);
+              const catPkgs = effective.filter((p) => p.category === cat.id);
+              if (catPkgs.length === 0) return null;
               const range = categoryPriceRange(catPkgs, scenario);
               const common = pickMostCommon(catPkgs);
               const commonPrice =
@@ -121,7 +130,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
       </motion.div>
 
       <p className="mt-6 text-center text-xs italic text-ink-soft/60">
-        Totals: 9 categories · 65 packages · single flat-rate per case.
+        Totals: {categories.length} categories · {totalCount} packages · single flat-rate per case.
       </p>
     </section>
   );

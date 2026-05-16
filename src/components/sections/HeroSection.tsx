@@ -4,8 +4,9 @@ import { motion, type Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import confetti from 'canvas-confetti';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Target } from 'lucide-react';
 import { BrandHeader } from '@/components/layout/BrandHeader';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease } from '@/lib/motion';
 
 interface HeroSectionProps {
@@ -17,6 +18,8 @@ interface HeroSectionProps {
   body?: string;
   /** Cover-only: shown at bottom, auto-hides. */
   pressHint?: string;
+  /** Closing-only: structured "Today's proposed outcome" highlight. */
+  proposedOutcome?: string;
 }
 
 /**
@@ -43,8 +46,13 @@ export function HeroSection({
   subtitle,
   body,
   pressHint,
+  proposedOutcome,
 }: HeroSectionProps) {
   const [showHint, setShowHint] = useState(false);
+  const { textOf } = useOverrides();
+  const closingOutcome = proposedOutcome
+    ? textOf('closing.proposedOutcome', proposedOutcome)
+    : '';
 
   useEffect(() => {
     if (variant !== 'cover') return;
@@ -182,6 +190,29 @@ export function HeroSection({
           </motion.div>
         )}
 
+        {/* Closing — Today's proposed outcome highlight */}
+        {variant === 'closing' && closingOutcome && (
+          <motion.aside
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 4.0, duration: 0.7, ease: ease.premium }}
+            className="mx-auto mt-10 max-w-2xl rounded-sm border border-gold/40 bg-gold/[0.06] p-5 text-left"
+          >
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-gold/40 bg-gold/10 text-gold">
+                <Target size={16} />
+              </span>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
+                  Today&rsquo;s proposed outcome
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-ice/90 md:text-base">
+                  {closingOutcome}
+                </p>
+              </div>
+            </div>
+          </motion.aside>
+        )}
       </div>
     </section>
   );

@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { PresentationShell } from '@/components/layout/PresentationShell';
-import { SmoothScroll } from '@/components/layout/SmoothScroll';
+// Lenis smooth-scroll was disabled in Phase 2.4 for live-meeting reliability —
+// wheel-event interception was breaking native scroll on long pages. Native
+// scroll is now the default. Re-enable only after a careful retest.
+// import { SmoothScroll } from '@/components/layout/SmoothScroll';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,9 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen bg-navy-deep font-sans text-white antialiased">
-        <SmoothScroll>
-          <PresentationShell>{children}</PresentationShell>
-        </SmoothScroll>
+        <PresentationShell>{children}</PresentationShell>
       </body>
     </html>
   );

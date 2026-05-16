@@ -19,12 +19,19 @@
 
 html,
 body {
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
+  /* Native vertical scroll — explicit so no library re-disables it. */
+  overflow-y: auto;
   background: var(--navy-deep);
   color: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Used by modal/overlay components only — never on html/body globally. */
+body[data-scroll-locked='true'] {
+  overflow: hidden;
 }
 
 ::selection {

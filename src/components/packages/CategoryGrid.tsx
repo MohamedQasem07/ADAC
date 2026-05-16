@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { useMemo } from 'react';
 import { usePricing } from '@/context/PricingContext';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { routeToHref } from '@/lib/nav-config';
 import { categoryPriceRange } from '@/lib/pricing';
@@ -27,7 +29,12 @@ interface CategoryGridProps {
  */
 export function CategoryGrid({ sectionId, categories, packages }: CategoryGridProps) {
   const { scenario } = usePricing();
+  const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+
+  // Apply presenter overrides once for the whole grid — counts and price
+  // ranges reflect what the audience will actually see in §12.
+  const effective = useMemo(() => applyPackages(packages), [applyPackages, packages]);
 
   return (
     <motion.ul
@@ -38,7 +45,7 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
       className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-5 px-8 sm:grid-cols-2 lg:grid-cols-3"
     >
       {categories.map((cat, i) => {
-        const catPkgs = packages.filter((p) => p.category === cat.id);
+        const catPkgs = effective.filter((p) => p.category === cat.id);
         const subId = `${sectionId}.${i + 1}`; // 12.1, 12.2, ...
         const range = categoryPriceRange(catPkgs, scenario);
 

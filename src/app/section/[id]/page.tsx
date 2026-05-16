@@ -36,6 +36,9 @@ export default function SectionPage({ params }: { params: { id: string } }) {
         title={fm.title ?? section.title}
         subtitle={fm.subtitle}
         body={content.data.body}
+        proposedOutcome={
+          typeof fm.proposedOutcome === 'string' ? fm.proposedOutcome : undefined
+        }
       />
     );
   }
@@ -69,7 +72,7 @@ export default function SectionPage({ params }: { params: { id: string } }) {
       subtitle?: string;
       items: Array<{ id: string; icon?: string; title: string; summary: string; href: string }>;
     };
-    return <OverviewSection data={data} />;
+    return <OverviewSection data={data} keyPrefix={section.id} />;
   }
 
   // §12 package catalogue top-level: 3×3 category grid.

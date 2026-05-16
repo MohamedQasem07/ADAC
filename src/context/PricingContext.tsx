@@ -28,11 +28,24 @@ export function PricingProvider({ children }: { children: ReactNode }) {
   const [ripple, setRipple] = useState<PricingState['ripple']>(null);
 
   // Hydrate from localStorage on mount.
+  // Priority: explicit scenario key > overrides.pricing.defaultScenario > 'B'.
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored === 'A' || stored === 'B' || stored === 'C') {
         setScenarioState(stored);
+        return;
+      }
+      // No explicit scenario yet — check overrides for a default.
+      const overridesRaw = window.localStorage.getItem('hmc-adac-presentation-overrides-v1');
+      if (overridesRaw) {
+        const parsed = JSON.parse(overridesRaw) as {
+          pricing?: { defaultScenario?: PricingScenario };
+        };
+        const d = parsed?.pricing?.defaultScenario;
+        if (d === 'A' || d === 'B' || d === 'C') {
+          setScenarioState(d);
+        }
       }
     } catch {
       // localStorage unavailable (private mode etc.) — silently keep default.

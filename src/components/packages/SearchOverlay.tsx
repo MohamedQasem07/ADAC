@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Search, X } from 'lucide-react';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { fallbackPackagesData } from '@/data/fallback';
 import { ease } from '@/lib/motion';
 import { routeToHref } from '@/lib/nav-config';
@@ -26,9 +27,13 @@ export function SearchOverlay({ enabled = true }: SearchOverlayProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const { applyPackages } = useOverrides();
 
-  const packages = fallbackPackagesData.packages as Package[];
+  const allPackages = fallbackPackagesData.packages as Package[];
   const categories = fallbackPackagesData.categories as PackageCategory[];
+  // Disabled / Removed packages are filtered out so the audience-facing
+  // search never surfaces them.
+  const packages = useMemo(() => applyPackages(allPackages), [applyPackages, allPackages]);
 
   useEffect(() => {
     if (!enabled) return;

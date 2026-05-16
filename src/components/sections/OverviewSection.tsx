@@ -20,6 +20,7 @@ import {
   Target,
   type LucideIcon,
 } from 'lucide-react';
+import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 
@@ -37,6 +38,13 @@ interface OverviewData {
   subtitle?: string;
   items: OverviewItem[];
 }
+
+/**
+ * Prefix used for text-override lookups. `overview` is the original 8-card
+ * agenda; `decisions` is the Phase 2.3 Decision Points page. Both reuse
+ * this renderer.
+ */
+type OverviewKeyPrefix = 'overview' | 'decisions';
 
 const ICONS: Record<string, LucideIcon> = {
   AlertTriangle,
@@ -60,8 +68,15 @@ const ICONS: Record<string, LucideIcon> = {
  * after the cover. 8 premium cards, each linking to the section they
  * represent. Acts as a one-page meeting roadmap.
  */
-export function OverviewSection({ data }: { data: OverviewData }) {
+export function OverviewSection({
+  data,
+  keyPrefix = 'overview',
+}: {
+  data: OverviewData;
+  keyPrefix?: OverviewKeyPrefix;
+}) {
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+  const { textOf } = useOverrides();
 
   return (
     <section className="min-h-screen px-4 py-24">
@@ -87,8 +102,11 @@ export function OverviewSection({ data }: { data: OverviewData }) {
         animate={inView ? 'visible' : 'hidden'}
         className="mx-auto mt-16 grid w-full max-w-6xl grid-cols-1 gap-5 px-8 sm:grid-cols-2 lg:grid-cols-4"
       >
-        {data.items.map((item) => {
+        {data.items.map((item, i) => {
           const Icon = item.icon ? ICONS[item.icon] : null;
+          const cardNum = i + 1;
+          const title = textOf(`${keyPrefix}.card.${cardNum}.title`, item.title);
+          const summary = textOf(`${keyPrefix}.card.${cardNum}.summary`, item.summary);
           return (
             <motion.li
               key={item.id}
@@ -131,10 +149,10 @@ export function OverviewSection({ data }: { data: OverviewData }) {
                 </div>
 
                 <h3 className="mt-5 font-display text-lg leading-snug text-white">
-                  {item.title}
+                  {title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft/90">
-                  {item.summary}
+                  {summary}
                 </p>
                 <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-soft/50">
                   {item.id}

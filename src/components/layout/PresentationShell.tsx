@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { PricingProvider } from '@/context/PricingContext';
+import { PresentationOverridesProvider } from '@/context/PresentationOverridesContext';
 import { parsePathname } from '@/lib/nav-config';
+import { ControlPanelOverlay } from '@/components/control/ControlPanelOverlay';
 import { AmbientBackground } from './AmbientBackground';
 import { Breadcrumb } from './Breadcrumb';
 import { CheatsheetOverlay } from './CheatsheetOverlay';
@@ -35,23 +37,26 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
   void isCover;
 
   return (
-    <PricingProvider>
-      <AmbientBackground />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <PresentationOverridesProvider>
+      <PricingProvider>
+        <AmbientBackground />
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <MenuButton onClick={() => setSidebarOpen(true)} />
-      <Breadcrumb />
+        <MenuButton onClick={() => setSidebarOpen(true)} />
+        <Breadcrumb />
 
-      {/* Main slot — section pages render their own SectionFrame later. */}
-      <div className="relative z-10 min-h-screen">
-        <PageTransition>{children}</PageTransition>
-      </div>
+        {/* Main slot — section pages render their own SectionFrame later. */}
+        <div className="relative z-10 min-h-screen">
+          <PageTransition>{children}</PageTransition>
+        </div>
 
-      <KeyboardNav onToggleSidebar={() => setSidebarOpen((v) => !v)} />
-      <ScenarioIndicator />
-      <HotkeyToast />
-      <CheatsheetOverlay />
-      <SearchOverlay />
-    </PricingProvider>
+        <KeyboardNav onToggleSidebar={() => setSidebarOpen((v) => !v)} />
+        <ScenarioIndicator />
+        <HotkeyToast />
+        <CheatsheetOverlay />
+        <SearchOverlay />
+        <ControlPanelOverlay />
+      </PricingProvider>
+    </PresentationOverridesProvider>
   );
 }
