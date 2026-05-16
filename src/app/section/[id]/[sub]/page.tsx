@@ -5,6 +5,7 @@ import {
   getSubtopicMeta,
   loadReferencedContent,
 } from '@/lib/content-loader';
+import { CHART_REGISTRY } from '@/components/charts';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 
@@ -31,7 +32,20 @@ export default function SubtopicPage({
   const subtopic = getSubtopicMeta(params.id, params.sub);
   if (!subtopic) notFound();
 
-  // Non-markdown renderers (charts, map, cards, sample-report, package-category)
+  // Chart renderers (§3 family) — wired in Phase 5.
+  if (subtopic.renderer && subtopic.renderer.startsWith('chart-')) {
+    const ChartComponent = CHART_REGISTRY[subtopic.renderer];
+    if (ChartComponent) return <ChartComponent />;
+    return (
+      <PlaceholderSection
+        section={section}
+        subtopic={subtopic}
+        reason="renderer-not-built"
+      />
+    );
+  }
+
+  // Other non-markdown renderers (map, cards, sample-report, package-category)
   // are wired in later phases — fall back to placeholder for now.
   if (subtopic.renderer && subtopic.renderer !== 'markdown') {
     return (
