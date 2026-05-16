@@ -6,6 +6,7 @@ import {
   loadReferencedContent,
 } from '@/lib/content-loader';
 import { CHART_REGISTRY } from '@/components/charts';
+import { NetworkMap, type NetworkMapData } from '@/components/map/NetworkMap';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 
@@ -41,6 +42,28 @@ export default function SubtopicPage({
         section={section}
         subtopic={subtopic}
         reason="renderer-not-built"
+      />
+    );
+  }
+
+  // Map renderer (§2.2) — wired in Phase 6.
+  if (subtopic.renderer === 'map') {
+    const content = loadReferencedContent(subtopic.content);
+    if (content?.kind === 'json') {
+      return (
+        <NetworkMap
+          data={content.data as NetworkMapData}
+          title="HMC Clinical Network"
+          populationLabel="10 locations across the Red Sea region"
+          annotation="24/7 operations · Hotel coverage by mode A/B/C"
+        />
+      );
+    }
+    return (
+      <PlaceholderSection
+        section={section}
+        subtopic={subtopic}
+        reason="missing-content"
       />
     );
   }
