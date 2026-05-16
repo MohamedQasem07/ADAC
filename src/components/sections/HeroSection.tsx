@@ -158,7 +158,7 @@ export function HeroSection({
             className="mt-10 flex justify-center"
           >
             <Link
-              href="/section/2"
+              href="/section/overview"
               className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/50 bg-gold px-7 py-3 font-sans text-sm font-semibold uppercase tracking-[0.18em] text-navy-deep shadow-[0_18px_55px_rgba(201,169,97,0.22)] transition duration-300 hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_24px_70px_rgba(201,169,97,0.32)] focus:outline-none focus:ring-2 focus:ring-gold-soft focus:ring-offset-2 focus:ring-offset-navy-deep"
             >
               {pressHint ?? 'Start Presentation'}

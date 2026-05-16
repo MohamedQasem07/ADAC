@@ -14,6 +14,13 @@
       "group": "Opening"
     },
     {
+      "id": "overview",
+      "title": "Presentation Overview",
+      "type": "editorial",
+      "content": "section-overview.json",
+      "group": "Opening"
+    },
+    {
       "id": "2",
       "title": "About HMC",
       "type": "mixed",

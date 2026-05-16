@@ -13,13 +13,22 @@ import {
 } from 'recharts';
 import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
+import {
+  CHART_AXIS_LINE,
+  CHART_GOLD,
+  CHART_GOLD_SOFT,
+  CHART_GRID,
+  CHART_TEXT_PRIMARY,
+  CHART_TEXT_SECONDARY,
+  CHART_TOOLTIP_STYLE,
+} from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = '#C9A961';
-const GOLD_SOFT = '#E0C988';
-const INK_SOFT = '#7A8B9D';
+const GOLD = CHART_GOLD;
+const GOLD_SOFT = CHART_GOLD_SOFT;
+const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.1 — Year-by-Year ADAC Volume.
@@ -43,32 +52,32 @@ export function YearlyVolumeChart() {
       eyebrow="§3.1"
       title="Year-by-Year ADAC Volume"
       populationLabel="n=268 cases · 2023–2026"
+      insight={{
+        keyInsight:
+          'ADAC case volume shows a stable multi-year relationship, with 2024 and 2025 forming the main analysis window.',
+        meaning:
+          'HMC is not proposing an untested cooperation — the package model is built on real, multi-year case-handling history.',
+      }}
     >
       <div ref={ref} className="relative" style={{ width: '100%', height: 380 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 60, right: 20, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
+            <CartesianGrid stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="year"
-              tick={{ fill: INK_SOFT, fontSize: 13, letterSpacing: '0.1em' }}
+              tick={{ fill: INK_SOFT, fontSize: 14, letterSpacing: '0.1em' }}
               tickLine={false}
-              axisLine={{ stroke: 'rgba(255,255,255,0.08)' }}
+              axisLine={{ stroke: CHART_AXIS_LINE }}
             />
             <YAxis
-              tick={{ fill: INK_SOFT, fontSize: 12 }}
+              tick={{ fill: INK_SOFT, fontSize: 13 }}
               tickLine={false}
               axisLine={false}
               width={36}
             />
             <Tooltip
               cursor={{ fill: 'rgba(201,169,97,0.06)' }}
-              contentStyle={{
-                background: 'rgba(13,27,42,0.92)',
-                border: '1px solid rgba(201,169,97,0.25)',
-                borderRadius: 2,
-                color: '#fff',
-                fontSize: 12,
-              }}
+              contentStyle={CHART_TOOLTIP_STYLE}
             />
             <Bar
               dataKey="total"

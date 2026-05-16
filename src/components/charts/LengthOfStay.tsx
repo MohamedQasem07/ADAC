@@ -13,12 +13,19 @@ import {
 } from 'recharts';
 import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
+import {
+  CHART_AXIS_LINE,
+  CHART_GOLD,
+  CHART_GRID,
+  CHART_TEXT_SECONDARY,
+  CHART_TOOLTIP_STYLE,
+} from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = '#C9A961';
-const INK_SOFT = '#7A8B9D';
+const GOLD = CHART_GOLD;
+const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.7 — ADAC Length of Stay (histogram).
@@ -44,41 +51,41 @@ export function LengthOfStay() {
       title="ADAC Length of Stay"
       populationLabel="n=156 ADAC admissions · 2024–2025"
       annotation="83% of admissions discharged within 48 hours"
+      insight={{
+        keyInsight:
+          'Most admissions were resolved within a short timeframe — 83% discharged within 48 hours.',
+        meaning:
+          'Fast documentation, clear package coding, and same-day case summaries align directly with ADAC’s case-closure needs.',
+      }}
     >
       <div ref={ref} style={{ width: '100%', height: 360 }} className="relative">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 60, right: 20, left: 10, bottom: 20 }}>
-            <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <BarChart data={data} margin={{ top: 60, right: 20, left: 10, bottom: 28 }}>
+            <CartesianGrid stroke={CHART_GRID} vertical={false} />
             <XAxis
               dataKey="days"
-              tick={{ fill: INK_SOFT, fontSize: 12 }}
+              tick={{ fill: INK_SOFT, fontSize: 13 }}
               tickLine={false}
-              axisLine={{ stroke: 'rgba(255,255,255,0.08)' }}
+              axisLine={{ stroke: CHART_AXIS_LINE }}
               label={{
                 value: 'Days admitted',
                 position: 'insideBottom',
-                offset: -8,
+                offset: -12,
                 fill: INK_SOFT,
-                fontSize: 10,
+                fontSize: 12,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
               }}
             />
             <YAxis
-              tick={{ fill: INK_SOFT, fontSize: 11 }}
+              tick={{ fill: INK_SOFT, fontSize: 13 }}
               tickLine={false}
               axisLine={false}
-              width={32}
+              width={36}
             />
             <Tooltip
               cursor={{ fill: 'rgba(201,169,97,0.06)' }}
-              contentStyle={{
-                background: 'rgba(13,27,42,0.92)',
-                border: '1px solid rgba(201,169,97,0.25)',
-                borderRadius: 2,
-                color: '#fff',
-                fontSize: 12,
-              }}
+              contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(_v, _n, p) => [`${p.payload.count} cases (${p.payload.pct.toFixed(2)}%)`, 'Admissions']}
             />
             <Bar
@@ -114,7 +121,7 @@ export function LengthOfStay() {
           style={{ width: '12%' }}
         >
           <p className="font-display text-2xl text-gold">83%</p>
-          <p className="text-[9px] uppercase tracking-[0.3em] text-gold/80">within 48 h</p>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-gold">within 48 h</p>
         </motion.div>
       </div>
     </ChartFrame>

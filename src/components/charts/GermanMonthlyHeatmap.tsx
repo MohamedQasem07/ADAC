@@ -40,6 +40,12 @@ export function GermanMonthlyHeatmap() {
       title="German Patient Monthly Volume"
       populationLabel="n=1,127 German patients · 2024–2025 monthly"
       annotation="Peak season concentration · August through December"
+      insight={{
+        keyInsight:
+          'German traveler volume is seasonal, with clear concentration in high-demand months across August through December.',
+        meaning:
+          'A package framework helps ADAC and HMC manage predictable seasonal peaks with fewer approval delays and steadier case throughput.',
+      }}
     >
       <div ref={ref} className="overflow-x-auto">
         <table className="mx-auto w-full">
@@ -49,7 +55,7 @@ export function GermanMonthlyHeatmap() {
               {MONTHS.map((m) => (
                 <th
                   key={m}
-                  className="px-1 pb-2 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-ink-soft/70"
+                  className="px-1 pb-2 text-center text-[12px] font-medium uppercase tracking-[0.2em] text-ice/85"
                 >
                   {m}
                 </th>
@@ -59,7 +65,7 @@ export function GermanMonthlyHeatmap() {
           <tbody>
             {YEARS.map((year, yi) => (
               <tr key={year}>
-                <th className="pr-3 text-right text-[10px] font-medium uppercase tracking-[0.2em] text-ink-soft/70">
+                <th className="pr-3 text-right text-[12px] font-medium uppercase tracking-[0.2em] text-ice/85">
                   {year}
                 </th>
                 {MONTHS.map((month, mi) => {
@@ -79,7 +85,7 @@ export function GermanMonthlyHeatmap() {
                       className="relative p-0.5"
                     >
                       <div
-                        className="group relative flex aspect-square min-w-[42px] items-center justify-center rounded-sm border border-white/5 text-[11px] font-medium text-white transition-shadow duration-300 hover:shadow-gold-glow"
+                        className="group relative flex aspect-square min-w-[44px] items-center justify-center rounded-sm border border-white/10 text-[13px] font-semibold text-white transition-shadow duration-300 hover:shadow-gold-glow"
                         style={{
                           background: `rgba(201, 169, 97, ${0.08 + intensity * 0.75})`,
                         }}

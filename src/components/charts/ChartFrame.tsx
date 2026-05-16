@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { type ReactNode } from 'react';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { InsightPanel, type ChartInsight } from './InsightPanel';
 
 interface ChartFrameProps {
   /** Section id (e.g. "3.1"). */
@@ -16,6 +17,8 @@ interface ChartFrameProps {
   annotation?: string;
   /** Optional eyebrow above the title. */
   eyebrow?: string;
+  /** Optional two-card insight panel under the chart. */
+  insight?: ChartInsight;
   children: ReactNode;
   /** Tighter top padding for non-hero charts. */
   compact?: boolean;
@@ -26,10 +29,8 @@ interface ChartFrameProps {
  *   - Container fades up on scroll-into-view (0.6 s)
  *   - Title fades in first
  *   - Subtitle (n=X · window) fades in 150 ms later
- *   - Annotation fades in last (after data animation completes)
- *
- * The chart body itself (children) renders inside an absolute-positioned
- * frame so Recharts ResponsiveContainer can fill it.
+ *   - Annotation fades in
+ *   - InsightPanel (when supplied) fades in last
  */
 export function ChartFrame({
   subId,
@@ -37,6 +38,7 @@ export function ChartFrame({
   populationLabel,
   annotation,
   eyebrow,
+  insight,
   children,
   compact = false,
 }: ChartFrameProps) {
@@ -53,7 +55,7 @@ export function ChartFrame({
         transition={{ duration: 0.7, ease: ease.premium }}
         className="mb-6"
       >
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-gold/80">
+        <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-gold">
           {eyebrow ?? `§${subId}`}
         </p>
         <h2 className="mt-2 font-display text-3xl font-semibold leading-tight text-white md:text-4xl">
@@ -63,7 +65,7 @@ export function ChartFrame({
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: 0.15, duration: 0.6, ease: ease.premium }}
-          className="mt-2 text-xs uppercase tracking-[0.25em] text-ink-soft/70"
+          className="mt-2 text-xs uppercase tracking-[0.25em] text-ice/85"
         >
           {populationLabel}
         </motion.p>
@@ -88,6 +90,8 @@ export function ChartFrame({
           {annotation}
         </motion.p>
       )}
+
+      {insight && <InsightPanel insight={insight} inView={inView} />}
     </section>
   );
 }

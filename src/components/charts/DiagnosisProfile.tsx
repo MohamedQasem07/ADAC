@@ -11,10 +11,11 @@ import {
   YAxis,
 } from 'recharts';
 import { fallbackADACData } from '@/data/fallback';
+import { CHART_GOLD, CHART_TEXT_SECONDARY, CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = '#C9A961';
-const INK_SOFT = '#7A8B9D';
+const GOLD = CHART_GOLD;
+const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
  * §3.3 — ADAC Diagnosis Profile.
@@ -36,6 +37,12 @@ export function DiagnosisProfile() {
       title="ADAC Diagnosis Profile"
       populationLabel="n=156 ADAC admissions · 2024–2025"
       annotation="Top 3 categories = 75.6% of admissions"
+      insight={{
+        keyInsight:
+          'The top diagnosis categories are concentrated in a small number of common tourist medical scenarios — gastrointestinal, respiratory, and trauma cover ~75% of admissions.',
+        meaning:
+          'These patterns are well-suited to structured outpatient flat-rate packages rather than repeated case-by-case pricing.',
+      }}
     >
       <div style={{ width: '100%', height: 540 }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -48,20 +55,14 @@ export function DiagnosisProfile() {
             <YAxis
               type="category"
               dataKey="name"
-              tick={{ fill: INK_SOFT, fontSize: 12 }}
-              width={200}
+              tick={{ fill: INK_SOFT, fontSize: 13 }}
+              width={210}
               tickLine={false}
               axisLine={false}
             />
             <Tooltip
               cursor={{ fill: 'rgba(201,169,97,0.06)' }}
-              contentStyle={{
-                background: 'rgba(13,27,42,0.92)',
-                border: '1px solid rgba(201,169,97,0.25)',
-                borderRadius: 2,
-                color: '#fff',
-                fontSize: 12,
-              }}
+              contentStyle={CHART_TOOLTIP_STYLE}
               formatter={(_v: number, _n, p) =>
                 [`${p.payload.count} cases · ${p.payload.pct.toFixed(2)}%`, 'Count']
               }
@@ -84,7 +85,7 @@ export function DiagnosisProfile() {
                 position="right"
                 formatter={(v: number) => `${v.toFixed(1)}%`}
                 fill="#fff"
-                fontSize={12}
+                fontSize={13}
               />
             </Bar>
           </BarChart>

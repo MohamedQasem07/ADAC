@@ -1,0 +1,64 @@
+{
+  "title": "Presentation Overview",
+  "eyebrow": "Agenda",
+  "subtitle": "A 90-minute discussion framework for ADAC × HMC outpatient cooperation",
+  "summary": "Single-page agenda that frames the eight topics this meeting covers.",
+  "items": [
+    {
+      "id": "01",
+      "icon": "Building2",
+      "title": "Why HMC",
+      "summary": "HMC's Red Sea medical network and operational capability.",
+      "href": "/section/2"
+    },
+    {
+      "id": "02",
+      "icon": "BarChart3",
+      "title": "ADAC Track Record",
+      "summary": "Verified case history, German traveler volume, and ADAC's position as the leading German insurance partner.",
+      "href": "/section/3"
+    },
+    {
+      "id": "03",
+      "icon": "Map",
+      "title": "Red Sea Coverage",
+      "summary": "10 HMC locations plus hotel-zone and mobile coverage.",
+      "href": "/section/5"
+    },
+    {
+      "id": "04",
+      "icon": "Layers",
+      "title": "Outpatient Package Framework",
+      "summary": "Flat-rate clinical packages for common tourist medical scenarios.",
+      "href": "/section/12"
+    },
+    {
+      "id": "05",
+      "icon": "Stethoscope",
+      "title": "Service Delivery Modes",
+      "summary": "Clinic visit, hotel room visit, and mobile clinic unit.",
+      "href": "/section/6"
+    },
+    {
+      "id": "06",
+      "icon": "FileText",
+      "title": "Documentation & SLA",
+      "summary": "Same-day reports, package-coded invoices, and clear response targets.",
+      "href": "/section/9"
+    },
+    {
+      "id": "07",
+      "icon": "Tag",
+      "title": "Pricing & Pilot",
+      "summary": "Negotiable package framework with a proposed 3-month pilot.",
+      "href": "/section/13"
+    },
+    {
+      "id": "08",
+      "icon": "MessagesSquare",
+      "title": "Discussion & Next Steps",
+      "summary": "Scope, pricing, communication channels, reporting, and pilot approval.",
+      "href": "/section/17"
+    }
+  ]
+}

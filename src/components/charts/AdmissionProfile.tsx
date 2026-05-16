@@ -51,6 +51,12 @@ export function AdmissionProfile() {
       title="Admission Profile"
       populationLabel="n=156 ADAC admissions · 2024–2025"
       annotation="78% of all ADAC cases require inpatient admission · 22% are outpatient (the flat-rate target)"
+      insight={{
+        keyInsight:
+          'A meaningful portion of ADAC cases required admission, but the outpatient segment still needs a clear, efficient model.',
+        meaning:
+          'The flat-rate outpatient framework manages earlier-stage cases before unnecessary escalation and keeps admission decisions clinically driven.',
+      }}
     >
       <div ref={ref} className="space-y-10">
         {/* Stacked bar */}
@@ -102,7 +108,7 @@ export function AdmissionProfile() {
                 <p className="font-display text-2xl text-white">
                   {inView ? <CountUp end={seg.count} duration={1.5} preserveValue useEasing /> : 0}
                 </p>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-soft/70">{seg.label}</p>
+                <p className="text-[12px] uppercase tracking-[0.3em] text-ice/85">{seg.label}</p>
               </div>
             </motion.div>
           ))}

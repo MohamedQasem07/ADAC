@@ -35,6 +35,12 @@ export function MarketShareHero() {
       eyebrow="§3.8"
       title="ADAC Market Share of Insured German Cases"
       populationLabel="n=766 insured German cases · 2024–2025"
+      insight={{
+        keyInsight:
+          'ADAC represents the leading share of insured German cases at HMC — approximately 1 in every 5 insured German patients.',
+        meaning:
+          'A dedicated outpatient framework is justified by the scale and strategic value of this relationship, not by speculation.',
+      }}
     >
       <div ref={ref} className="flex flex-col items-center gap-12">
         {/* Hero number */}
@@ -92,7 +98,7 @@ export function MarketShareHero() {
             style={{ transformOrigin: 'left center' }}
             className="gold-rule mt-4 w-40"
           />
-          <p className="mt-6 max-w-xl text-center text-base text-ink-soft md:text-lg">
+          <p className="mt-6 max-w-xl text-center text-base text-ice/85 md:text-lg">
             of insured German cases at HMC come through ADAC.
           </p>
         </motion.div>
@@ -119,7 +125,7 @@ export function MarketShareHero() {
               className="rounded-sm border border-white/10 bg-navy/30 p-5 text-center backdrop-blur-sm"
             >
               <p className="font-display text-xl text-white">{c.value}</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-ink-soft/70">
+              <p className="mt-1 text-[12px] uppercase tracking-[0.3em] text-ice/85">
                 {c.label}
               </p>
             </motion.div>

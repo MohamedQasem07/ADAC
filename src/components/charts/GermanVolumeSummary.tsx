@@ -31,6 +31,12 @@ export function GermanVolumeSummary() {
       title="German Patient Volume"
       populationLabel="n=1,127 German patients · 2024–2025"
       annotation="23% → 27% of HMC volume in 2 years"
+      insight={{
+        keyInsight:
+          'German travelers remain a major patient group across the Red Sea operation — 1,127 cases over 2024 and 2025, growing as a share of HMC volume.',
+        meaning:
+          'HMC’s German-case experience supports multilingual service, documentation standards, and predictable cooperation with German insurance partners.',
+      }}
     >
       <div ref={ref} className="relative">
         {/* Connecting line that draws across the three cards after they settle. */}
@@ -85,12 +91,12 @@ export function GermanVolumeSummary() {
                   c.value
                 )}
               </p>
-              <p className="mt-3 text-[11px] uppercase tracking-[0.3em] text-ink-soft/80">
+              <p className="mt-3 text-[12px] uppercase tracking-[0.3em] text-ice/85">
                 {c.label}
               </p>
               <p
                 className={`mt-4 text-xs ${
-                  i === 2 ? 'text-gold-soft' : 'text-ink-soft/70'
+                  i === 2 ? 'text-gold-soft' : 'text-ice/85'
                 }`}
               >
                 {i === 2 ? 'Cumulative' : `${c.share} of HMC volume`}

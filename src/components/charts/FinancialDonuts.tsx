@@ -4,6 +4,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import CountUp from 'react-countup';
 import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
+import { CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { ChartFrame } from './ChartFrame';
@@ -30,6 +31,12 @@ export function FinancialDonuts() {
       title="Cash vs Insurance Split"
       populationLabel="n=200 ADAC cases · 2024–2025"
       annotation="Insurance share grew from 70% → 87% in 2025"
+      insight={{
+        keyInsight:
+          'The insurance share of ADAC cases at HMC rose sharply in 2025 — from 70% to 87% of cases.',
+        meaning:
+          'A clearer ADAC–HMC framework reduces uncertainty for travelers and removes the cash-payment friction at the moment of care.',
+      }}
     >
       <div ref={ref} className="flex flex-col items-center gap-12 md:flex-row md:justify-around">
         {/* Big combined donut */}
@@ -54,15 +61,7 @@ export function FinancialDonuts() {
                 <Cell />
                 <Cell />
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: 'rgba(13,27,42,0.92)',
-                  border: '1px solid rgba(201,169,97,0.25)',
-                  borderRadius: 2,
-                  color: '#fff',
-                  fontSize: 12,
-                }}
-              />
+              <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
             </PieChart>
           </ResponsiveContainer>
           <motion.div
@@ -74,7 +73,7 @@ export function FinancialDonuts() {
             <p className="font-display text-5xl text-white">
               {inView ? <CountUp end={fm.combined.total} duration={1.5} preserveValue useEasing /> : 0}
             </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-ink-soft/70">cases</p>
+            <p className="mt-1 text-[12px] uppercase tracking-[0.3em] text-ice/80">cases</p>
           </motion.div>
         </div>
 
@@ -90,9 +89,9 @@ export function FinancialDonuts() {
                 transition={{ delay: 0.7 + idx * 0.15, duration: 0.6, ease: ease.premium }}
                 className="rounded-sm border border-white/10 bg-navy/30 p-5"
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/80">{year}</p>
+                <p className="font-mono text-[12px] uppercase tracking-[0.3em] text-gold">{year}</p>
                 <p className="mt-1 font-display text-2xl text-white">
-                  {year_data.total} <span className="text-sm text-ink-soft">cases</span>
+                  {year_data.total} <span className="text-sm text-ice/80">cases</span>
                 </p>
                 <div className="mt-3 h-2 w-full overflow-hidden rounded-sm bg-white/5">
                   <motion.div
@@ -103,7 +102,7 @@ export function FinancialDonuts() {
                     style={{ background: GOLD }}
                   />
                 </div>
-                <div className="mt-2 flex justify-between text-[11px] uppercase tracking-[0.2em] text-ink-soft/80">
+                <div className="mt-2 flex justify-between text-[12px] uppercase tracking-[0.2em] text-ice/85">
                   <span>Insurance {year_data.insurancePct}%</span>
                   <span>Cash {year_data.cashPct}%</span>
                 </div>

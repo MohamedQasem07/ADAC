@@ -9,6 +9,7 @@ import {
 import { DashboardOverview } from '@/components/sections/DashboardOverview';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { LayoutAwareSection } from '@/components/sections/LayoutAwareSection';
+import { OverviewSection } from '@/components/sections/OverviewSection';
 import { PackageCatalogueOverview } from '@/components/sections/PackageCatalogueOverview';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 import type { ADACDataset, Package, PackageCategory } from '@/types/content';
@@ -53,6 +54,17 @@ export default function SectionPage({ params }: { params: { id: string } }) {
         subtopics={section.subtopics ?? []}
       />
     );
+  }
+
+  // Presentation Overview (agenda) — id "overview", JSON-backed.
+  if (section.id === 'overview' && content?.kind === 'json') {
+    const data = content.data as {
+      title: string;
+      eyebrow?: string;
+      subtitle?: string;
+      items: Array<{ id: string; icon?: string; title: string; summary: string; href: string }>;
+    };
+    return <OverviewSection data={data} />;
   }
 
   // §12 package catalogue top-level: 3×3 category grid.

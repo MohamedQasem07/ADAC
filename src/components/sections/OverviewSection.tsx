@@ -1,0 +1,137 @@
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import {
+  ArrowUpRight,
+  BarChart3,
+  Building2,
+  FileText,
+  Layers,
+  Map,
+  MessagesSquare,
+  Stethoscope,
+  Tag,
+  type LucideIcon,
+} from 'lucide-react';
+import { ease, staggerTight } from '@/lib/motion';
+import { useScrollReveal } from '@/lib/use-scroll-reveal';
+
+interface OverviewItem {
+  id: string;
+  icon?: string;
+  title: string;
+  summary: string;
+  href: string;
+}
+
+interface OverviewData {
+  title: string;
+  eyebrow?: string;
+  subtitle?: string;
+  items: OverviewItem[];
+}
+
+const ICONS: Record<string, LucideIcon> = {
+  BarChart3,
+  Building2,
+  FileText,
+  Layers,
+  Map,
+  MessagesSquare,
+  Stethoscope,
+  Tag,
+};
+
+/**
+ * Presentation Overview — the agenda screen that appears immediately
+ * after the cover. 8 premium cards, each linking to the section they
+ * represent. Acts as a one-page meeting roadmap.
+ */
+export function OverviewSection({ data }: { data: OverviewData }) {
+  const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+
+  return (
+    <section className="min-h-screen px-4 py-24">
+      <header className="mx-auto max-w-3xl px-4 text-center">
+        {data.eyebrow && (
+          <p className="font-sans text-[11px] uppercase tracking-[0.5em] text-gold">
+            {data.eyebrow}
+          </p>
+        )}
+        <h1 className="mt-4 font-display text-4xl font-semibold leading-tight text-white md:text-5xl lg:text-6xl">
+          {data.title}
+        </h1>
+        {data.subtitle && (
+          <p className="mt-4 text-base text-ink-soft md:text-lg">{data.subtitle}</p>
+        )}
+        <div className="gold-rule mx-auto mt-8 w-24" />
+      </header>
+
+      <motion.ul
+        ref={ref}
+        variants={staggerTight}
+        initial="hidden"
+        animate={inView ? 'visible' : 'hidden'}
+        className="mx-auto mt-16 grid w-full max-w-6xl grid-cols-1 gap-5 px-8 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {data.items.map((item) => {
+          const Icon = item.icon ? ICONS[item.icon] : null;
+          return (
+            <motion.li
+              key={item.id}
+              variants={{
+                hidden: { opacity: 0, y: 22 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.65, ease: ease.premium },
+                },
+              }}
+            >
+              <Link
+                href={item.href}
+                className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/50 hover:shadow-card-hover"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-gold/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                />
+
+                <div className="flex items-start justify-between">
+                  {Icon ? (
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-gold/30 bg-gold/10 text-gold">
+                      <Icon size={18} />
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">
+                      {item.id}
+                    </span>
+                  )}
+                  <ArrowUpRight
+                    size={14}
+                    className="text-ink-soft/40 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold"
+                  />
+                </div>
+
+                <h3 className="mt-5 font-display text-lg leading-snug text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft/90">
+                  {item.summary}
+                </p>
+                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-soft/50">
+                  {item.id}
+                </p>
+              </Link>
+            </motion.li>
+          );
+        })}
+      </motion.ul>
+    </section>
+  );
+}
