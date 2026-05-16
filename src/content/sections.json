@@ -195,7 +195,8 @@
         { "id": "13.1", "title": "Calibrated for Reasonable Pricing", "content": "section-13a-calibrated.md", "renderer": "markdown" },
         { "id": "13.2", "title": "What's Always Included", "content": "section-13b-included.md", "renderer": "markdown" },
         { "id": "13.3", "title": "What's Quoted Separately", "content": "section-13c-separate.md", "renderer": "markdown" },
-        { "id": "13.4", "title": "Currency & Payment Terms", "content": "section-13d-payment.md", "renderer": "markdown" }
+        { "id": "13.4", "title": "Currency & Payment Terms", "content": "section-13d-payment.md", "renderer": "markdown" },
+        { "id": "13.5", "title": "Worked Example · Package Flow", "content": "section-13e-example.md", "renderer": "worked-example" }
       ]
     },
     {

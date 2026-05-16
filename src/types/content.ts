@@ -35,7 +35,8 @@ export type SubtopicRenderer =
   | 'chart-market-share'
   | 'chart-german-volume'
   | 'package-category'
-  | 'pricing-matrix';
+  | 'pricing-matrix'
+  | 'worked-example';
 
 export interface SubtopicMeta {
   id: string;
