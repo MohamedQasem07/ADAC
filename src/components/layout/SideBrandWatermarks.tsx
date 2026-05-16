@@ -13,94 +13,73 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const HMC_SRC = `${BASE_PATH}/brand/hmc-logo-white.png`;
 const ADAC_SRC = `${BASE_PATH}/brand/adac-logo-white.png`;
 
-/**
- * Sidebar width token. Matches `w-[min(22rem,calc(100vw-1rem))]` from
- * Sidebar.tsx — when the sidebar opens, the HMC watermark slides
- * horizontally to sit just outside its right edge so it remains in the
- * visible "page background" region rather than disappearing under the
- * sidebar panel.
- */
+/** Sidebar width token — matches `w-[min(22rem,...)]` in Sidebar.tsx. */
 const SIDEBAR_WIDTH_REM = 22;
-const HMC_GAP_FROM_SIDEBAR_PX = 32;
 
 /**
- * Phase 2.4K.3 — true background-dimmed brand watermarks.
+ * Phase 2.4K.4 — corner-anchored watermark ghosts.
  *
- * The earlier 2.4K iterations read as "semi-transparent UI logos." This
- * version aims for the look of white atmospheric watermark paint
- * embedded in the page background — soft, frosted, slightly blurred,
- * similar in spirit to how the main content reads when the sidebar
- * overlay is open.
+ * HMC emerges from the **extreme upper-left corner** of the viewport,
+ * ADAC emerges from the **extreme lower-right corner**. Neither has a
+ * visible bounding rectangle: the previous 2.4K.3 navy frost scrim has
+ * been removed because it drew a visible square behind the logo. What
+ * remains is just:
  *
- * Technique stack (per logo):
- *   1. Large radial atmospheric halo behind the logo (180% box, 38 px
- *      blur). HMC halo is HMC-blue, ADAC halo is ADAC-yellow. This
- *      establishes a coloured "light pool" in the corner before any
- *      logo is drawn.
- *   2. Logo image with filter `blur(1.4px) brightness(1.12) saturate(0.55)`
- *      and opacity 0.55. The micro-blur is the single most important
- *      step: it strips the logo of its sharp PNG edge so it reads as
- *      background paint. The saturate desaturates any colour cast and
- *      the brightness lift keeps the white visible against dark navy.
- *   3. A faint navy frost scrim positioned ON TOP of the logo
- *      (`bg-navy-deep/15` + `backdrop-blur-[2px]`). This is what gives
- *      the "logo embedded in frosted glass" feel — the same family of
- *      treatment as the sidebar-open page dim.
- *   4. Wrapper opacity 0.92 — the per-piece opacities above (halo, logo
- *      0.55, scrim 0.15) already do most of the dimming; the wrapper
- *      gets a small final attenuation, then drops to 0.10 when the
- *      sidebar is open.
+ *   1. A SOFT radial halo (no rectangle — pure radial gradient with
+ *      strong outer falloff) sitting behind the logo.
+ *   2. The white logo image itself, strongly blurred and dimmed, so it
+ *      reads as a soft brand shape painted into the background rather
+ *      than as a UI overlay.
  *
- * Placement (Phase 2.4K.3):
- *   - HMC sits UPPER-LEFT (top ~26 %), `left: 32 px` when the sidebar is
- *     closed. When the sidebar opens, HMC slides right to
- *     `calc(22rem + 32 px)` so it stays in the visible content area
- *     rather than disappearing behind the frosted sidebar panel. A 500
- *     ms premium ease transitions the `left` value smoothly.
- *   - ADAC sits LOWER-RIGHT (top ~74 %) inside the warm gold-light zone,
- *     never moves on sidebar toggle.
+ * Subtlety: the watermarks are deliberately much dimmer than 2.4K.3.
+ * The user should notice them only as faint brand presence, not as a
+ * second logo demanding attention.
  *
- * Layering & safety:
- *   - `z-20` — above ambient (z-0) and content slot (z-10), below the
- *     sidebar (z-50) and shell chrome (z-30+).
- *   - `pointer-events: none` + `select-none` so nothing is blocked.
- *   - Hidden below the `lg` breakpoint (≥ 1024 px CSS).
+ * Placement (corner-anchored):
+ *   - HMC: top 130px, left -16px (so the logo bleeds slightly off the
+ *     page edge — that's what makes it feel attached to the corner
+ *     rather than floating). When the sidebar is open, HMC slides to
+ *     left: calc(22rem - 16px) so it bleeds off the right edge of the
+ *     sidebar instead.
+ *   - ADAC: bottom 90px, right -16px. Same bleed treatment on the
+ *     opposite corner. Does NOT move with the sidebar.
  *
- * Hidden routes: `/`, `/section/1`, `/control` and `/control/*`.
+ * Layering & safety unchanged from 2.4K.3:
+ *   - z-20 (above ambient z-0, above content slot z-10, below shell
+ *     chrome z-30+ and sidebar z-50)
+ *   - pointer-events: none, select-none
+ *   - Hidden below the lg breakpoint and on /, /section/1, /control/*
  */
 export function SideBrandWatermarks({ sidebarOpen }: SideBrandWatermarksProps) {
   const pathname = usePathname() || '/';
   const route = parsePathname(pathname);
 
-  // Hide entirely on the cover and on Control Mode.
   const isCover = (route.sectionId === '1' && !route.subId) || pathname === '/';
   const isControl = pathname.startsWith('/control');
   if (isCover || isControl) return null;
 
-  const wrapperOpacity = sidebarOpen ? 0.1 : 0.92;
+  // 2.4K.4: much dimmer wrapper. The image inside is also dimmer.
+  const wrapperOpacity = sidebarOpen ? 0.06 : 0.18;
 
-  // HMC slides right when the sidebar opens so it sits at the
-  // left edge of the visible page-background area, not under the
-  // sidebar's frosted panel.
-  const hmcLeft = sidebarOpen
-    ? `calc(${SIDEBAR_WIDTH_REM}rem + ${HMC_GAP_FROM_SIDEBAR_PX}px)`
-    : `32px`;
+  // HMC slides right when the sidebar is open so it bleeds off the
+  // sidebar's right edge instead of the viewport's left edge.
+  const hmcLeft = sidebarOpen ? `calc(${SIDEBAR_WIDTH_REM}rem - 16px)` : `-16px`;
 
-  // Combined filter applied to the logo IMAGE itself. The blur(1.4px)
-  // is the painted-into-background look; brightness + saturate keep
-  // the white intact against dark navy without becoming washed out.
+  // Image filter: heavier blur than 2.4K.3 (2.4 px). Brightness slightly
+  // higher to compensate for the bigger blur. Saturate kept low so it
+  // reads neutral white.
   const logoFilterHMC =
-    'blur(1.4px) brightness(1.12) saturate(0.55) drop-shadow(0 0 30px rgba(31,111,229,0.34))';
+    'blur(2.4px) brightness(1.18) saturate(0.5) drop-shadow(0 0 32px rgba(31,111,229,0.30))';
   const logoFilterADAC =
-    'blur(1.4px) brightness(1.12) saturate(0.55) drop-shadow(0 0 30px rgba(255,210,0,0.36))';
+    'blur(2.4px) brightness(1.18) saturate(0.5) drop-shadow(0 0 32px rgba(255,210,0,0.32))';
 
   return (
     <div aria-hidden className="pointer-events-none select-none">
-      {/* HMC — upper-left, slides right with sidebar */}
+      {/* HMC — extreme upper-left corner */}
       <div
-        className="fixed z-20 hidden -translate-y-1/2 lg:block"
+        className="fixed z-20 hidden lg:block"
         style={{
-          top: '26%',
+          top: '130px',
           left: hmcLeft,
           opacity: wrapperOpacity,
           transition:
@@ -109,19 +88,20 @@ export function SideBrandWatermarks({ sidebarOpen }: SideBrandWatermarksProps) {
       >
         <div
           className="relative"
-          style={{ width: 'clamp(190px, 15vw, 330px)' }}
+          style={{ width: 'clamp(200px, 16vw, 340px)' }}
         >
-          {/* 1. Atmospheric blue/cyan halo — paints the corner before the logo */}
+          {/* Radial-only halo. Very soft, big falloff — never reads as
+              a rectangle. Sized larger than the logo so its outer
+              transparency edge sits beyond the logo's bounding box. */}
           <span
             aria-hidden
-            className="absolute left-1/2 top-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[220%] w-[220%] -translate-x-1/2 -translate-y-1/2"
             style={{
               background:
-                'radial-gradient(circle, rgba(31,111,229,0.40) 0%, rgba(31,111,229,0.20) 36%, rgba(31,111,229,0.08) 58%, transparent 78%)',
-              filter: 'blur(38px)',
+                'radial-gradient(circle, rgba(31,111,229,0.30) 0%, rgba(31,111,229,0.12) 32%, rgba(31,111,229,0.03) 56%, transparent 75%)',
+              filter: 'blur(34px)',
             }}
           />
-          {/* 2. The logo — white, blurred, slightly brightened */}
           <Image
             src={HMC_SRC}
             alt=""
@@ -131,49 +111,36 @@ export function SideBrandWatermarks({ sidebarOpen }: SideBrandWatermarksProps) {
             priority={false}
             className="relative h-auto w-full object-contain"
             style={{
-              opacity: 0.55,
+              opacity: 0.4,
               filter: logoFilterHMC,
-            }}
-          />
-          {/* 3. Frost scrim — sits ON TOP of the logo. Subtle navy tint
-              + backdrop-blur. Gives the "logo dimmed into the page
-              background" feel that opacity alone cannot. */}
-          <span
-            aria-hidden
-            className="absolute inset-0 backdrop-blur-[2px]"
-            style={{
-              background:
-                'linear-gradient(135deg, rgba(10,25,41,0.18) 0%, rgba(10,25,41,0.10) 60%, rgba(10,25,41,0.04) 100%)',
             }}
           />
         </div>
       </div>
 
-      {/* ADAC — lower-right, anchored in the warm light zone (never moves on sidebar toggle) */}
+      {/* ADAC — extreme lower-right corner */}
       <div
-        className="fixed z-20 hidden -translate-y-1/2 lg:block"
+        className="fixed z-20 hidden lg:block"
         style={{
-          top: '74%',
-          right: '32px',
+          bottom: '90px',
+          right: '-16px',
           opacity: wrapperOpacity,
           transition: 'opacity 500ms cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
         <div
           className="relative"
-          style={{ width: 'clamp(180px, 14vw, 310px)' }}
+          style={{ width: 'clamp(190px, 15vw, 320px)' }}
         >
-          {/* 1. Atmospheric gold/yellow halo */}
           <span
             aria-hidden
-            className="absolute left-1/2 top-1/2 h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[220%] w-[220%] -translate-x-1/2 -translate-y-1/2"
             style={{
               background:
-                'radial-gradient(circle, rgba(255,210,0,0.38) 0%, rgba(255,210,0,0.20) 36%, rgba(255,210,0,0.08) 58%, transparent 78%)',
-              filter: 'blur(38px)',
+                'radial-gradient(circle, rgba(255,210,0,0.30) 0%, rgba(255,210,0,0.12) 32%, rgba(255,210,0,0.03) 56%, transparent 75%)',
+              filter: 'blur(34px)',
             }}
           />
-          {/* 2. Logo — white, blurred */}
           <Image
             src={ADAC_SRC}
             alt=""
@@ -183,17 +150,8 @@ export function SideBrandWatermarks({ sidebarOpen }: SideBrandWatermarksProps) {
             priority={false}
             className="relative h-auto w-full object-contain"
             style={{
-              opacity: 0.55,
+              opacity: 0.4,
               filter: logoFilterADAC,
-            }}
-          />
-          {/* 3. Frost scrim */}
-          <span
-            aria-hidden
-            className="absolute inset-0 backdrop-blur-[2px]"
-            style={{
-              background:
-                'linear-gradient(225deg, rgba(10,25,41,0.18) 0%, rgba(10,25,41,0.10) 60%, rgba(10,25,41,0.04) 100%)',
             }}
           />
         </div>
