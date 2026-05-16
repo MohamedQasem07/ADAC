@@ -51,21 +51,22 @@ export function MarketShareHero() {
           className="relative flex flex-col items-center"
         >
           <motion.p
-            className="font-display font-semibold leading-none tracking-tight text-gold md:text-[10rem] lg:text-[12rem]"
+            className="font-display font-semibold leading-none tracking-tight md:text-[10rem] lg:text-[12rem]"
             style={{
               fontSize: 'clamp(5rem, 14vw, 12rem)',
+              color: 'var(--theme-accent)',
             }}
             initial={{
-              filter: 'drop-shadow(0 0 0px rgba(201,169,97,0))',
+              filter: 'drop-shadow(0 0 0px rgba(var(--theme-accent-rgb),0))',
               scale: 0.97,
             }}
             animate={
               inView
                 ? {
                     filter: [
-                      'drop-shadow(0 0 0px rgba(201,169,97,0))',
-                      'drop-shadow(0 0 56px rgba(201,169,97,0.55))',
-                      'drop-shadow(0 0 32px rgba(201,169,97,0.32))',
+                      'drop-shadow(0 0 0px rgba(var(--theme-accent-rgb),0))',
+                      'drop-shadow(0 0 56px rgba(var(--theme-accent-rgb),0.55))',
+                      'drop-shadow(0 0 32px rgba(var(--theme-accent-rgb),0.32))',
                     ],
                     scale: [0.97, 1.02, 1],
                   }
@@ -132,7 +133,10 @@ export function MarketShareHero() {
           ))}
         </motion.div>
 
-        <p className="max-w-2xl text-center text-sm italic text-gold-soft">
+        <p
+          className="max-w-2xl text-center text-sm italic"
+          style={{ color: 'var(--theme-accent-soft)' }}
+        >
           {ms.phrasing}
         </p>
       </div>

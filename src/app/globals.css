@@ -15,6 +15,66 @@
   --text-dark: #0f1b2d;
   --text-medium: #4a5568;
   --text-soft: #7a8b9d;
+
+  /* ─── Phase 2.4E — Optional visual theme tokens ────────────────
+     Default values map to the current Premium Navy theme, so any
+     component that consumes these vars renders unchanged when no
+     [data-theme] override is set on <html>. The Partnership theme
+     overrides these in the [data-theme='partnership'] block below. */
+  --theme-accent: #c9a961;
+  --theme-accent-soft: #e0c988;
+  --theme-accent-rgb: 201, 169, 97;
+  --theme-cta-bg: #c9a961;
+  --theme-cta-bg-hover: #e0c988;
+  --theme-cta-text: #0a1929;
+  --theme-cta-glow: rgba(201, 169, 97, 0.28);
+  --theme-cta-glow-strong: rgba(201, 169, 97, 0.4);
+  --theme-glow-hmc: rgba(201, 169, 97, 0.18);
+  --theme-glow-adac: rgba(201, 169, 97, 0.18);
+  --theme-badge-bg: rgba(201, 169, 97, 0.07);
+  --theme-badge-border: rgba(201, 169, 97, 0.35);
+  --theme-badge-text: #e0c988;
+  --theme-connector-from: #c9a961;
+  --theme-connector-to: #c9a961;
+  --theme-chart-primary: #c9a961;
+  --theme-chart-primary-soft: #e0c988;
+  --theme-chart-primary-rgb: 201, 169, 97;
+  --theme-chart-secondary: #2e75b6;
+  --theme-chart-tertiary: #0096b4;
+  --theme-chart-danger: #e74747;
+  --theme-chart-cyan: #54c7e8;
+  --theme-chart-text: #f4f8fc;
+  --theme-chart-text-secondary: #b8c7d6;
+}
+
+/* HMC × ADAC Partnership theme — HMC blue + ADAC yellow + medical
+   cyan + subtle red. Opt-in only via localStorage hmc-adac-visual-
+   theme-v1 = 'partnership' or the Ctrl/Cmd+Shift+T toggle. */
+[data-theme='partnership'] {
+  --theme-accent: #ffd200;
+  --theme-accent-soft: #ffdf45;
+  --theme-accent-rgb: 255, 210, 0;
+  --theme-cta-bg: #ffd200;
+  --theme-cta-bg-hover: #ffdf45;
+  --theme-cta-text: #111111;
+  --theme-cta-glow: rgba(255, 210, 0, 0.32);
+  --theme-cta-glow-strong: rgba(255, 210, 0, 0.48);
+  --theme-glow-hmc: rgba(31, 111, 229, 0.22);
+  --theme-glow-adac: rgba(255, 210, 0, 0.22);
+  --theme-badge-bg: rgba(31, 111, 229, 0.1);
+  --theme-badge-border: rgba(255, 210, 0, 0.55);
+  --theme-badge-text: #ffd200;
+  --theme-connector-from: #2f80ed;
+  --theme-connector-to: #ffd200;
+  --theme-chart-primary: #ffd200;
+  --theme-chart-primary-soft: #e5b800;
+  --theme-chart-primary-rgb: 255, 210, 0;
+  --theme-chart-secondary: #2f80ed;
+  --theme-chart-tertiary: #54c7e8;
+  --theme-chart-danger: #e74747;
+  --theme-chart-cyan: #54c7e8;
+  --theme-chart-text: #f7fafc;
+  --theme-chart-text-secondary: #d7e2ef;
 }
 
 html,

@@ -26,9 +26,26 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Tiny pre-hydration script that reads the visual-theme preference
+// from localStorage and applies it to <html data-theme="..."> before
+// React renders. Without this, partnership-theme users would see a
+// brief flash of Premium Navy on first paint. Strict validation —
+// any unknown value is ignored so the default (Premium Navy) wins.
+const THEME_INIT_SCRIPT = `
+try {
+  var t = localStorage.getItem('hmc-adac-visual-theme-v1');
+  if (t === 'partnership' || t === 'premium-navy') {
+    if (t === 'partnership') document.documentElement.setAttribute('data-theme','partnership');
+  }
+} catch (e) {}
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-screen bg-navy-deep font-sans text-white antialiased">
         <PresentationShell>{children}</PresentationShell>
       </body>

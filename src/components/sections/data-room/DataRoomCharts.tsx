@@ -18,14 +18,12 @@ import CountUp from 'react-countup';
 import { fallbackADACData } from '@/data/fallback';
 import {
   CHART_AXIS_LINE,
-  CHART_GOLD,
-  CHART_GOLD_SOFT,
-  CHART_GRID,
   CHART_TEXT_SECONDARY,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { useThemeChartColors } from '@/lib/theme-colors';
 
 /**
  * Compact dashboard-only chart variants for the Executive Data Room.
@@ -38,16 +36,16 @@ import { useScrollReveal } from '@/lib/use-scroll-reveal';
  * Locked data: all numbers read from src/data/fallback.ts.
  */
 
-const GOLD = CHART_GOLD;
-const GOLD_SOFT = CHART_GOLD_SOFT;
 const INK = CHART_TEXT_SECONDARY;
-const TEAL = '#0096B4';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const HEATMAP_YEARS = ['2024', '2025'];
 
 // ─── §3.1 compact ───────────────────────────────────────────────
 export function MiniYearlyBars() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const GOLD_SOFT = palette.primarySoft;
   const data = fallbackADACData.yearlyADAC.map((row) => ({
     year: String(row.year),
     total: row.total,
@@ -148,7 +146,7 @@ export function MiniHeatmap() {
                   >
                     <div
                       className="relative flex aspect-square min-w-[26px] items-center justify-center rounded-sm border border-white/10 text-[10px] font-semibold text-white"
-                      style={{ background: `rgba(201, 169, 97, ${0.08 + intensity * 0.75})` }}
+                      style={{ background: `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})` }}
                       title={`${month} ${year}: ${value ?? '—'}`}
                     >
                       <span style={{ opacity: value != null ? 1 : 0.55 }}>
@@ -168,6 +166,8 @@ export function MiniHeatmap() {
 
 // ─── §3.8 compact market-share radial ───────────────────────────
 export function MiniMarketShare() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
   const ms = fallbackADACData.marketShare;
   const pct = Number(ms.adacShare.replace('%', ''));
   const { ref, inView } = useScrollReveal({ threshold: 0.2 });
@@ -226,6 +226,9 @@ export function MiniMarketShare() {
 
 // ─── §3.4 compact donut ─────────────────────────────────────────
 export function MiniFinancialDonut() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const TEAL = palette.tertiary;
   const fm = fallbackADACData.financialMix.combined;
   const { ref, inView } = useScrollReveal({ threshold: 0.2 });
   return (
@@ -280,6 +283,8 @@ export function MiniFinancialDonut() {
 
 // ─── §3.3 compact diagnosis (top 5) ─────────────────────────────
 export function MiniDiagnosis() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
   const data = fallbackADACData.diagnosisProfile.slice(0, 5).map((d) => ({
     name: d.category,
     pct: d.pct,
@@ -329,6 +334,10 @@ export function MiniDiagnosis() {
 
 // ─── §3.5 compact admission stacked bar ─────────────────────────
 export function MiniAdmission() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const TEAL = palette.tertiary;
+  const BLUE = palette.secondary;
   const ap = fallbackADACData.admissionProfile;
   const surgeryPct = Number(
     (
@@ -341,7 +350,7 @@ export function MiniAdmission() {
   );
   const segments = [
     { label: 'Normal Room', pct: ap.normalRoom.pct, color: GOLD },
-    { label: 'ICU', pct: ap.icu.pct, color: '#2E75B6' },
+    { label: 'ICU', pct: ap.icu.pct, color: BLUE },
     { label: 'Surgery', pct: surgeryPct, color: TEAL },
   ];
   const { ref, inView } = useScrollReveal({ threshold: 0.2 });
@@ -376,6 +385,9 @@ export function MiniAdmission() {
 
 // ─── §3.6 compact age distribution ──────────────────────────────
 export function MiniAge() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const GOLD_SOFT = palette.primarySoft;
   const data = fallbackADACData.ageProfile.map((d) => ({
     name: d.group.replace(/^[\d–\-+ ]+/, '').trim() || d.group,
     full: d.group,
@@ -414,7 +426,7 @@ export function MiniAge() {
                 key={d.full}
                 fill={d.isDominant ? GOLD_SOFT : GOLD}
                 fillOpacity={d.isDominant ? 1 : 0.55}
-                style={d.isDominant ? { filter: 'drop-shadow(0 0 8px rgba(201,169,97,0.45))' } : undefined}
+                style={d.isDominant ? { filter: 'drop-shadow(0 0 8px rgba(var(--theme-chart-primary-rgb),0.45))' } : undefined}
               />
             ))}
             <LabelList
@@ -433,6 +445,8 @@ export function MiniAge() {
 
 // ─── §3.7 compact length-of-stay histogram ──────────────────────
 export function MiniLengthOfStay() {
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
   const data = fallbackADACData.lengthOfStay.map((d) => ({
     days: d.days,
     count: d.count,
@@ -476,8 +490,18 @@ export function MiniLengthOfStay() {
         className="pointer-events-none absolute left-[8%] top-1 text-center"
         style={{ width: '14%' }}
       >
-        <p className="font-display text-base text-gold">83%</p>
-        <p className="text-[9px] uppercase tracking-[0.25em] text-gold/85">within 48 h</p>
+        <p
+          className="font-display text-base"
+          style={{ color: 'var(--theme-accent)' }}
+        >
+          83%
+        </p>
+        <p
+          className="text-[9px] uppercase tracking-[0.25em]"
+          style={{ color: 'var(--theme-accent-soft)' }}
+        >
+          within 48 h
+        </p>
       </motion.div>
     </div>
   );

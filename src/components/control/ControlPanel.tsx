@@ -1,15 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { AlertCircle, FileJson, RotateCcw, Tag, TextSelect, Wallet } from 'lucide-react';
+import {
+  AlertCircle,
+  FileJson,
+  Palette,
+  RotateCcw,
+  Tag,
+  TextSelect,
+  Wallet,
+} from 'lucide-react';
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { TextOverridesTab } from './TextOverridesTab';
 import { PackageOverridesTab } from './PackageOverridesTab';
 import { PricingOverridesTab } from './PricingOverridesTab';
 import { ImportExportTab } from './ImportExportTab';
 import { ResetOverridesTab } from './ResetOverridesTab';
+import { ThemeTab } from './ThemeTab';
 
-type TabId = 'text' | 'packages' | 'pricing' | 'io' | 'reset';
+type TabId = 'text' | 'packages' | 'pricing' | 'theme' | 'io' | 'reset';
 
 interface Tab {
   id: TabId;
@@ -21,6 +30,7 @@ const TABS: Tab[] = [
   { id: 'text', label: 'Slide Text', icon: <TextSelect size={14} /> },
   { id: 'packages', label: 'Package Catalogue', icon: <Tag size={14} /> },
   { id: 'pricing', label: 'Pricing', icon: <Wallet size={14} /> },
+  { id: 'theme', label: 'Theme', icon: <Palette size={14} /> },
   { id: 'io', label: 'Import / Export', icon: <FileJson size={14} /> },
   { id: 'reset', label: 'Reset', icon: <RotateCcw size={14} /> },
 ];
@@ -94,6 +104,7 @@ export function ControlPanel() {
         {tab === 'text' && <TextOverridesTab />}
         {tab === 'packages' && <PackageOverridesTab />}
         {tab === 'pricing' && <PricingOverridesTab />}
+        {tab === 'theme' && <ThemeTab />}
         {tab === 'io' && <ImportExportTab />}
         {tab === 'reset' && <ResetOverridesTab />}
       </main>

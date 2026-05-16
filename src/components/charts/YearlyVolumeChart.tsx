@@ -15,19 +15,15 @@ import { motion } from 'framer-motion';
 import { fallbackADACData } from '@/data/fallback';
 import {
   CHART_AXIS_LINE,
-  CHART_GOLD,
-  CHART_GOLD_SOFT,
   CHART_GRID,
-  CHART_TEXT_PRIMARY,
   CHART_TEXT_SECONDARY,
   CHART_TOOLTIP_STYLE,
 } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
 
-const GOLD = CHART_GOLD;
-const GOLD_SOFT = CHART_GOLD_SOFT;
 const INK_SOFT = CHART_TEXT_SECONDARY;
 
 /**
@@ -43,6 +39,10 @@ export function YearlyVolumeChart() {
     total: row.total,
     isYTD: row.note?.includes('YTD'),
   }));
+
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const GOLD_SOFT = palette.primarySoft;
 
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
@@ -110,10 +110,13 @@ export function YearlyVolumeChart() {
         {/* +70% growth arrow — draws from above 2023 bar to above 2025 bar
             after the data animation lands (delay ~1.4s). The arrow is an
             SVG path with stroke-dasharray reveal. */}
-        <GrowthArrow inView={inView} />
+        <GrowthArrow inView={inView} gold={GOLD} goldSoft={GOLD_SOFT} />
       </div>
 
-      <p className="mt-6 text-center text-sm italic text-gold-soft md:text-base">
+      <p
+        className="mt-6 text-center text-sm italic md:text-base"
+        style={{ color: 'var(--theme-accent-soft)' }}
+      >
         +70% growth 2023 → 2025 · 2026 shown YTD (5 months)
       </p>
     </ChartFrame>
@@ -121,7 +124,17 @@ export function YearlyVolumeChart() {
 }
 
 /** Animated "+70% growth" callout overlay drawn above the chart bars. */
-function GrowthArrow({ inView }: { inView: boolean }) {
+function GrowthArrow({
+  inView,
+  gold,
+  goldSoft,
+}: {
+  inView: boolean;
+  gold: string;
+  goldSoft: string;
+}) {
+  const GOLD = gold;
+  const GOLD_SOFT = goldSoft;
   // 4 bars in equal segments: midpoints at 12.5%, 37.5%, 62.5%, 87.5%.
   // 2023 = first bar (12.5%), 2025 = third bar (62.5%).
   return (

@@ -66,10 +66,30 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           {eyebrow}
         </motion.p>
 
-        {/* Partnership lockup — the main opening event. The asymmetric
-            horizontal beam from 2.4D.1 was removed; symmetry now lives
-            inside PartnershipLockup's central connector. */}
-        <div className="mt-10 w-full md:mt-12">
+        {/* Partnership lockup — the main opening event. Two theme-aware
+            radial glows sit behind it (left = HMC side, right = ADAC
+            side). Under premium-navy both glows are gold/identical;
+            under the partnership theme the left becomes HMC blue and
+            the right becomes ADAC yellow. */}
+        <div className="relative mt-10 w-full md:mt-12">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-1/2 h-[160%] w-1/2 -translate-y-1/2"
+            style={{
+              background:
+                'radial-gradient(50% 60% at 30% 50%, var(--theme-glow-hmc) 0%, transparent 70%)',
+              filter: 'blur(4px)',
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-1/2 h-[160%] w-1/2 -translate-y-1/2"
+            style={{
+              background:
+                'radial-gradient(50% 60% at 70% 50%, var(--theme-glow-adac) 0%, transparent 70%)',
+              filter: 'blur(4px)',
+            }}
+          />
           <PartnershipLockup />
         </div>
 
@@ -126,7 +146,14 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           >
             {badges.map((b, i) => (
               <motion.li key={`${b}-${i}`} variants={badgeItem}>
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/35 bg-gold/[0.07] px-3 py-1.5 text-xs uppercase tracking-[0.22em] text-gold-soft">
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-xs uppercase tracking-[0.22em]"
+                  style={{
+                    background: 'var(--theme-badge-bg)',
+                    border: '1px solid var(--theme-badge-border)',
+                    color: 'var(--theme-badge-text)',
+                  }}
+                >
                   {b}
                 </span>
               </motion.li>
@@ -143,7 +170,21 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
         >
           <Link
             href="/section/overview"
-            className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-gold/55 bg-gold px-8 py-3 font-sans text-sm font-semibold uppercase tracking-[0.2em] text-navy-deep shadow-[0_18px_55px_rgba(201,169,97,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_24px_70px_rgba(201,169,97,0.4)] focus:outline-none focus:ring-2 focus:ring-gold-soft focus:ring-offset-2 focus:ring-offset-navy-deep"
+            className="group inline-flex min-h-12 items-center gap-3 rounded-full px-8 py-3 font-sans text-sm font-semibold uppercase tracking-[0.2em] transition duration-300 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-navy-deep"
+            style={{
+              background: 'var(--theme-cta-bg)',
+              color: 'var(--theme-cta-text)',
+              border: '1px solid var(--theme-cta-bg)',
+              boxShadow: '0 18px 55px var(--theme-cta-glow)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--theme-cta-bg-hover)';
+              e.currentTarget.style.boxShadow = '0 24px 70px var(--theme-cta-glow-strong)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--theme-cta-bg)';
+              e.currentTarget.style.boxShadow = '0 18px 55px var(--theme-cta-glow)';
+            }}
           >
             Start Presentation
             <ArrowRight

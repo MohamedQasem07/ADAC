@@ -142,16 +142,18 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       >
                         {s.title}
                       </span>
-                      {/* Executive accent for the Data Room */}
+                      {/* Executive accent for the Data Room — theme-aware
+                          (gold under premium-navy, ADAC yellow under
+                          partnership). */}
                       {isDataRoom && (
                         <span
                           aria-label="Executive view"
-                          className={cn(
-                            'shrink-0 inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[9px] uppercase tracking-[0.18em]',
-                            isActive
-                              ? 'border-gold/60 bg-gold/15 text-gold'
-                              : 'border-gold/35 bg-gold/[0.05] text-gold/85 group-hover:border-gold/55'
-                          )}
+                          className="shrink-0 inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[9px] uppercase tracking-[0.18em]"
+                          style={{
+                            background: 'var(--theme-badge-bg)',
+                            border: '1px solid var(--theme-badge-border)',
+                            color: 'var(--theme-badge-text)',
+                          }}
                         >
                           <Sparkles size={9} />
                           Exec

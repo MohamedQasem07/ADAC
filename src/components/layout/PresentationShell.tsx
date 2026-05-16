@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { PricingProvider } from '@/context/PricingContext';
 import { PresentationOverridesProvider } from '@/context/PresentationOverridesContext';
+import { VisualThemeProvider } from '@/context/VisualThemeContext';
 import { parsePathname } from '@/lib/nav-config';
 import { ControlPanelOverlay } from '@/components/control/ControlPanelOverlay';
 import { AmbientBackground } from './AmbientBackground';
@@ -37,7 +38,8 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
   void isCover;
 
   return (
-    <PresentationOverridesProvider>
+    <VisualThemeProvider>
+      <PresentationOverridesProvider>
       <PricingProvider>
         <AmbientBackground />
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -57,6 +59,7 @@ export function PresentationShell({ children }: { children: React.ReactNode }) {
         <SearchOverlay />
         <ControlPanelOverlay />
       </PricingProvider>
-    </PresentationOverridesProvider>
+      </PresentationOverridesProvider>
+    </VisualThemeProvider>
   );
 }

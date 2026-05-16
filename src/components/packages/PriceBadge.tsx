@@ -32,7 +32,12 @@ export function PriceBadge({ pkg, size = 'md' }: PriceBadgeProps) {
 
   return (
     <span
-      className={`relative inline-flex items-center justify-center overflow-hidden rounded-sm border border-gold/40 bg-gold/10 font-display font-semibold text-gold-soft ${sizing}`}
+      className={`relative inline-flex items-center justify-center overflow-hidden rounded-sm border font-display font-semibold ${sizing}`}
+      style={{
+        borderColor: 'var(--theme-badge-border)',
+        background: 'var(--theme-badge-bg)',
+        color: 'var(--theme-badge-text)',
+      }}
     >
       <AnimatePresence mode="wait">
         <motion.span

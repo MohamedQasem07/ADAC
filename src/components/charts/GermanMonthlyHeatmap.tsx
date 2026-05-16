@@ -87,7 +87,7 @@ export function GermanMonthlyHeatmap() {
                       <div
                         className="group relative flex aspect-square min-w-[44px] items-center justify-center rounded-sm border border-white/10 text-[13px] font-semibold text-white transition-shadow duration-300 hover:shadow-gold-glow"
                         style={{
-                          background: `rgba(201, 169, 97, ${0.08 + intensity * 0.75})`,
+                          background: `rgba(var(--theme-chart-primary-rgb), ${0.08 + intensity * 0.75})`,
                         }}
                       >
                         <span style={{ opacity: value != null ? 1 : 0.2 }}>

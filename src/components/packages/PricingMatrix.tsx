@@ -78,9 +78,13 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
                   <td className="relative px-4 py-4 md:px-6">
                     <span
                       aria-hidden
-                      className="absolute left-0 top-1/2 h-8 w-[2px] -translate-y-1/2 scale-y-0 bg-gold transition-transform duration-300 group-hover:scale-y-100"
+                      className="absolute left-0 top-1/2 h-8 w-[2px] -translate-y-1/2 scale-y-0 transition-transform duration-300 group-hover:scale-y-100"
+                      style={{ background: 'var(--theme-accent)' }}
                     />
-                    <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-gold/80">
+                    <p
+                      className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                      style={{ color: 'var(--theme-accent-soft)' }}
+                    >
                       {cat.code}
                     </p>
                     <p className="mt-1 font-display text-base text-white">{cat.name}</p>
@@ -88,7 +92,10 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
                   <td className="px-4 py-4 text-sm text-ink-soft md:px-6">
                     {catPkgs.length}
                   </td>
-                  <td className="px-4 py-4 font-display text-base text-gold-soft md:px-6">
+                  <td
+                    className="px-4 py-4 font-display text-base md:px-6"
+                    style={{ color: 'var(--theme-accent-soft)' }}
+                  >
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={`${cat.id}-range-${scenario}`}

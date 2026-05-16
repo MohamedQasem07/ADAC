@@ -7,10 +7,8 @@ import { fallbackADACData } from '@/data/fallback';
 import { CHART_TOOLTIP_STYLE } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { useThemeChartColors } from '@/lib/theme-colors';
 import { ChartFrame } from './ChartFrame';
-
-const GOLD = '#C9A961';
-const TEAL = '#0096B4';
 
 /**
  * §3.4 — Cash vs Insurance Split.
@@ -22,6 +20,9 @@ const TEAL = '#0096B4';
  */
 export function FinancialDonuts() {
   const fm = fallbackADACData.financialMix;
+  const palette = useThemeChartColors();
+  const GOLD = palette.primary;
+  const TEAL = palette.tertiary;
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
   return (
@@ -89,7 +90,12 @@ export function FinancialDonuts() {
                 transition={{ delay: 0.7 + idx * 0.15, duration: 0.6, ease: ease.premium }}
                 className="rounded-sm border border-white/10 bg-navy/30 p-5"
               >
-                <p className="font-mono text-[12px] uppercase tracking-[0.3em] text-gold">{year}</p>
+                <p
+                  className="font-mono text-[12px] uppercase tracking-[0.3em]"
+                  style={{ color: 'var(--theme-accent)' }}
+                >
+                  {year}
+                </p>
                 <p className="mt-1 font-display text-2xl text-white">
                   {year_data.total} <span className="text-sm text-ice/80">cases</span>
                 </p>

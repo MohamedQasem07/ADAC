@@ -146,7 +146,9 @@ export function PartnershipLockup({ className = '' }: PartnershipLockupProps) {
 function CentralConnector({ started }: { started: boolean }) {
   return (
     <div className="relative flex h-[140px] w-[112px] shrink-0 items-center justify-center md:h-[160px] md:w-[128px] lg:h-[180px] lg:w-[144px]">
-      {/* Soft circular gold halo behind the × — fully symmetrical */}
+      {/* Soft circular halo behind the × — theme-aware. Premium navy
+          uses gold (rgb(201,169,97)); partnership uses ADAC yellow
+          (rgb(255,210,0)) via --theme-accent-rgb. */}
       <motion.span
         aria-hidden
         initial={{ opacity: 0, scale: 0.65 }}
@@ -155,13 +157,16 @@ function CentralConnector({ started }: { started: boolean }) {
         className="absolute h-16 w-16 rounded-full md:h-20 md:w-20"
         style={{
           background:
-            'radial-gradient(circle, rgba(201,169,97,0.34) 0%, rgba(201,169,97,0.18) 40%, transparent 72%)',
+            'radial-gradient(circle, rgba(var(--theme-accent-rgb), 0.34) 0%, rgba(var(--theme-accent-rgb), 0.18) 40%, transparent 72%)',
           filter: 'blur(2px)',
         }}
       />
 
-      {/* Two short symmetrical hairlines — one drawing left toward HMC,
-          one drawing right toward ADAC. Same length, same opacity. */}
+      {/* Two short symmetrical hairlines drawing outward from the ×.
+          Theme-aware: under premium-navy both lines are gold; under
+          partnership the left line runs from HMC blue → transparent
+          and the right line runs from transparent → ADAC yellow,
+          visually connecting blue (HMC) to yellow (ADAC). */}
       <motion.span
         aria-hidden
         initial={{ scaleX: 0, opacity: 0 }}
@@ -170,7 +175,7 @@ function CentralConnector({ started }: { started: boolean }) {
         style={{
           transformOrigin: 'right center',
           background:
-            'linear-gradient(90deg, transparent 0%, rgba(201,169,97,0.85) 100%)',
+            'linear-gradient(90deg, transparent 0%, var(--theme-connector-from) 100%)',
         }}
         className="absolute right-[58%] h-px w-10 md:w-12 lg:w-14"
       />
@@ -182,23 +187,24 @@ function CentralConnector({ started }: { started: boolean }) {
         style={{
           transformOrigin: 'left center',
           background:
-            'linear-gradient(90deg, rgba(201,169,97,0.85) 0%, transparent 100%)',
+            'linear-gradient(90deg, var(--theme-connector-to) 0%, transparent 100%)',
         }}
         className="absolute left-[58%] h-px w-10 md:w-12 lg:w-14"
       />
 
-      {/* × glyph */}
+      {/* × glyph — colour taken from --theme-accent for theme awareness */}
       <motion.span
         aria-hidden
         initial={{ opacity: 0, scale: 0.85 }}
         animate={started ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
         transition={{ delay: 1.55, duration: 0.5, ease: ease.premium }}
-        className="relative inline-flex items-center justify-center font-display font-medium text-gold"
+        className="relative inline-flex items-center justify-center font-display font-medium"
         style={{
           fontSize: 'clamp(40px, 4.5vw, 56px)',
           fontFamily: 'var(--font-playfair), Georgia, serif',
           lineHeight: 1,
-          textShadow: '0 0 18px rgba(201,169,97,0.45)',
+          color: 'var(--theme-accent)',
+          textShadow: '0 0 18px rgba(var(--theme-accent-rgb), 0.45)',
         }}
       >
         ×

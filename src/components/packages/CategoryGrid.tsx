@@ -97,7 +97,10 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
                   <p className="text-[10px] uppercase tracking-[0.25em] text-ink-soft/70">
                     Range
                   </p>
-                  <p className="font-display text-base text-gold-soft">
+                  <p
+                    className="font-display text-base"
+                    style={{ color: 'var(--theme-accent-soft)' }}
+                  >
                     {range}
                   </p>
                 </div>
