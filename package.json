@@ -1,0 +1,50 @@
+{
+  "name": "hmc-adac-presentation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HMC × ADAC interactive partnership presentation for 19 May 2026",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "framer-motion": "^11.11.17",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.20",
+    "@studio-freight/react-lenis": "^0.0.47",
+    "@react-spring/web": "^9.7.5",
+    "react-intersection-observer": "^9.13.1",
+    "canvas-confetti": "^1.9.3",
+    "react-countup": "^6.5.3",
+    "recharts": "^2.13.3",
+    "lucide-react": "^0.460.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0",
+    "gray-matter": "^4.0.3",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4",
+    "class-variance-authority": "^0.7.1",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.4",
+    "@radix-ui/react-tabs": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/canvas-confetti": "^1.9.0",
+    "tailwindcss": "^3.4.14",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.18"
+  }
+}

@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy-deep: #0a1929;
+  --navy: #0d1b2a;
+  --navy-medium: #1b3a5c;
+  --royal-blue: #2e75b6;
+  --teal: #0096b4;
+  --gold: #c9a961;
+  --gold-soft: #e0c988;
+  --white: #ffffff;
+  --ice: #f4f8fc;
+  --text-dark: #0f1b2d;
+  --text-medium: #4a5568;
+  --text-soft: #7a8b9d;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--navy-deep);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(201, 169, 97, 0.35);
+  color: #fff;
+}
+
+/* Premium horizontal-rule pattern used as section dividers */
+.gold-rule {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 97, 0.8) 50%,
+    transparent 100%
+  );
+}
