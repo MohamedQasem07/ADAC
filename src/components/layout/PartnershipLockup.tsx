@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ease } from '@/lib/motion';
 
 interface PartnershipLockupProps {
@@ -13,118 +13,196 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 const HMC_SRC = `${BASE_PATH}/brand/hmc-logo-white.png`;
 const ADAC_SRC = `${BASE_PATH}/brand/adac-logo-white.png`;
 
+// Far-edge entry distance — large enough that movement is unmistakable
+// at 1366/1920 projector widths. 500 px is roughly 36% of a 1366
+// viewport and 26% of a 1920 viewport, so the logo enters from clearly
+// off-centre on either machine.
+const ENTRY_OFFSET_PX = 500;
+
 /**
  * HMC × ADAC partnership lockup for the Welcome cover.
  *
- *   [ HMC logo ]   |   ×   |   [ ADAC logo ]
+ *   [ HMC logo ] | central connector ( × + halo + symmetrical lines ) | [ ADAC logo ]
  *
- * Sized to feel like the hero element of the page (not a small header).
- *   HMC  wrapper: h-[112px] md:h-[124px] lg:h-32     (96–128 px)
- *   ADAC wrapper: h-[92px]  md:h-[104px] lg:h-28     (92–112 px, visually balanced)
+ * Logo sizing tuned for visual balance, not exact pixel parity:
+ *   HMC  wrapper: h-[124px] md:h-[140px] lg:h-[156px]
+ *                 max-width 280 → 340 → 400 px
+ *   ADAC wrapper: h-[140px] md:h-[160px] lg:h-[180px]
+ *                 max-width 240 → 300 → 360 px  (compact wordmark)
+ *                 image scaled internally by 1.25× to compensate for
+ *                 the transparent padding around the official ADAC PNG
  *
- * Each logo uses next/image with `object-contain` + CSS-driven sizing.
- * On image-load failure, falls back to a Playfair typographic wordmark.
+ * Animation visible at projector distance:
+ *   t+0.20 → 1.40   HMC slides in from x:-500, opacity 0→1, scale 0.92→1
+ *   t+0.20 → 1.40   ADAC slides in from x:+500, opacity 0→1, scale 0.92→1
+ *   t+1.45 → 1.95   Central × + soft circular halo fades + scales 0.85→1
+ *   t+1.65 → 2.20   Two short symmetrical gold hairlines draw from × outward
  *
- * Animation visible-from-projector:
- *   t+0.25  HMC slides in from x:-100 with opacity 0→1 + scale 0.92→1
- *   t+0.25  ADAC slides in from x:+100 with opacity 0→1 + scale 0.92→1
- *   t+1.10  Gold vertical rule scales 0→1 vertically
- *   t+1.35  × mark fades + scales 0.6→1 with bounce
- *
- * Parent (WelcomeCover) schedules title/subtitle/badges/CTA after this.
+ * A `started` flag gates the animation — gated by useEffect so the
+ * audience always sees the entry play, even after hard refresh /
+ * direct visits to the root URL.
  */
 export function PartnershipLockup({ className = '' }: PartnershipLockupProps) {
   const [hmcFailed, setHmcFailed] = useState(false);
   const [adacFailed, setAdacFailed] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  // Defer animation kickoff by one frame so React has settled the
+  // initial paint at the offscreen position. Without this, fast
+  // hydration can mask the entry motion.
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => setStarted(true));
+    return () => window.cancelAnimationFrame(id);
+  }, []);
 
   return (
     <div
-      className={`flex w-full items-center justify-center gap-8 sm:gap-10 md:gap-14 lg:gap-16 ${className}`}
+      className={`relative mx-auto flex w-full max-w-[1100px] items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14 ${className}`}
     >
-      {/* HMC */}
+      {/* HMC — enters from far left */}
       <motion.div
-        initial={{ opacity: 0, x: -100, scale: 0.92 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ delay: 0.25, duration: 0.9, ease: ease.premium }}
-        className="flex h-[112px] shrink-0 items-center justify-end md:h-[124px] lg:h-32"
+        initial={{ opacity: 0, x: -ENTRY_OFFSET_PX, scale: 0.92 }}
+        animate={
+          started
+            ? { opacity: 1, x: 0, scale: 1 }
+            : { opacity: 0, x: -ENTRY_OFFSET_PX, scale: 0.92 }
+        }
+        transition={{ delay: 0.2, duration: 1.2, ease: ease.premium }}
+        className="flex h-[124px] flex-1 items-center justify-end md:h-[140px] lg:h-[156px]"
       >
         {!hmcFailed ? (
           <Image
             src={HMC_SRC}
             alt="Hurghada Medical Center"
-            width={420}
-            height={130}
+            width={440}
+            height={156}
             priority
             unoptimized
             onError={() => setHmcFailed(true)}
-            className="h-full w-auto max-w-[260px] object-contain sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px]"
+            className="h-full w-auto max-w-[280px] object-contain sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px]"
           />
         ) : (
           <span
-            className="font-display text-[88px] font-semibold leading-none tracking-wide text-white md:text-[100px] lg:text-[112px]"
+            className="font-display font-semibold leading-none tracking-wide text-white"
+            style={{ fontSize: 'clamp(72px, 9vw, 120px)' }}
           >
             HMC
           </span>
         )}
       </motion.div>
 
-      {/* Divider — vertical gold rule + × mark */}
-      <div className="relative flex h-[112px] items-center justify-center md:h-[124px] lg:h-32">
-        <motion.span
-          aria-hidden
-          initial={{ scaleY: 0, opacity: 0 }}
-          animate={{ scaleY: 1, opacity: 0.9 }}
-          transition={{ delay: 1.1, duration: 0.7, ease: ease.premium }}
-          style={{
-            transformOrigin: 'center',
-            background:
-              'linear-gradient(180deg, transparent 0%, rgba(201,169,97,0.55) 15%, rgba(201,169,97,1) 50%, rgba(201,169,97,0.55) 85%, transparent 100%)',
-          }}
-          className="block h-[85%] w-px"
-        />
-        <motion.span
-          aria-hidden
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.35, duration: 0.45, ease: ease.bounce }}
-          className="absolute inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/55 bg-navy-deep text-gold md:h-10 md:w-10"
-          style={{
-            fontSize: '1.15rem',
-            fontFamily: 'var(--font-playfair), Georgia, serif',
-            lineHeight: 1,
-            boxShadow: '0 0 22px rgba(201,169,97,0.4)',
-          }}
-        >
-          ×
-        </motion.span>
-      </div>
+      {/* Central connector — × mark, soft halo, two symmetrical lines */}
+      <CentralConnector started={started} />
 
-      {/* ADAC */}
+      {/* ADAC — enters from far right; visually scaled to balance HMC */}
       <motion.div
-        initial={{ opacity: 0, x: 100, scale: 0.92 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ delay: 0.25, duration: 0.9, ease: ease.premium }}
-        className="flex h-[92px] shrink-0 items-center justify-start md:h-[104px] lg:h-28"
+        initial={{ opacity: 0, x: ENTRY_OFFSET_PX, scale: 0.92 }}
+        animate={
+          started
+            ? { opacity: 1, x: 0, scale: 1 }
+            : { opacity: 0, x: ENTRY_OFFSET_PX, scale: 0.92 }
+        }
+        transition={{ delay: 0.2, duration: 1.2, ease: ease.premium }}
+        className="flex h-[140px] flex-1 items-center justify-start md:h-[160px] lg:h-[180px]"
       >
         {!adacFailed ? (
-          <Image
-            src={ADAC_SRC}
-            alt="ADAC"
-            width={260}
-            height={110}
-            priority
-            unoptimized
-            onError={() => setAdacFailed(true)}
-            className="h-full w-auto max-w-[220px] object-contain sm:max-w-[260px] md:max-w-[300px] lg:max-w-[340px]"
-          />
+          <div className="relative flex h-full w-full max-w-[240px] items-center justify-start overflow-hidden sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px]">
+            {/* The official ADAC PNG carries a wide transparent padding
+                around the wordmark. We scale the image inside its
+                wrapper so the visible letters reach HMC's visual mass. */}
+            <Image
+              src={ADAC_SRC}
+              alt="ADAC"
+              width={360}
+              height={180}
+              priority
+              unoptimized
+              onError={() => setAdacFailed(true)}
+              className="h-full w-auto object-contain"
+              style={{ transform: 'scale(1.25)', transformOrigin: 'left center' }}
+            />
+          </div>
         ) : (
           <span
-            className="font-display text-[72px] font-semibold leading-none tracking-wide text-white md:text-[84px] lg:text-[96px]"
+            className="font-display font-semibold leading-none tracking-wide text-white"
+            style={{ fontSize: 'clamp(64px, 8vw, 112px)' }}
           >
             ADAC
           </span>
         )}
       </motion.div>
+    </div>
+  );
+}
+
+/**
+ * Central connector — replaces the asymmetric horizontal beam from 2.4D.1.
+ *
+ *   ┃   <- thin gold vertical hairline (subtle, fades on top and bottom)
+ *   ●   <- soft circular gold halo behind the × mark (centred, symmetric)
+ *   ×   <- gold × glyph
+ *  ←/→  <- two short symmetrical hairlines drawing outward
+ */
+function CentralConnector({ started }: { started: boolean }) {
+  return (
+    <div className="relative flex h-[140px] w-[112px] shrink-0 items-center justify-center md:h-[160px] md:w-[128px] lg:h-[180px] lg:w-[144px]">
+      {/* Soft circular gold halo behind the × — fully symmetrical */}
+      <motion.span
+        aria-hidden
+        initial={{ opacity: 0, scale: 0.65 }}
+        animate={started ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.65 }}
+        transition={{ delay: 1.45, duration: 0.55, ease: ease.premium }}
+        className="absolute h-16 w-16 rounded-full md:h-20 md:w-20"
+        style={{
+          background:
+            'radial-gradient(circle, rgba(201,169,97,0.34) 0%, rgba(201,169,97,0.18) 40%, transparent 72%)',
+          filter: 'blur(2px)',
+        }}
+      />
+
+      {/* Two short symmetrical hairlines — one drawing left toward HMC,
+          one drawing right toward ADAC. Same length, same opacity. */}
+      <motion.span
+        aria-hidden
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={started ? { scaleX: 1, opacity: 0.85 } : { scaleX: 0, opacity: 0 }}
+        transition={{ delay: 1.65, duration: 0.55, ease: ease.premium }}
+        style={{
+          transformOrigin: 'right center',
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(201,169,97,0.85) 100%)',
+        }}
+        className="absolute right-[58%] h-px w-10 md:w-12 lg:w-14"
+      />
+      <motion.span
+        aria-hidden
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={started ? { scaleX: 1, opacity: 0.85 } : { scaleX: 0, opacity: 0 }}
+        transition={{ delay: 1.65, duration: 0.55, ease: ease.premium }}
+        style={{
+          transformOrigin: 'left center',
+          background:
+            'linear-gradient(90deg, rgba(201,169,97,0.85) 0%, transparent 100%)',
+        }}
+        className="absolute left-[58%] h-px w-10 md:w-12 lg:w-14"
+      />
+
+      {/* × glyph */}
+      <motion.span
+        aria-hidden
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={started ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
+        transition={{ delay: 1.55, duration: 0.5, ease: ease.premium }}
+        className="relative inline-flex items-center justify-center font-display font-medium text-gold"
+        style={{
+          fontSize: 'clamp(40px, 4.5vw, 56px)',
+          fontFamily: 'var(--font-playfair), Georgia, serif',
+          lineHeight: 1,
+          textShadow: '0 0 18px rgba(201,169,97,0.45)',
+        }}
+      >
+        ×
+      </motion.span>
     </div>
   );
 }
