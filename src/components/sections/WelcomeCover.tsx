@@ -15,14 +15,24 @@ interface WelcomeCoverProps {
 /**
  * Welcome / Cover page (§1) — Partnership Opening.
  *
- * Replaces the previous HeroSection-with-single-logo cover with a
- * balanced HMC × ADAC partnership lockup, a stronger title sequence,
- * a clear executive subtitle and tagline, five premium badges, the
- * Start Presentation CTA, and a two-line footer attribution.
+ * Hero element is the HMC × ADAC partnership lockup. Sequence is tuned
+ * to be obviously visible at projector distance:
  *
- * Background here is intentionally minimal — AmbientBackground.tsx
- * skips its star-particle field for §1 and renders a soft radial gold
- * glow + diagonal partnership beam instead. We add nothing extra here.
+ *   t+0.00   Background visible
+ *   t+0.10   Eyebrow "Partnership Opening" fades in
+ *   t+0.25   HMC slides from x:-100, ADAC slides from x:+100
+ *            (both with scale 0.92→1, duration 0.9 s)
+ *   t+1.10   Vertical gold rule draws (scaleY 0→1, 0.7 s)
+ *   t+1.35   × mark fades + bounces in
+ *   t+1.65   Title "HMC × ADAC" word-stagger (Playfair)
+ *   t+2.20   Subtitle fades up
+ *   t+2.45   Tagline fades up
+ *   t+2.70   5 badges stagger in (60 ms apart)
+ *   t+3.10   Start Presentation CTA fades up
+ *   t+3.40   Footer attribution fades up
+ *
+ * Behind the lockup: a soft horizontal gold beam that suggests
+ * partnership without competing with the logos.
  */
 export function WelcomeCover({ content }: WelcomeCoverProps) {
   const fm = content.frontmatter;
@@ -33,18 +43,19 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
   const badges = Array.isArray(fm.badges) ? (fm.badges as string[]) : [];
   const footerLines = Array.isArray(fm.footerLines) ? (fm.footerLines as string[]) : [];
 
-  // Defer the CTA so the audience reads the title before the button appears.
+  // CTA visible only once the title has landed, so the audience reads
+  // the lockup → title sequence before the button calls them to act.
   const [showCTA, setShowCTA] = useState(false);
   useEffect(() => {
-    const t = window.setTimeout(() => setShowCTA(true), 3000);
+    const t = window.setTimeout(() => setShowCTA(true), 3100);
     return () => window.clearTimeout(t);
   }, []);
 
   const words = title.split(' ');
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center px-6 py-20 text-center sm:px-8">
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center">
+    <section className="relative flex min-h-screen items-center justify-center px-4 py-16 text-center sm:px-6 md:py-20">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center">
         {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -55,17 +66,42 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           {eyebrow}
         </motion.p>
 
-        {/* Partnership lockup — HMC × ADAC */}
-        <div className="mt-10 md:mt-12">
-          <PartnershipLockup height={88} />
+        {/* Partnership lockup region — relative wrapper so the horizontal
+            partnership beam sits behind the logos. */}
+        <div className="relative mt-10 w-full md:mt-12">
+          {/* Soft horizontal gold beam behind the lockup */}
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0, scaleX: 0.6 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 0.4, duration: 1.4, ease: ease.premium }}
+            style={{
+              transformOrigin: 'center',
+              background:
+                'linear-gradient(90deg, transparent 0%, rgba(201,169,97,0.16) 22%, rgba(201,169,97,0.30) 50%, rgba(201,169,97,0.16) 78%, transparent 100%)',
+              filter: 'blur(14px)',
+            }}
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[60%] w-[110%] -translate-x-1/2 -translate-y-1/2"
+          />
+          {/* Hairline gold rule along the beam axis */}
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 0.45, scaleX: 1 }}
+            transition={{ delay: 0.55, duration: 1.4, ease: ease.premium }}
+            style={{ transformOrigin: 'center' }}
+            className="pointer-events-none absolute left-1/2 top-1/2 h-px w-[88%] -translate-x-1/2 -translate-y-1/2 bg-[linear-gradient(90deg,transparent_0%,rgba(201,169,97,0.6)_30%,rgba(201,169,97,0.85)_50%,rgba(201,169,97,0.6)_70%,transparent_100%)]"
+          />
+
+          <PartnershipLockup />
         </div>
 
-        {/* Title (word-by-word stagger at 1.4s) */}
+        {/* Title — sits close to the lockup as the same hero block */}
         <motion.h1
           variants={titleContainer}
           initial="hidden"
           animate="visible"
-          className="mt-12 font-display text-5xl font-semibold leading-[1.05] text-white sm:text-6xl md:mt-14 md:text-7xl lg:text-[5.5rem]"
+          className="mt-10 font-display text-5xl font-semibold leading-[1.05] text-white sm:text-6xl md:text-7xl lg:text-[5.5rem]"
         >
           {words.map((word, i) => (
             <motion.span
@@ -79,25 +115,25 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           ))}
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — larger and more readable */}
         {subtitle && (
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.1, duration: 0.7, ease: ease.premium }}
-            className="mx-auto mt-7 max-w-3xl font-display text-xl leading-snug text-white/95 md:text-2xl"
+            transition={{ delay: 2.2, duration: 0.7, ease: ease.premium }}
+            className="mx-auto mt-6 max-w-3xl font-display text-xl leading-snug text-white/95 sm:text-2xl md:text-[1.75rem] lg:text-[2rem]"
           >
             {subtitle}
           </motion.p>
         )}
 
-        {/* Tagline */}
+        {/* Tagline — bigger than before for projector legibility */}
         {tagline && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.35, duration: 0.7, ease: ease.premium }}
-            className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-ice/85 md:text-base"
+            transition={{ delay: 2.45, duration: 0.7, ease: ease.premium }}
+            className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-ice/90 md:text-lg lg:text-xl"
           >
             {tagline}
           </motion.p>
@@ -109,11 +145,11 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
             variants={badgeContainer}
             initial="hidden"
             animate="visible"
-            className="mt-9 flex flex-wrap items-center justify-center gap-2.5"
+            className="mt-8 flex flex-wrap items-center justify-center gap-2.5"
           >
             {badges.map((b, i) => (
               <motion.li key={`${b}-${i}`} variants={badgeItem}>
-                <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/35 bg-gold/[0.07] px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-gold-soft">
+                <span className="inline-flex items-center gap-1.5 rounded-sm border border-gold/35 bg-gold/[0.07] px-3 py-1.5 text-xs uppercase tracking-[0.22em] text-gold-soft">
                   {b}
                 </span>
               </motion.li>
@@ -145,16 +181,16 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 3.3, duration: 0.7, ease: ease.premium }}
-            className="mt-16 space-y-1 text-center"
+            transition={{ delay: 3.4, duration: 0.7, ease: ease.premium }}
+            className="mt-14 space-y-1 text-center"
           >
             {footerLines.map((line, i) => (
               <p
                 key={i}
                 className={
                   i === 0
-                    ? 'text-[11px] uppercase tracking-[0.4em] text-ice/80'
-                    : 'text-[11px] uppercase tracking-[0.35em] text-ice/65'
+                    ? 'text-xs uppercase tracking-[0.4em] text-ice/85'
+                    : 'text-xs uppercase tracking-[0.35em] text-ice/70'
                 }
               >
                 {line}
@@ -169,7 +205,7 @@ export function WelcomeCover({ content }: WelcomeCoverProps) {
 
 const titleContainer: Variants = {
   hidden: {},
-  visible: { transition: { delayChildren: 1.4, staggerChildren: 0.08 } },
+  visible: { transition: { delayChildren: 1.65, staggerChildren: 0.08 } },
 };
 const titleWord: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -177,7 +213,7 @@ const titleWord: Variants = {
 };
 const badgeContainer: Variants = {
   hidden: {},
-  visible: { transition: { delayChildren: 2.5, staggerChildren: 0.06 } },
+  visible: { transition: { delayChildren: 2.7, staggerChildren: 0.06 } },
 };
 const badgeItem: Variants = {
   hidden: { opacity: 0, scale: 0.94 },

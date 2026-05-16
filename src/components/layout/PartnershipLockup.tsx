@@ -6,8 +6,6 @@ import { useState } from 'react';
 import { ease } from '@/lib/motion';
 
 interface PartnershipLockupProps {
-  /** Logo height in px; both logos sized to match. */
-  height?: number;
   className?: string;
 }
 
@@ -20,51 +18,50 @@ const ADAC_SRC = `${BASE_PATH}/brand/adac-logo-white.png`;
  *
  *   [ HMC logo ]   |   ×   |   [ ADAC logo ]
  *
- * Each logo renders from /public/brand/*-logo-white.png with a graceful
- * typographic fallback (same pattern as BrandHeader.tsx). The vertical
- * gold rule and the × mark are SVG, so they animate cleanly via
- * Framer Motion without dragging in extra assets.
+ * Sized to feel like the hero element of the page (not a small header).
+ *   HMC  wrapper: h-[112px] md:h-[124px] lg:h-32     (96–128 px)
+ *   ADAC wrapper: h-[92px]  md:h-[104px] lg:h-28     (92–112 px, visually balanced)
  *
- * Animation sequence (parent passes `initial`/`animate` for orchestration):
- *   t+0.30  HMC slides in from x:-24
- *   t+0.55  ADAC slides in from x:+24
- *   t+0.95  Gold vertical rule scales 0→1 (top-to-bottom feel)
- *   t+1.15  × mark fades + scales 0.6→1 with bounce
+ * Each logo uses next/image with `object-contain` + CSS-driven sizing.
+ * On image-load failure, falls back to a Playfair typographic wordmark.
+ *
+ * Animation visible-from-projector:
+ *   t+0.25  HMC slides in from x:-100 with opacity 0→1 + scale 0.92→1
+ *   t+0.25  ADAC slides in from x:+100 with opacity 0→1 + scale 0.92→1
+ *   t+1.10  Gold vertical rule scales 0→1 vertically
+ *   t+1.35  × mark fades + scales 0.6→1 with bounce
+ *
+ * Parent (WelcomeCover) schedules title/subtitle/badges/CTA after this.
  */
-export function PartnershipLockup({ height = 88, className = '' }: PartnershipLockupProps) {
+export function PartnershipLockup({ className = '' }: PartnershipLockupProps) {
   const [hmcFailed, setHmcFailed] = useState(false);
   const [adacFailed, setAdacFailed] = useState(false);
 
-  // Approximate aspect 3.2:1 for both logos so they balance visually.
-  const width = Math.round(height * 3.2);
-
   return (
     <div
-      className={`flex items-center justify-center gap-6 sm:gap-8 md:gap-10 ${className}`}
+      className={`flex w-full items-center justify-center gap-8 sm:gap-10 md:gap-14 lg:gap-16 ${className}`}
     >
       {/* HMC */}
       <motion.div
-        initial={{ opacity: 0, x: -24 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.3, duration: 0.7, ease: ease.premium }}
-        className="flex shrink-0 items-center justify-end"
-        style={{ minWidth: width }}
+        initial={{ opacity: 0, x: -100, scale: 0.92 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{ delay: 0.25, duration: 0.9, ease: ease.premium }}
+        className="flex h-[112px] shrink-0 items-center justify-end md:h-[124px] lg:h-32"
       >
         {!hmcFailed ? (
           <Image
             src={HMC_SRC}
             alt="Hurghada Medical Center"
-            width={width}
-            height={height}
+            width={420}
+            height={130}
             priority
             unoptimized
             onError={() => setHmcFailed(true)}
-            style={{ height, width: 'auto' }}
+            className="h-full w-auto max-w-[260px] object-contain sm:max-w-[320px] md:max-w-[360px] lg:max-w-[400px]"
           />
         ) : (
           <span
-            className="font-display font-semibold tracking-wide text-white"
-            style={{ fontSize: height * 0.85, lineHeight: 1 }}
+            className="font-display text-[88px] font-semibold leading-none tracking-wide text-white md:text-[100px] lg:text-[112px]"
           >
             HMC
           </span>
@@ -72,33 +69,30 @@ export function PartnershipLockup({ height = 88, className = '' }: PartnershipLo
       </motion.div>
 
       {/* Divider — vertical gold rule + × mark */}
-      <div
-        className="relative flex items-center justify-center"
-        style={{ height: height * 1.05 }}
-      >
+      <div className="relative flex h-[112px] items-center justify-center md:h-[124px] lg:h-32">
         <motion.span
           aria-hidden
           initial={{ scaleY: 0, opacity: 0 }}
-          animate={{ scaleY: 1, opacity: 0.85 }}
-          transition={{ delay: 0.95, duration: 0.6, ease: ease.premium }}
+          animate={{ scaleY: 1, opacity: 0.9 }}
+          transition={{ delay: 1.1, duration: 0.7, ease: ease.premium }}
           style={{
             transformOrigin: 'center',
             background:
-              'linear-gradient(180deg, transparent 0%, rgba(201,169,97,0.6) 18%, rgba(201,169,97,0.9) 50%, rgba(201,169,97,0.6) 82%, transparent 100%)',
+              'linear-gradient(180deg, transparent 0%, rgba(201,169,97,0.55) 15%, rgba(201,169,97,1) 50%, rgba(201,169,97,0.55) 85%, transparent 100%)',
           }}
-          className="block h-full w-px"
+          className="block h-[85%] w-px"
         />
         <motion.span
           aria-hidden
           initial={{ opacity: 0, scale: 0.6 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.15, duration: 0.4, ease: ease.bounce }}
-          className="absolute inline-flex h-7 w-7 items-center justify-center rounded-full border border-gold/50 bg-navy-deep text-gold"
+          transition={{ delay: 1.35, duration: 0.45, ease: ease.bounce }}
+          className="absolute inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/55 bg-navy-deep text-gold md:h-10 md:w-10"
           style={{
-            fontSize: '0.95rem',
+            fontSize: '1.15rem',
             fontFamily: 'var(--font-playfair), Georgia, serif',
             lineHeight: 1,
-            boxShadow: '0 0 16px rgba(201,169,97,0.35)',
+            boxShadow: '0 0 22px rgba(201,169,97,0.4)',
           }}
         >
           ×
@@ -107,27 +101,25 @@ export function PartnershipLockup({ height = 88, className = '' }: PartnershipLo
 
       {/* ADAC */}
       <motion.div
-        initial={{ opacity: 0, x: 24 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.55, duration: 0.7, ease: ease.premium }}
-        className="flex shrink-0 items-center justify-start"
-        style={{ minWidth: width }}
+        initial={{ opacity: 0, x: 100, scale: 0.92 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{ delay: 0.25, duration: 0.9, ease: ease.premium }}
+        className="flex h-[92px] shrink-0 items-center justify-start md:h-[104px] lg:h-28"
       >
         {!adacFailed ? (
           <Image
             src={ADAC_SRC}
             alt="ADAC"
-            width={width}
-            height={height}
+            width={260}
+            height={110}
             priority
             unoptimized
             onError={() => setAdacFailed(true)}
-            style={{ height, width: 'auto' }}
+            className="h-full w-auto max-w-[220px] object-contain sm:max-w-[260px] md:max-w-[300px] lg:max-w-[340px]"
           />
         ) : (
           <span
-            className="font-display font-semibold tracking-wide text-white"
-            style={{ fontSize: height * 0.85, lineHeight: 1 }}
+            className="font-display text-[72px] font-semibold leading-none tracking-wide text-white md:text-[84px] lg:text-[96px]"
           >
             ADAC
           </span>
