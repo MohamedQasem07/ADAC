@@ -889,53 +889,17 @@ function ReportPanel({
 
         <DocumentTitle title="Medical Report" />
 
+        {/* Phase 2.4U — metadata grid is now READ-ONLY display.
+            The single edit surface is the shared Patient / Case Data
+            panel above the documents. */}
         <PatientMetaGrid
           rows={[
-            {
-              l1: 'Your ref.',
-              v1: fields.adacRef,
-              l2: 'OUR Ref No:',
-              v2: fields.hmcRef,
-              edit1: (v) => setField('adacRef', v),
-              edit2: (v) => setField('hmcRef', v),
-            },
-            {
-              l1: 'Patient:',
-              v1: fields.patientInitials,
-              l2: 'Date of Birth:',
-              v2: fields.dob,
-              edit1: (v) => setField('patientInitials', v),
-              edit2: (v) => setField('dob', v),
-            },
-            {
-              l1: 'Nationality:',
-              v1: fields.nationality,
-              l2: 'Gender:',
-              v2: fields.gender,
-              edit1: (v) => setField('nationality', v),
-              edit2: (v) => setField('gender', v),
-            },
-            {
-              l1: 'Date of Admission:',
-              v1: fields.dateOfAdmission,
-              l2: 'Date of Discharge:',
-              v2: fields.dateOfDischarge,
-              edit1: (v) => setField('dateOfAdmission', v),
-              edit2: (v) => setField('dateOfDischarge', v),
-            },
-            {
-              l1: 'Package Code:',
-              v1: pkg.code,
-              l2: 'Date of Visit:',
-              v2: fields.date,
-              edit2: (v) => setField('date', v),
-            },
-            {
-              l1: 'Package Name:',
-              v1: pkg.name,
-              l2: 'Document Type:',
-              v2: 'Medical Report',
-            },
+            { l1: 'Your ref.',          v1: fields.adacRef,           l2: 'OUR Ref No:',     v2: fields.hmcRef },
+            { l1: 'Patient:',           v1: fields.patientInitials,   l2: 'Date of Birth:',  v2: fields.dob },
+            { l1: 'Nationality:',       v1: fields.nationality,       l2: 'Gender:',         v2: fields.gender },
+            { l1: 'Date of Admission:', v1: fields.dateOfAdmission,   l2: 'Date of Discharge:', v2: fields.dateOfDischarge },
+            { l1: 'Package Code:',      v1: pkg.code,                 l2: 'Date of Visit:',  v2: fields.date },
+            { l1: 'Package Name:',      v1: pkg.name,                 l2: 'Document Type:',  v2: 'Medical Report' },
           ]}
           toText={fields.toInsurance}
         />
@@ -1397,7 +1361,7 @@ function InvoicePanel({
                 className="text-right font-mono text-[10px] uppercase tracking-[0.06em] md:text-[11px]"
                 style={{ color: DARK_BLUE }}
               >
-                Included · package
+                Included
               </span>
             </div>
           ))}
@@ -1775,7 +1739,7 @@ function InvoicePrintPreviewModal({
                 className="text-right font-mono text-[10px] uppercase tracking-[0.06em] md:text-[11px]"
                 style={{ color: DARK_BLUE }}
               >
-                Included · package
+                Included
               </span>
             </div>
           ))}
@@ -1872,6 +1836,130 @@ function ReadOnlyList({ label, items }: { label: string; items: string[] }) {
         ))}
       </ol>
     </div>
+  );
+}
+
+/* ───────────────── Shared Patient / Case Data panel ───────────────── */
+
+/**
+ * Phase 2.4U — single edit surface for the metadata shared between the
+ * medical report and the package invoice. Edits here flow into both
+ * documents AND both print-preview modals because all four read from
+ * the same `fields` state. The metadata grids inside the documents
+ * render as read-only displays (no inline inputs) so the presenter is
+ * never confused about where to type.
+ */
+function PatientCaseDataPanel({
+  fields,
+  setField,
+}: {
+  fields: ReportFields;
+  setField: <K extends keyof ReportFields>(k: K, v: ReportFields[K]) => void;
+}) {
+  return (
+    <section
+      className="mt-6 rounded-sm border border-white/10 bg-navy/40 p-5 backdrop-blur-sm md:p-6"
+      aria-label="Shared patient and case data"
+    >
+      <div className="mb-4 flex items-baseline justify-between gap-3">
+        <p
+          className="font-mono text-[10px] uppercase tracking-[0.32em]"
+          style={{ color: 'var(--theme-accent)' }}
+        >
+          Patient / case data · shared with both documents
+        </p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
+          Edits flow live into report + invoice
+        </p>
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <PanelField
+          label="Patient initials"
+          value={fields.patientInitials}
+          onChange={(v) => setField('patientInitials', v)}
+        />
+        <PanelField
+          label="Insurance / To"
+          value={fields.toInsurance}
+          onChange={(v) => setField('toInsurance', v)}
+        />
+        <PanelField
+          label="ADAC reference"
+          value={fields.adacRef}
+          onChange={(v) => setField('adacRef', v)}
+        />
+        <PanelField
+          label="HMC reference"
+          value={fields.hmcRef}
+          onChange={(v) => setField('hmcRef', v)}
+        />
+        <PanelField
+          label="Nationality"
+          value={fields.nationality}
+          onChange={(v) => setField('nationality', v)}
+        />
+        <PanelField
+          label="Gender"
+          value={fields.gender}
+          onChange={(v) => setField('gender', v)}
+        />
+        <PanelField
+          label="Date of birth"
+          type="date"
+          value={fields.dob === '—' ? '' : fields.dob}
+          onChange={(v) => setField('dob', v || '—')}
+        />
+        <PanelField
+          label="Date of visit"
+          type="date"
+          value={fields.date}
+          onChange={(v) => setField('date', v)}
+        />
+        <PanelField
+          label="Date of admission"
+          type="date"
+          value={fields.dateOfAdmission}
+          onChange={(v) => setField('dateOfAdmission', v)}
+        />
+        <PanelField
+          label="Date of discharge"
+          type="date"
+          value={fields.dateOfDischarge}
+          onChange={(v) => setField('dateOfDischarge', v)}
+        />
+      </div>
+    </section>
+  );
+}
+
+function PanelField({
+  label,
+  value,
+  onChange,
+  type = 'text',
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: 'text' | 'date';
+}) {
+  return (
+    <label className="block">
+      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ice/85">
+        {label}
+      </span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1 w-full rounded-sm border border-white/15 bg-navy-deep/70 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-[var(--theme-accent)]"
+        style={
+          type === 'date'
+            ? { colorScheme: 'dark' } // makes the native date picker icon readable on dark bg
+            : undefined
+        }
+      />
+    </label>
   );
 }
 
@@ -2064,9 +2152,14 @@ export function PackageTemplateSimulator() {
         </motion.section>
       )}
 
-      {/* Two large preview documents — Phase 2.4T: full-width, vertically
-          stacked. Invoice first (meeting flow: see the official invoice
-          first, then the supporting medical report). */}
+      {/* Phase 2.4U — Shared Patient / Case Data panel above both documents.
+          Single edit surface for all metadata; flows live into both the
+          medical report and the package invoice (plus both print modals). */}
+      {loadedPkg && <PatientCaseDataPanel fields={fields} setField={setField} />}
+
+      {/* Two large preview documents — Phase 2.4U: report first
+          (medically/operationally the service + report happens first),
+          invoice second (generated from the documented service). */}
       <AnimatePresence mode="wait">
         <motion.section
           key={loadedPkg?.code ?? 'empty'}
@@ -2078,11 +2171,6 @@ export function PackageTemplateSimulator() {
         >
           {loadedPkg && (
             <>
-              <InvoicePanel
-                pkg={loadedPkg}
-                fields={fields}
-                onOpenPrintPreview={() => setInvoicePrintOpen(true)}
-              />
               <ReportPanel
                 pkg={loadedPkg}
                 fields={fields}
@@ -2092,6 +2180,11 @@ export function PackageTemplateSimulator() {
                 addListItem={addListItem}
                 removeListItem={removeListItem}
                 onOpenPrintPreview={() => setPrintOpen(true)}
+              />
+              <InvoicePanel
+                pkg={loadedPkg}
+                fields={fields}
+                onOpenPrintPreview={() => setInvoicePrintOpen(true)}
               />
             </>
           )}
