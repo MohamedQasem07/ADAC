@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Sparkles, Star } from 'lucide-react';
 import {
   getAllSectionsClient,
   parsePathname,
@@ -31,6 +31,49 @@ function badgeFor(id: string): string {
   if (BADGE_BY_ID[id]) return BADGE_BY_ID[id];
   if (/^\d+$/.test(id)) return id;
   return id.slice(0, 3).toUpperCase();
+}
+
+/**
+ * Phase 2.4V — Gold Focus Markers (presenter-facing, sidebar-only).
+ *
+ * The 14 anchor routes the presenter must not miss during the meeting.
+ * Each row in the Sidebar that matches one of these ids gets a small
+ * gold star next to its title. Audience never sees these markers
+ * because they live inside the (presenter-only) sidebar.
+ *
+ * Section ids:  'data-room', '3', '4', '12', '13', '17', 'decisions'
+ * Subtopic ids: '3.1', '3.4', '3.8', '10.5', '12.10', '13.5', '13.6'
+ */
+const FOCUS_ROUTES: ReadonlySet<string> = new Set([
+  'data-room',
+  '3',
+  '3.1',
+  '3.4',
+  '3.8',
+  '4',
+  '10.5',
+  '12',
+  '12.10',
+  '13',
+  '13.5',
+  '13.6',
+  'decisions',
+  '17',
+]);
+
+function FocusMarker() {
+  return (
+    <Star
+      aria-label="Anchor page"
+      size={10}
+      fill="currentColor"
+      className="shrink-0"
+      style={{
+        color: 'var(--theme-accent)',
+        opacity: 0.85,
+      }}
+    />
+  );
 }
 
 /**
@@ -111,6 +154,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               const isOpen = expanded[s.id] ?? false;
               const badge = badgeFor(s.id);
               const isDataRoom = s.id === 'data-room';
+              const isFocus = FOCUS_ROUTES.has(s.id);
 
               return (
                 <li key={s.id}>
@@ -174,6 +218,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       >
                         {s.title}
                       </span>
+                      {/* Phase 2.4V — Gold Focus Marker (presenter-only). */}
+                      {isFocus && <FocusMarker />}
                       {/* Executive accent for the Data Room */}
                       {isDataRoom && (
                         <span
@@ -221,6 +267,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                       {s.subtopics!.map((sub) => {
                         const subActive =
                           current.sectionId === s.id && current.subId === sub.id;
+                        const subFocus = FOCUS_ROUTES.has(sub.id);
                         return (
                           <li key={sub.id}>
                             <Link
@@ -250,6 +297,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                                 {sub.id}
                               </span>
                               <span className="min-w-0 flex-1 truncate">{sub.title}</span>
+                              {subFocus && <FocusMarker />}
                             </Link>
                           </li>
                         );
