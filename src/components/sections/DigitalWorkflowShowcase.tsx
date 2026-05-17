@@ -138,23 +138,23 @@ const steps: Step[] = [
   },
   {
     n: 7,
-    title: 'Nursing sheet and proposed invoice',
+    title: 'Generated medical report output',
     whatHappens:
-      'After clinical confirmation, the system can prepare the nursing sheet and proposed coded invoice / breakdowns within seconds.',
+      'The doctor’s structured medical report is rendered as a clean printable medical report with patient details, vitals, complaint, examination, diagnosis, management, medications, discharge instructions, and letterhead.',
     whySmart:
-      'Doctor orders, nursing execution, and invoice preparation are connected but still human-reviewed.',
+      'The report is produced from the digital case record instead of being handwritten or rebuilt manually.',
     adacValue:
-      'Faster ADAC-ready file preparation with nurse-confirmed and operator-confirmed items.',
+      'ADAC receives a standardized medical report that can be reviewed, printed, or attached to the insurance file.',
   },
   {
     n: 8,
-    title: 'Generated medical report output',
+    title: 'Nursing sheet, invoice and breakdown sync',
     whatHappens:
-      'The final output can be printed or prepared as part of the insurance file with report, invoice, breakdowns, and attachments when applicable.',
+      'Once the medical report is saved, the system begins preparing the nursing sheet and syncing the proposed invoice items. The workflow can also support medication / consumables and lab breakdown preparation from the structured clinical items.',
     whySmart:
-      'One digital case record supports the whole submission pack.',
+      'Clinical documentation, nursing execution, invoice preparation, and breakdowns are connected to the same case record and remain nurse-confirmed and operator-confirmed.',
     adacValue:
-      'A cleaner file can be reviewed and sent in minutes rather than hours for standard package cases.',
+      'For standard package cases, the report, nursing documentation, proposed coded invoice, and supporting breakdowns can be prepared for review in minutes rather than hours.',
   },
 ];
 
