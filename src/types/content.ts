@@ -37,7 +37,8 @@ export type SubtopicRenderer =
   | 'package-category'
   | 'pricing-matrix'
   | 'worked-example'
-  | 'digital-workflow';
+  | 'digital-workflow'
+  | 'package-simulator';
 
 export interface SubtopicMeta {
   id: string;

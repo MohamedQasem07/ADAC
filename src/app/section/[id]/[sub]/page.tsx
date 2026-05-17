@@ -11,6 +11,7 @@ import { NetworkMap, type NetworkMapData } from '@/components/map/NetworkMap';
 import { CategoryDetail } from '@/components/packages/CategoryDetail';
 import { PricingMatrix } from '@/components/packages/PricingMatrix';
 import { WorkedExampleCard } from '@/components/packages/WorkedExampleCard';
+import { PackageTemplateSimulator } from '@/components/packages/PackageTemplateSimulator';
 import { CardsLayout } from '@/components/sections/layouts/CardsLayout';
 import { DigitalWorkflowShowcase } from '@/components/sections/DigitalWorkflowShowcase';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
@@ -94,6 +95,11 @@ export default function SubtopicPage({
   // §13.5 — Worked Example · Package Flow (Phase 2.4L L2.1).
   if (subtopic.renderer === 'worked-example') {
     return <WorkedExampleCard />;
+  }
+
+  // §13.6 — Package Template Simulator (Phase 2.4Q).
+  if (subtopic.renderer === 'package-simulator') {
+    return <PackageTemplateSimulator />;
   }
 
   // §10.5 — Digital Package Workflow · animated screenshot story (Phase 2.4M / §10.5).

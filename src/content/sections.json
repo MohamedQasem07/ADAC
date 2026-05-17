@@ -197,7 +197,8 @@
         { "id": "13.2", "title": "What's Always Included", "content": "section-13b-included.md", "renderer": "markdown" },
         { "id": "13.3", "title": "What's Quoted Separately", "content": "section-13c-separate.md", "renderer": "markdown" },
         { "id": "13.4", "title": "Currency & Payment Terms", "content": "section-13d-payment.md", "renderer": "markdown" },
-        { "id": "13.5", "title": "Worked Example · Package Flow", "content": "section-13e-example.md", "renderer": "worked-example" }
+        { "id": "13.5", "title": "Worked Example · Package Flow", "content": "section-13e-example.md", "renderer": "worked-example" },
+        { "id": "13.6", "title": "Package Template Simulator", "content": "section-13f-simulator.md", "renderer": "package-simulator" }
       ]
     },
     {
