@@ -9,7 +9,6 @@ import {
   parsePathname,
   routeToHref,
 } from '@/lib/nav-config';
-import { useVisualTheme } from '@/context/VisualThemeContext';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
@@ -86,8 +85,6 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname() || '/';
   const current = parsePathname(pathname);
   const sections = getAllSectionsClient();
-  const { theme } = useVisualTheme();
-  const isPartnership = theme === 'partnership';
 
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => ({
     [current.sectionId]: true,
@@ -127,23 +124,12 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           </p>
           <p className="mt-1 font-display text-base text-white">Partnership Proposal</p>
           <p className="mt-0.5 text-xs text-ink-soft/70">19 May 2026 · Hurghada</p>
-          {/* Phase 2.4E.3 — small dual-brand bar visible only under the
-              Partnership theme. Two micro segments: HMC blue → ADAC
-              yellow. Premium Navy ignores this block. */}
-          {isPartnership && (
-            <div className="mt-3 flex items-center gap-2">
-              <span
-                aria-hidden
-                className="inline-flex h-[3px] w-8 overflow-hidden rounded-full"
-              >
-                <span className="block h-full w-1/2" style={{ background: 'var(--theme-hmc-blue)' }} />
-                <span className="block h-full w-1/2" style={{ background: 'var(--theme-adac-yellow)' }} />
-              </span>
-              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-ice/70">
-                HMC × ADAC Mode
-              </span>
-            </div>
-          )}
+          {/* Phase 2.4W polish — the Phase 2.4E.3 dual-brand strip
+              (HMC blue + ADAC yellow halves) read as a small two-stripe
+              flag when the sidebar was open, which was visually
+              distracting. The ThemeSwitcher (top-right) is the
+              authoritative theme indicator; no extra cue is needed
+              inside the sidebar header. */}
         </header>
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">

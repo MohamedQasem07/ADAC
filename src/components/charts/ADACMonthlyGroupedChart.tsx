@@ -22,10 +22,53 @@ import {
 } from '@/lib/chart-style';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
-import { useThemeChartColors } from '@/lib/theme-colors';
+import { useVisualTheme } from '@/context/VisualThemeContext';
 import { ChartFrame } from './ChartFrame';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * Per-year colours for the grouped 4-year chart.
+ *
+ * Phase 2.4W polish — previously the chart used the shared theme
+ * palette (`primarySoft` for 2024 and `primary` for 2025) which made
+ * those two yearly bars almost indistinguishable on the dark
+ * background. Defining year-specific hex values here gives each year a
+ * clearly different colour while staying within the Premium Navy /
+ * Partnership identity. The global `useThemeChartColors()` palette
+ * used elsewhere is intentionally unchanged.
+ *
+ *   2023 — refined steel blue (cool, distinct from gold)
+ *   2024 — muted bronze / amber (warm but desaturated, NOT yellow)
+ *   2025 — brighter warm gold / ADAC yellow (the strongest year)
+ *   2026 — bright cyan / teal + dashed (year-to-date, clearly cool)
+ */
+interface YearPalette {
+  y2023: string;
+  y2024: string;
+  y2025: string;
+  y2026: string;
+}
+
+const YEAR_COLORS: Record<'premium-navy' | 'partnership', YearPalette> = {
+  'premium-navy': {
+    y2023: '#5E8AB8', // refined steel blue
+    y2024: '#A67C3F', // muted bronze amber
+    y2025: '#E5C158', // warm gold (distinct from 2024 amber)
+    y2026: '#67D4E8', // bright cyan (clearly cool, plus dashed border)
+  },
+  partnership: {
+    y2023: '#5491DB', // clean partnership blue
+    y2024: '#B8881F', // deeper amber (clearly NOT the bright yellow)
+    y2025: '#FFD200', // ADAC yellow
+    y2026: '#67D4E8', // cyan (clearly cool)
+  },
+};
+
+function useYearColors(): YearPalette {
+  const { theme } = useVisualTheme();
+  return YEAR_COLORS[theme];
+}
 
 interface ChartRow {
   month: string;
@@ -74,13 +117,7 @@ export function ADACMonthlyGroupedChart() {
     };
   });
 
-  const palette = useThemeChartColors();
-  const colors: Record<SeriesKey, string> = {
-    y2023: palette.secondary, // HMC blue (premium) / partnership blue
-    y2024: palette.primarySoft, // soft gold / soft yellow
-    y2025: palette.primary, // gold / ADAC yellow (the strongest year)
-    y2026: palette.tertiary, // teal / cyan (visually distinct + dashed)
-  };
+  const colors = useYearColors();
 
   const series: SeriesDef[] = [
     { key: 'y2023', label: '2023', rowKey: '2023', ytd: false },
@@ -249,13 +286,7 @@ export function MiniADACMonthlyGrouped() {
     };
   });
 
-  const palette = useThemeChartColors();
-  const colors: Record<SeriesKey, string> = {
-    y2023: palette.secondary,
-    y2024: palette.primarySoft,
-    y2025: palette.primary,
-    y2026: palette.tertiary,
-  };
+  const colors = useYearColors();
 
   const series: SeriesDef[] = [
     { key: 'y2023', label: '2023', rowKey: '2023', ytd: false },
