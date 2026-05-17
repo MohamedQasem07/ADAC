@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   FileText,
   Plus,
@@ -53,6 +54,75 @@ const MED_BLUE = '#2E75B6';
 const LIGHT_BLUE = '#EBF3FB';
 const RED = '#C00000';
 const GREY_RULE = '#DDDDDD';
+
+/* ───────────────── Print stylesheet (shared) ─────────────────
+ * Single source of truth for the @media print rule used by both
+ * print preview modals. Hides every element on the page except the
+ * portalled `.hmc-print-root` and strips the sheet's modal chrome
+ * down to bare paper-on-A4.
+ *
+ * Phase 2.4U.1 fix:
+ *   - The 2.4U version used `visibility: hidden` which still keeps
+ *     elements in the box model, so the simulator's article wrapper
+ *     (py-20 md:py-24) emitted 4–5 blank pages above the modal.
+ *   - Switched to `display: none` so hidden elements are removed
+ *     from layout entirely.
+ *   - Both modals now portal into document.body via createPortal so
+ *     `.hmc-print-root` is a direct child of <body>, letting
+ *     `body > *:not(.hmc-print-root)` cleanly hide everything else.
+ *   - Strip sheet padding in print; rely on @page margin only.
+ *   - break-inside: avoid on letterhead, patient grid, GRAND TOTAL
+ *     bar, and footer so key blocks never split mid-row.
+ */
+const PRINT_STYLE = `
+@media print {
+  @page { size: A4; margin: 10mm; }
+
+  /* Hide everything except the print root. */
+  body > *:not(.hmc-print-root) { display: none !important; }
+
+  /* The portalled modal becomes the only printable thing on the page. */
+  .hmc-print-root {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+    display: block !important;
+    color: #000 !important;
+  }
+
+  /* All children of the print root: also strip modal chrome. */
+  .hmc-print-root .hmc-print-controls { display: none !important; }
+
+  /* The A4 sheet itself: drop modal-only padding/shadow so @page margin
+     is the only space around the content. */
+  .hmc-print-root .hmc-print-sheet {
+    box-shadow: none !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: #000 !important;
+  }
+
+  /* Key blocks that must never split mid-row. */
+  .hmc-print-no-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Tighten line-heights a notch for printable density. */
+  .hmc-print-sheet * {
+    color: #000 !important;
+  }
+}
+`;
 
 /* ───────────────── Invoice-style scenario-aware total text ─────────────────
  * Phase 2.4T — the GRAND TOTAL row inside the invoice document should read
@@ -584,7 +654,7 @@ function splitIncluded(included?: string): string[] {
  */
 function HMCLetterhead() {
   return (
-    <div className="relative -mx-5 -mt-5 mb-4 bg-white px-5 pt-4 md:-mx-7 md:-mt-7 md:px-8 md:pt-5">
+    <div className="hmc-print-no-break relative -mx-5 -mt-5 mb-4 bg-white px-5 pt-4 md:-mx-7 md:-mt-7 md:px-8 md:pt-5">
       <div className="flex items-start justify-between gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -695,7 +765,7 @@ function PatientMetaGrid({
   toText: string;
 }) {
   return (
-    <div className="relative overflow-hidden border" style={{ borderColor: '#000' }}>
+    <div className="hmc-print-no-break relative overflow-hidden border" style={{ borderColor: '#000' }}>
       <table className="w-full border-collapse text-[11px] md:text-[12px]">
         <tbody>
           {rows.map((r, i) => (
@@ -790,7 +860,7 @@ function PatientMetaGrid({
  */
 function HMCFooter() {
   return (
-    <div className="relative mt-6">
+    <div className="hmc-print-no-break relative mt-6">
       <div className="h-px w-full" style={{ background: RED }} />
       <p
         className="mt-2 text-center text-[8.5px] uppercase tracking-[0.04em] md:text-[9.5px]"
@@ -1371,7 +1441,7 @@ function InvoicePanel({
             band, white bold left label, white bold right total via the
             scenario-aware InvoiceTotalValue helper (NOT PriceBadge). */}
         <div
-          className="relative mt-0 flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
+          className="hmc-print-no-break relative mt-0 flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
           style={{ background: DARK_BLUE }}
         >
           <div>
@@ -1435,9 +1505,11 @@ function PrintPreviewModal({
     if (typeof window !== 'undefined') window.print();
   };
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <div
-      className="hmc-print-modal fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
+      className="hmc-print-root fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Medical report print preview"
@@ -1564,18 +1636,9 @@ function PrintPreviewModal({
         </p>
       </div>
 
-      {/* Print stylesheet — hides backdrop + controls, shows clean A4. */}
-      <style>{`
-        @media print {
-          body * { visibility: hidden !important; }
-          .hmc-print-modal { position: static !important; background: white !important; padding: 0 !important; backdrop-filter: none !important; }
-          .hmc-print-modal, .hmc-print-modal * { visibility: visible !important; }
-          .hmc-print-controls { display: none !important; }
-          .hmc-print-sheet { box-shadow: none !important; max-width: none !important; width: 100% !important; margin: 0 !important; padding: 12mm !important; }
-          @page { size: A4; margin: 12mm; }
-        }
-      `}</style>
-    </div>
+      <style>{PRINT_STYLE}</style>
+    </div>,
+    document.body
   );
 }
 
@@ -1609,9 +1672,11 @@ function InvoicePrintPreviewModal({
     if (typeof window !== 'undefined') window.print();
   };
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <div
-      className="hmc-print-modal fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
+      className="hmc-print-root fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Package invoice print preview"
@@ -1745,7 +1810,7 @@ function InvoicePrintPreviewModal({
           ))}
         </div>
         <div
-          className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
+          className="hmc-print-no-break flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
           style={{ background: DARK_BLUE }}
         >
           <div>
@@ -1773,17 +1838,9 @@ function InvoicePrintPreviewModal({
         </p>
       </div>
 
-      <style>{`
-        @media print {
-          body * { visibility: hidden !important; }
-          .hmc-print-modal { position: static !important; background: white !important; padding: 0 !important; backdrop-filter: none !important; }
-          .hmc-print-modal, .hmc-print-modal * { visibility: visible !important; }
-          .hmc-print-controls { display: none !important; }
-          .hmc-print-sheet { box-shadow: none !important; max-width: none !important; width: 100% !important; margin: 0 !important; padding: 12mm !important; }
-          @page { size: A4; margin: 12mm; }
-        }
-      `}</style>
-    </div>
+      <style>{PRINT_STYLE}</style>
+    </div>,
+    document.body
   );
 }
 
