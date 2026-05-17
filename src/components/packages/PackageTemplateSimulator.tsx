@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { fallbackPackagesData } from '@/data/fallback';
+import { useAudienceMode } from '@/context/AudienceModeContext';
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { usePricing } from '@/context/PricingContext';
 import { ease } from '@/lib/motion';
@@ -933,6 +934,12 @@ interface ReportPanelProps {
     index: number
   ) => void;
   onOpenPrintPreview: () => void;
+  /**
+   * Phase 2.4W — true in mobile audience mode. Renders the report as a
+   * read-only document (no editable inputs, no print button). Desktop
+   * presenter mode passes false (default).
+   */
+  readOnly?: boolean;
 }
 
 function ReportPanel({
@@ -944,11 +951,12 @@ function ReportPanel({
   addListItem,
   removeListItem,
   onOpenPrintPreview,
+  readOnly = false,
 }: ReportPanelProps) {
   return (
     <div
       className="overflow-hidden rounded-sm border border-white/10 bg-navy/40 backdrop-blur-sm"
-      aria-label="Editable medical report template"
+      aria-label={readOnly ? 'Medical report preview' : 'Editable medical report template'}
     >
       {/* Outer dark chrome label band */}
       <header
@@ -961,26 +969,28 @@ function ReportPanel({
             className="font-mono text-[10px] uppercase tracking-[0.32em]"
             style={{ color: 'var(--theme-badge-text)' }}
           >
-            Editable Medical Report
+            {readOnly ? 'Medical Report Preview' : 'Editable Medical Report'}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
             {pkg.code}
           </p>
-          <button
-            type="button"
-            onClick={onOpenPrintPreview}
-            className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors"
-            style={{
-              borderColor: 'var(--theme-accent)',
-              background: 'var(--theme-badge-bg)',
-              color: 'var(--theme-badge-text)',
-            }}
-          >
-            <Printer size={12} />
-            Print Preview
-          </button>
+          {!readOnly && (
+            <button
+              type="button"
+              onClick={onOpenPrintPreview}
+              className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors"
+              style={{
+                borderColor: 'var(--theme-accent)',
+                background: 'var(--theme-badge-bg)',
+                color: 'var(--theme-badge-text)',
+              }}
+            >
+              <Printer size={12} />
+              Print Preview
+            </button>
+          )}
         </div>
       </header>
 
@@ -1007,150 +1017,220 @@ function ReportPanel({
           toText={fields.toInsurance}
         />
 
-        {/* Clinical sections */}
+        {/* Clinical sections.
+            Phase 2.4W — in audience mode (readOnly), every editable
+            surface is swapped for the matching ReadOnly* helper
+            already used by the print-preview modals. Desktop presenter
+            mode is unchanged. */}
         <div className="relative mt-5 space-y-4">
-          <DocSection label="Complaint">
-            <DocTextarea
-              value={fields.complaint}
-              onChange={(v) => setField('complaint', v)}
-              rows={2}
-            />
-          </DocSection>
-
-          <DocSection label="Past History">
-            <DocTextarea
-              value={fields.pastHistory}
-              onChange={(v) => setField('pastHistory', v)}
-              rows={2}
-            />
-          </DocSection>
-
-          {/* Vitals — 6 separately editable named lines */}
-          <DocSection label="Emergency Consultation — Vital Signs">
-            <div className="grid grid-cols-1 gap-y-1 text-[12px] md:grid-cols-2 md:gap-x-6 md:text-[13px]">
-              <VitalRow
-                label="Blood Pressure"
-                value={fields.vitals.bloodPressure}
-                onChange={(v) => setVital('bloodPressure', v)}
+          {readOnly ? (
+            <ReadOnlyDocSection label="Complaint" value={fields.complaint} />
+          ) : (
+            <DocSection label="Complaint">
+              <DocTextarea
+                value={fields.complaint}
+                onChange={(v) => setField('complaint', v)}
+                rows={2}
               />
-              <VitalRow
-                label="Pulse Rate"
-                value={fields.vitals.pulseRate}
-                onChange={(v) => setVital('pulseRate', v)}
+            </DocSection>
+          )}
+
+          {readOnly ? (
+            <ReadOnlyDocSection label="Past History" value={fields.pastHistory} />
+          ) : (
+            <DocSection label="Past History">
+              <DocTextarea
+                value={fields.pastHistory}
+                onChange={(v) => setField('pastHistory', v)}
+                rows={2}
               />
-              <VitalRow
-                label="Oxygen Saturation"
-                value={fields.vitals.oxygenSaturation}
-                onChange={(v) => setVital('oxygenSaturation', v)}
+            </DocSection>
+          )}
+
+          {/* Vitals — 6 separately editable named lines (or read-only). */}
+          {readOnly ? (
+            <ReadOnlyDocSection
+              label="Emergency Consultation — Vital Signs"
+              value={[
+                `Blood Pressure: ${fields.vitals.bloodPressure || '—'}`,
+                `Pulse Rate: ${fields.vitals.pulseRate || '—'}`,
+                `Oxygen Saturation: ${fields.vitals.oxygenSaturation || '—'}`,
+                `Temperature: ${fields.vitals.temperature || '—'}`,
+                `Respiratory Rate: ${fields.vitals.respiratoryRate || '—'}`,
+                `GCS: ${fields.vitals.gcs || '—'}`,
+              ].join('\n')}
+            />
+          ) : (
+            <DocSection label="Emergency Consultation — Vital Signs">
+              <div className="grid grid-cols-1 gap-y-1 text-[12px] md:grid-cols-2 md:gap-x-6 md:text-[13px]">
+                <VitalRow
+                  label="Blood Pressure"
+                  value={fields.vitals.bloodPressure}
+                  onChange={(v) => setVital('bloodPressure', v)}
+                />
+                <VitalRow
+                  label="Pulse Rate"
+                  value={fields.vitals.pulseRate}
+                  onChange={(v) => setVital('pulseRate', v)}
+                />
+                <VitalRow
+                  label="Oxygen Saturation"
+                  value={fields.vitals.oxygenSaturation}
+                  onChange={(v) => setVital('oxygenSaturation', v)}
+                />
+                <VitalRow
+                  label="Temperature"
+                  value={fields.vitals.temperature}
+                  onChange={(v) => setVital('temperature', v)}
+                />
+                <VitalRow
+                  label="Respiratory Rate"
+                  value={fields.vitals.respiratoryRate}
+                  onChange={(v) => setVital('respiratoryRate', v)}
+                />
+                <VitalRow
+                  label="GCS"
+                  value={fields.vitals.gcs}
+                  onChange={(v) => setVital('gcs', v)}
+                />
+              </div>
+            </DocSection>
+          )}
+
+          {readOnly ? (
+            <ReadOnlyDocSection label="General Examination" value={fields.generalExamination} />
+          ) : (
+            <DocSection label="General Examination">
+              <DocTextarea
+                value={fields.generalExamination}
+                onChange={(v) => setField('generalExamination', v)}
+                rows={2}
               />
-              <VitalRow
-                label="Temperature"
-                value={fields.vitals.temperature}
-                onChange={(v) => setVital('temperature', v)}
+            </DocSection>
+          )}
+
+          {readOnly ? (
+            <ReadOnlyDocSection label="Local / System Examination" value={fields.localExamination} />
+          ) : (
+            <DocSection label="Local / System Examination">
+              <DocTextarea
+                value={fields.localExamination}
+                onChange={(v) => setField('localExamination', v)}
+                rows={2}
               />
-              <VitalRow
-                label="Respiratory Rate"
-                value={fields.vitals.respiratoryRate}
-                onChange={(v) => setVital('respiratoryRate', v)}
+            </DocSection>
+          )}
+
+          {readOnly ? (
+            <ReadOnlyList label="Investigations" items={fields.investigations} />
+          ) : (
+            <DocSection label="Investigations">
+              <EditableList
+                items={fields.investigations}
+                onChange={(i, v) => setListItem('investigations', i, v)}
+                onAdd={() => addListItem('investigations')}
+                onRemove={(i) => removeListItem('investigations', i)}
               />
-              <VitalRow
-                label="GCS"
-                value={fields.vitals.gcs}
-                onChange={(v) => setVital('gcs', v)}
+            </DocSection>
+          )}
+
+          {readOnly ? (
+            <ReadOnlyDocSection label="Diagnosis / Problem List" value={fields.diagnosis} />
+          ) : (
+            <DocSection label="Diagnosis / Problem List">
+              <DocTextarea
+                value={fields.diagnosis}
+                onChange={(v) => setField('diagnosis', v)}
+                rows={2}
               />
-            </div>
-          </DocSection>
+            </DocSection>
+          )}
 
-          <DocSection label="General Examination">
-            <DocTextarea
-              value={fields.generalExamination}
-              onChange={(v) => setField('generalExamination', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyDocSection label="Management" value={fields.management} />
+          ) : (
+            <DocSection label="Management">
+              <DocTextarea
+                value={fields.management}
+                onChange={(v) => setField('management', v)}
+                rows={2}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Local / System Examination">
-            <DocTextarea
-              value={fields.localExamination}
-              onChange={(v) => setField('localExamination', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyDocSection label="Initial Treatment Plan" value={fields.initialTreatmentPlan} />
+          ) : (
+            <DocSection label="Initial Treatment Plan">
+              <DocTextarea
+                value={fields.initialTreatmentPlan}
+                onChange={(v) => setField('initialTreatmentPlan', v)}
+                rows={2}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Investigations">
-            <EditableList
-              items={fields.investigations}
-              onChange={(i, v) => setListItem('investigations', i, v)}
-              onAdd={() => addListItem('investigations')}
-              onRemove={(i) => removeListItem('investigations', i)}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyList label="Medications" items={fields.medications} />
+          ) : (
+            <DocSection label="Medications">
+              <EditableList
+                items={fields.medications}
+                onChange={(i, v) => setListItem('medications', i, v)}
+                onAdd={() => addListItem('medications')}
+                onRemove={(i) => removeListItem('medications', i)}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Diagnosis / Problem List">
-            <DocTextarea
-              value={fields.diagnosis}
-              onChange={(v) => setField('diagnosis', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyDocSection label="Management Outcome" value={fields.managementOutcome} />
+          ) : (
+            <DocSection label="Management Outcome">
+              <DocTextarea
+                value={fields.managementOutcome}
+                onChange={(v) => setField('managementOutcome', v)}
+                rows={2}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Management">
-            <DocTextarea
-              value={fields.management}
-              onChange={(v) => setField('management', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyDocSection label="Discharge Instructions" value={fields.dischargeInstructions} />
+          ) : (
+            <DocSection label="Discharge Instructions">
+              <DocTextarea
+                value={fields.dischargeInstructions}
+                onChange={(v) => setField('dischargeInstructions', v)}
+                rows={2}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Initial Treatment Plan">
-            <DocTextarea
-              value={fields.initialTreatmentPlan}
-              onChange={(v) => setField('initialTreatmentPlan', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyList label="Discharge Medications" items={fields.dischargeMedications} />
+          ) : (
+            <DocSection label="Discharge Medications">
+              <EditableList
+                items={fields.dischargeMedications}
+                onChange={(i, v) => setListItem('dischargeMedications', i, v)}
+                onAdd={() => addListItem('dischargeMedications')}
+                onRemove={(i) => removeListItem('dischargeMedications', i)}
+              />
+            </DocSection>
+          )}
 
-          <DocSection label="Medications">
-            <EditableList
-              items={fields.medications}
-              onChange={(i, v) => setListItem('medications', i, v)}
-              onAdd={() => addListItem('medications')}
-              onRemove={(i) => removeListItem('medications', i)}
-            />
-          </DocSection>
-
-          <DocSection label="Management Outcome">
-            <DocTextarea
-              value={fields.managementOutcome}
-              onChange={(v) => setField('managementOutcome', v)}
-              rows={2}
-            />
-          </DocSection>
-
-          <DocSection label="Discharge Instructions">
-            <DocTextarea
-              value={fields.dischargeInstructions}
-              onChange={(v) => setField('dischargeInstructions', v)}
-              rows={2}
-            />
-          </DocSection>
-
-          <DocSection label="Discharge Medications">
-            <EditableList
-              items={fields.dischargeMedications}
-              onChange={(i, v) => setListItem('dischargeMedications', i, v)}
-              onAdd={() => addListItem('dischargeMedications')}
-              onRemove={(i) => removeListItem('dischargeMedications', i)}
-            />
-          </DocSection>
-
-          <DocSection label="Follow-up Plan">
-            <DocTextarea
-              value={fields.followUp}
-              onChange={(v) => setField('followUp', v)}
-              rows={2}
-            />
-          </DocSection>
+          {readOnly ? (
+            <ReadOnlyDocSection label="Follow-up Plan" value={fields.followUp} />
+          ) : (
+            <DocSection label="Follow-up Plan">
+              <DocTextarea
+                value={fields.followUp}
+                onChange={(v) => setField('followUp', v)}
+                rows={2}
+              />
+            </DocSection>
+          )}
         </div>
 
         {/* Doctor / operator review note */}
@@ -1300,10 +1380,13 @@ function InvoicePanel({
   pkg,
   fields,
   onOpenPrintPreview,
+  readOnly = false,
 }: {
   pkg: Package;
   fields: ReportFields;
   onOpenPrintPreview: () => void;
+  /** Phase 2.4W — true in audience mode; hides the Print Preview button. */
+  readOnly?: boolean;
 }) {
   const items = splitIncluded(pkg.included);
 
@@ -1330,19 +1413,21 @@ function InvoicePanel({
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
             {pkg.code}
           </p>
-          <button
-            type="button"
-            onClick={onOpenPrintPreview}
-            className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors"
-            style={{
-              borderColor: 'var(--theme-accent)',
-              background: 'var(--theme-badge-bg)',
-              color: 'var(--theme-badge-text)',
-            }}
-          >
-            <Printer size={12} />
-            Print Preview
-          </button>
+          {!readOnly && (
+            <button
+              type="button"
+              onClick={onOpenPrintPreview}
+              className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors"
+              style={{
+                borderColor: 'var(--theme-accent)',
+                background: 'var(--theme-badge-bg)',
+                color: 'var(--theme-badge-text)',
+              }}
+            >
+              <Printer size={12} />
+              Print Preview
+            </button>
+          )}
         </div>
       </header>
 
@@ -1936,24 +2021,33 @@ function ReadOnlyList({ label, items }: { label: string; items: string[] }) {
 function PatientCaseDataPanel({
   fields,
   setField,
+  readOnly = false,
 }: {
   fields: ReportFields;
   setField: <K extends keyof ReportFields>(k: K, v: ReportFields[K]) => void;
+  /**
+   * Phase 2.4W — in audience mode, the shared edit surface becomes a
+   * read-only display so attendees can see the patient context that
+   * flows into the documents but can't type anything.
+   */
+  readOnly?: boolean;
 }) {
   return (
     <section
       className="mt-6 rounded-sm border border-white/10 bg-navy/40 p-5 backdrop-blur-sm md:p-6"
-      aria-label="Shared patient and case data"
+      aria-label={readOnly ? 'Patient and case data' : 'Shared patient and case data'}
     >
       <div className="mb-4 flex items-baseline justify-between gap-3">
         <p
           className="font-mono text-[10px] uppercase tracking-[0.32em]"
           style={{ color: 'var(--theme-accent)' }}
         >
-          Patient / case data · shared with both documents
+          {readOnly
+            ? 'Patient / case data'
+            : 'Patient / case data · shared with both documents'}
         </p>
         <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
-          Edits flow live into report + invoice
+          {readOnly ? 'Shown in report + invoice below' : 'Edits flow live into report + invoice'}
         </p>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1961,55 +2055,65 @@ function PatientCaseDataPanel({
           label="Patient initials"
           value={fields.patientInitials}
           onChange={(v) => setField('patientInitials', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Insurance / To"
           value={fields.toInsurance}
           onChange={(v) => setField('toInsurance', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="ADAC reference"
           value={fields.adacRef}
           onChange={(v) => setField('adacRef', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="HMC reference"
           value={fields.hmcRef}
           onChange={(v) => setField('hmcRef', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Nationality"
           value={fields.nationality}
           onChange={(v) => setField('nationality', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Gender"
           value={fields.gender}
           onChange={(v) => setField('gender', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Date of birth"
           type="date"
           value={fields.dob === '—' ? '' : fields.dob}
           onChange={(v) => setField('dob', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Date of visit"
           type="date"
           value={fields.date}
           onChange={(v) => setField('date', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Date of admission"
           type="date"
           value={fields.dateOfAdmission}
           onChange={(v) => setField('dateOfAdmission', v)}
+          readOnly={readOnly}
         />
         <PanelField
           label="Date of discharge"
           type="date"
           value={fields.dateOfDischarge}
           onChange={(v) => setField('dateOfDischarge', v)}
+          readOnly={readOnly}
         />
       </div>
     </section>
@@ -2021,12 +2125,27 @@ function PanelField({
   value,
   onChange,
   type = 'text',
+  readOnly = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: 'text' | 'date';
+  /** Phase 2.4W — render a non-editable display variant for audience mode. */
+  readOnly?: boolean;
 }) {
+  if (readOnly) {
+    return (
+      <div className="block">
+        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ice/85">
+          {label}
+        </span>
+        <p className="mt-1 w-full rounded-sm border border-white/10 bg-navy-deep/40 px-3 py-2 text-sm text-white">
+          {value || '—'}
+        </p>
+      </div>
+    );
+  }
   return (
     <label className="block">
       <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ice/85">
@@ -2052,6 +2171,8 @@ function PanelField({
 export function PackageTemplateSimulator() {
   const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.05 });
+  // Phase 2.4W — audience mode renders the simulator view-only.
+  const { isAudience } = useAudienceMode();
 
   const allPackages = useMemo(
     () => applyPackages(fallbackPackagesData.packages as Package[]),
@@ -2238,8 +2359,15 @@ export function PackageTemplateSimulator() {
 
       {/* Phase 2.4U — Shared Patient / Case Data panel above both documents.
           Single edit surface for all metadata; flows live into both the
-          medical report and the package invoice (plus both print modals). */}
-      {loadedPkg && <PatientCaseDataPanel fields={fields} setField={setField} />}
+          medical report and the package invoice (plus both print modals).
+          Phase 2.4W — read-only in audience mode. */}
+      {loadedPkg && (
+        <PatientCaseDataPanel
+          fields={fields}
+          setField={setField}
+          readOnly={isAudience}
+        />
+      )}
 
       {/* Two large preview documents — Phase 2.4U: report first
           (medically/operationally the service + report happens first),
@@ -2263,12 +2391,18 @@ export function PackageTemplateSimulator() {
                 setListItem={setListItem}
                 addListItem={addListItem}
                 removeListItem={removeListItem}
-                onOpenPrintPreview={() => setPrintOpen(true)}
+                onOpenPrintPreview={() => {
+                  if (!isAudience) setPrintOpen(true);
+                }}
+                readOnly={isAudience}
               />
               <InvoicePanel
                 pkg={loadedPkg}
                 fields={fields}
-                onOpenPrintPreview={() => setInvoicePrintOpen(true)}
+                onOpenPrintPreview={() => {
+                  if (!isAudience) setInvoicePrintOpen(true);
+                }}
+                readOnly={isAudience}
               />
             </>
           )}
@@ -2281,8 +2415,10 @@ export function PackageTemplateSimulator() {
         required before submission.
       </p>
 
-      {/* Report print preview modal */}
-      {printOpen && loadedPkg && (
+      {/* Report print preview modal — never opened in audience mode
+          (button hidden + handler gated), but as defense-in-depth the
+          modal itself also checks isAudience. */}
+      {printOpen && loadedPkg && !isAudience && (
         <PrintPreviewModal
           pkg={loadedPkg}
           fields={fields}
@@ -2290,8 +2426,8 @@ export function PackageTemplateSimulator() {
         />
       )}
 
-      {/* Invoice print preview modal */}
-      {invoicePrintOpen && loadedPkg && (
+      {/* Invoice print preview modal — same defense-in-depth gate. */}
+      {invoicePrintOpen && loadedPkg && !isAudience && (
         <InvoicePrintPreviewModal
           pkg={loadedPkg}
           fields={fields}

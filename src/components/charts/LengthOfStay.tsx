@@ -63,7 +63,7 @@ export function LengthOfStay() {
           'Fast documentation, clear package coding, and same-day case summaries align directly with ADAC’s case-closure needs.',
       }}
     >
-      <div ref={ref} style={{ width: '100%', height: 360 }} className="relative">
+      <div ref={ref} className="relative h-[300px] w-full sm:h-[360px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 60, right: 20, left: 10, bottom: 28 }}>
             <CartesianGrid stroke={CHART_GRID} vertical={false} />

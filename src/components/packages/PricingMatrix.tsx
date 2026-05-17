@@ -54,7 +54,10 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
         transition={{ duration: 0.7, ease: ease.premium }}
         className="mt-12 overflow-hidden rounded-sm border border-white/10 bg-navy/50 backdrop-blur-sm"
       >
-        <table className="w-full text-left">
+        {/* Horizontal scroll wrapper so the 4–5-col table degrades
+            gracefully on phones without truncating prices. */}
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[480px] text-left">
           <thead className="sticky top-0 bg-navy-deep/80 text-[10px] uppercase tracking-[0.25em] text-ice/80 backdrop-blur-sm">
             <tr>
               <th className="px-4 py-3 font-medium md:px-6">Category</th>
@@ -139,6 +142,7 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
             })}
           </tbody>
         </table>
+        </div>
       </motion.div>
 
       <p className="mt-6 text-center text-xs italic text-ice/80">

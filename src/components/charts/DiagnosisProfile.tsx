@@ -56,7 +56,7 @@ export function DiagnosisProfile() {
           'These patterns are well-suited to structured outpatient flat-rate packages rather than repeated case-by-case pricing.',
       }}
     >
-      <div style={{ width: '100%', height: 540 }}>
+      <div className="h-[420px] w-full sm:h-[540px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

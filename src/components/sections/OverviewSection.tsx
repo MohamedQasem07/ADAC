@@ -25,6 +25,7 @@ import {
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { AudienceQRCode } from '@/components/layout/AudienceQRCode';
 
 interface OverviewItem {
   id: string;
@@ -105,6 +106,11 @@ export function OverviewSection({
         )}
         <div className="gold-rule mx-auto mt-8 w-24" />
       </header>
+
+      {/* Phase 2.4W — Mobile audience QR. Only on the Presentation
+          Overview page; hidden when the viewer is already in audience
+          mode (the QR is for getting INTO mobile mode). */}
+      {keyPrefix === 'overview' && <AudienceQRCode />}
 
       {/* Data Room CTA — visible only on the Presentation Overview page,
           not on the Decision Points page that reuses this renderer. */}

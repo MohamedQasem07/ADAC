@@ -59,7 +59,7 @@ export function AgeDistribution() {
           'Structured triage, clear escalation criteria, and same-day documented care pathways are essential for ADAC AG Holders.',
       }}
     >
-      <div style={{ width: '100%', height: 380 }}>
+      <div className="h-[300px] w-full sm:h-[380px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 30, right: 20, left: 10, bottom: 70 }}>
             <CartesianGrid stroke={CHART_GRID} vertical={false} />

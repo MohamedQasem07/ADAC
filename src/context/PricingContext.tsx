@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { PricingScenario } from '@/types/content';
+import { audienceModeActive } from '@/context/AudienceModeContext';
 
 interface PricingState {
   scenario: PricingScenario;
@@ -55,10 +56,15 @@ export function PricingProvider({ children }: { children: ReactNode }) {
   const setScenario = useCallback((next: PricingScenario) => {
     setScenarioState((prev) => {
       if (prev === next) return prev;
-      try {
-        window.localStorage.setItem(STORAGE_KEY, next);
-      } catch {
-        // ignore
+      // Phase 2.4W — audience mode never persists scenario writes to
+      // localStorage. This prevents an audience tab from accidentally
+      // overwriting the presenter's scenario across tabs/devices.
+      if (!audienceModeActive()) {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, next);
+        } catch {
+          // ignore
+        }
       }
       setRipple({ scenario: next, nonce: Date.now() });
       return next;
@@ -68,8 +74,15 @@ export function PricingProvider({ children }: { children: ReactNode }) {
   // Keyboard listener: Cmd/Ctrl + 1/2/3.
   // Ignores when an input/textarea/contentEditable element is focused
   // (i.e. when the search overlay is open).
+  //
+  // Phase 2.4W — defense-in-depth guard for iPad / Bluetooth keyboard
+  // in audience mode. PresentationShell already unmounts the rest of
+  // the keyboard surfaces, but this provider stays mounted because the
+  // scenario state itself is still used (locked to B). The early return
+  // ensures a stray Cmd+1/Cmd+3 can never cycle scenarios.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (audienceModeActive()) return;
       if (!(e.metaKey || e.ctrlKey)) return;
       if (e.altKey || e.shiftKey) return;
 

@@ -46,8 +46,9 @@ export function FinancialDonuts() {
       }}
     >
       <div ref={ref} className="flex flex-col items-center gap-12 md:flex-row md:justify-around">
-        {/* Big combined donut */}
-        <div className="relative" style={{ width: 280, height: 280 }}>
+        {/* Big combined donut — shrinks on small viewports so it fits a
+            phone screen without horizontal scroll. */}
+        <div className="relative h-[220px] w-[220px] sm:h-[280px] sm:w-[280px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
