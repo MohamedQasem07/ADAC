@@ -1,9 +1,10 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { ControlPanel } from '@/components/control/ControlPanel';
-import { useAudienceMode, audienceHref } from '@/context/AudienceModeContext';
+import { audienceHref, audienceModeActive } from '@/context/AudienceModeContext';
 
 /**
  * Standalone Presenter Control Mode route.
@@ -16,11 +17,33 @@ import { useAudienceMode, audienceHref } from '@/context/AudienceModeContext';
  * audience mode (`?m=1` or sessionStorage flag), this page shows a
  * "Presenter-only area" message instead of the actual ControlPanel.
  * Desktop presenter access (no `?m=1`) is unchanged.
+ *
+ * Phase 2.4W.1 — flash-free hydration. The previous implementation
+ * read `useAudienceMode()` from context, but context resolves audience
+ * mode in a useEffect, so /control?m=1 briefly rendered the full
+ * ControlPanel chrome before flipping to the "Presenter-only area"
+ * message. Fixed by tracking a local `audience: boolean | null`
+ * state: SSR and first client render show only the navy background
+ * (no chrome leak), then a single useEffect calls `audienceModeActive()`
+ * synchronously and renders the correct branch on the next paint.
+ * Hydration-safe (server + first client paint produce the same empty
+ * background div, so no React mismatch warning).
  */
 export default function ControlPage() {
-  const { isAudience } = useAudienceMode();
+  const [audience, setAudience] = useState<boolean | null>(null);
 
-  if (isAudience) {
+  useEffect(() => {
+    setAudience(audienceModeActive());
+  }, []);
+
+  // First render on both server and client — render only the bare
+  // background. Prevents any flash of presenter chrome before the
+  // audience check resolves on /control?m=1.
+  if (audience === null) {
+    return <div className="min-h-screen bg-navy-deep" aria-hidden />;
+  }
+
+  if (audience) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-navy-deep px-6 py-12">
         <div
