@@ -70,67 +70,91 @@ const stages: Stage[] = [
 interface Step {
   n: number;
   title: string;
-  explain: string;
-  adac: string;
+  whatHappens: string;
+  whySmart: string;
+  adacValue: string;
 }
 
 const steps: Step[] = [
   {
     n: 1,
     title: 'Patient registration',
-    explain:
-      'Reception registers the case digitally from any location: patient details, nationality, hotel or resort, visit date, branch / location, case provider and duty staff where available.',
-    adac: 'One structured case file starts before any clinical or invoice step.',
+    whatHappens:
+      'Reception registers the case digitally from any HMC location: patient details, nationality, hotel / resort, visit date, branch, case provider, and duty staff where available.',
+    whySmart:
+      'The case starts as one structured record instead of separate paper notes.',
+    adacValue:
+      'Clean case identity from the first minute, before report or invoice preparation begins.',
   },
   {
     n: 2,
     title: 'Case handling type',
-    explain:
-      'The case is routed as patient-settled, insurance, transfer, or approved free case. This controls the downstream invoice, reporting and approval logic.',
-    adac: 'Insurance cases are separated early and routed into the correct documentation pathway.',
+    whatHappens:
+      'The case is routed as patient-settled, insurance, transfer, or approved free case.',
+    whySmart:
+      'The system separates the financial and operational pathway early.',
+    adacValue:
+      'Insurance cases move immediately into the correct documentation and approval workflow.',
   },
   {
     n: 3,
     title: 'Medical stage gateway',
-    explain:
-      'The medical step opens the clinical workspace: structured medical report and nursing sheet are available from the same case.',
-    adac: 'Report and execution record stay connected to the original case.',
+    whatHappens:
+      'The medical workspace opens the structured report and nursing sheet from the same case.',
+    whySmart:
+      'Clinical documentation and nursing execution stay connected to one case file.',
+    adacValue:
+      'Less risk of missing medical or nursing documentation during claim review.',
   },
   {
     n: 4,
     title: 'Medical report wizard',
-    explain:
-      'Doctor writes the case in a structured seven-step medical report: Examination, Labs, Imaging, Procedures, Treatment and Medications, Follow-up, and Discharge.',
-    adac: 'No handwritten report; the file is consistent across locations.',
+    whatHappens:
+      'The doctor completes a structured seven-step report: Examination, Labs, Imaging, Procedures, Treatment & Medications, Follow-up, and Discharge.',
+    whySmart:
+      'The doctor does not write a blank report from scratch; the system guides the clinical structure.',
+    adacValue:
+      'Standardized report format across HMC locations, with no handwritten report issues.',
   },
   {
     n: 5,
     title: 'Clinical template picker',
-    explain:
-      'For common outpatient / package cases, templates can pre-fill complaint, vitals, examination, diagnosis, labs, procedures, medications, treatment plan and discharge instructions. Doctor reviews and adjusts the case-specific details.',
-    adac: 'Standard package cases can be documented faster while keeping clinical review.',
+    whatHappens:
+      'Common outpatient / package cases can use templates that pre-fill complaint, vitals, exam, diagnosis, investigations, medications, treatment plan, and discharge instructions.',
+    whySmart:
+      'The doctor adjusts the case-specific details instead of rebuilding the full report manually.',
+    adacValue:
+      'Standard package cases can be documented faster while keeping clinical review.',
   },
   {
     n: 6,
     title: 'Coded labs and services',
-    explain:
-      'Labs, services, medications, consumables, imaging and procedures are selected from coded catalogue / price-list items where available.',
-    adac: 'Fewer free-text invoice errors and cleaner breakdowns.',
+    whatHappens:
+      'Labs, services, medications, consumables, imaging, and procedures are selected from coded catalogue / price-list items where available.',
+    whySmart:
+      'Clinical selections connect to reviewed service codes instead of generic free-text invoice rows.',
+    adacValue:
+      'Cleaner invoice breakdowns and fewer clarification requests.',
   },
   {
     n: 7,
     title: 'Nursing sheet and proposed invoice',
-    explain:
-      'After clinical confirmation, the system can prepare the nursing sheet and proposed coded invoice / breakdowns within seconds. Nurse confirms executed items and quantities; operator confirms before final invoice save.',
-    adac: 'Treatment execution and invoice preparation are connected but still human-reviewed.',
+    whatHappens:
+      'After clinical confirmation, the system can prepare the nursing sheet and proposed coded invoice / breakdowns within seconds.',
+    whySmart:
+      'Doctor orders, nursing execution, and invoice preparation are connected but still human-reviewed.',
+    adacValue:
+      'Faster ADAC-ready file preparation with nurse-confirmed and operator-confirmed items.',
   },
   {
     n: 8,
     title: 'Generated medical report output',
-    explain:
-      'The final output can be printed or prepared as part of the insurance file with medical report, invoice, labs / medication breakdowns and attachments when applicable.',
-    adac:
-      'Report and invoice pack can be reviewed and sent in minutes rather than hours for standard package cases.',
+    whatHappens:
+      'The final output can be printed or prepared as part of the insurance file with report, invoice, breakdowns, and attachments when applicable.',
+    whySmart:
+      'One digital case record supports the whole submission pack.',
+    adacValue:
+      'A cleaner file can be reviewed and sent in minutes rather than hours for standard package cases.',
   },
 ];
 
@@ -250,18 +274,12 @@ export function DigitalWorkflowShowcase() {
           </p>
         </div>
 
-        {/* Vertical gold progress rail (desktop) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-4 top-32 hidden h-[calc(100%-8rem)] w-px md:block"
-          style={{
-            background:
-              'linear-gradient(to bottom, transparent, var(--theme-accent) 8%, var(--theme-accent) 92%, transparent)',
-            opacity: 0.35,
-          }}
-        />
+        {/* Phase 2.4M polish: the previous continuous vertical gold rail
+            was removed because it overlapped step text in flipped panels.
+            Step ordering is now communicated only by STEP badges, the
+            "n / 8" progress label, and per-step mini progress bars. */}
 
-        <ol className="space-y-24 md:space-y-32">
+        <ol className="space-y-28 md:space-y-36">
           {steps.map((s, i) => (
             <StepPanel key={s.n} step={s} index={i} />
           ))}
@@ -323,23 +341,13 @@ function StepPanel({ step, index }: { step: Step; index: number }) {
   const flip = index % 2 === 1;
 
   return (
-    <li ref={ref} className="relative">
-      {/* Rail dot (desktop) */}
-      <span
-        aria-hidden
-        className="absolute left-4 top-6 hidden h-3 w-3 -translate-x-1/2 rounded-full md:block"
-        style={{
-          background: 'var(--theme-accent)',
-          boxShadow: '0 0 0 4px rgba(2, 6, 23, 0.9), 0 0 16px rgba(201,169,97,0.6)',
-        }}
-      />
-
+    <li ref={ref}>
       <div
         className={`grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-10 ${
           flip ? 'md:[&>*:first-child]:order-2' : ''
         }`}
       >
-        {/* Screenshot panel */}
+        {/* Screenshot panel — the hero of each step */}
         <motion.figure
           className="md:col-span-7"
           initial={{ opacity: 0, y: 32, scale: 0.96 }}
@@ -375,7 +383,7 @@ function StepPanel({ step, index }: { step: Step; index: number }) {
           </div>
         </motion.figure>
 
-        {/* Explanation panel */}
+        {/* Explanation panel — three small labelled blocks */}
         <motion.div
           className="flex flex-col justify-center md:col-span-5"
           initial={{ opacity: 0, y: 18 }}
@@ -397,7 +405,7 @@ function StepPanel({ step, index }: { step: Step; index: number }) {
             </p>
           </div>
 
-          {/* Mini progress rail */}
+          {/* Per-step mini progress bar */}
           <motion.div
             aria-hidden
             className="mt-2 h-px w-full origin-left"
@@ -410,10 +418,32 @@ function StepPanel({ step, index }: { step: Step; index: number }) {
           <h3 className="mt-4 font-display text-2xl leading-tight text-white md:text-3xl">
             {step.title}
           </h3>
-          <p className="mt-3 text-base leading-relaxed text-ice/85">
-            {step.explain}
-          </p>
 
+          {/* What happens */}
+          <div className="mt-5">
+            <p
+              className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85"
+            >
+              What happens
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-ice/85 md:text-base">
+              {step.whatHappens}
+            </p>
+          </div>
+
+          {/* Why it is smart */}
+          <div className="mt-4">
+            <p
+              className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85"
+            >
+              Why it is smart
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-ice/85 md:text-base">
+              {step.whySmart}
+            </p>
+          </div>
+
+          {/* ADAC value — theme-accent block */}
           <div
             className="mt-5 border-l-2 pl-4"
             style={{ borderColor: 'var(--theme-accent)' }}
@@ -424,7 +454,9 @@ function StepPanel({ step, index }: { step: Step; index: number }) {
             >
               ADAC value
             </p>
-            <p className="mt-1 text-sm leading-relaxed text-white">{step.adac}</p>
+            <p className="mt-1 text-sm leading-relaxed text-white md:text-base">
+              {step.adacValue}
+            </p>
           </div>
         </motion.div>
       </div>
