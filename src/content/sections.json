@@ -150,7 +150,8 @@
         { "id": "10.1", "title": "Medical Report Template", "renderer": "sample-report" },
         { "id": "10.2", "title": "Invoice Format", "content": "section-10b-invoice.md", "renderer": "markdown" },
         { "id": "10.3", "title": "Same-Day Case Summary", "content": "section-10c-summary.md", "renderer": "markdown" },
-        { "id": "10.4", "title": "Monthly Performance Report", "content": "section-10d-monthly.md", "renderer": "markdown" }
+        { "id": "10.4", "title": "Monthly Performance Report", "content": "section-10d-monthly.md", "renderer": "markdown" },
+        { "id": "10.5", "title": "Digital Package Workflow", "renderer": "digital-workflow" }
       ]
     },
     {

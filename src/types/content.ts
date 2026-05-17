@@ -36,7 +36,8 @@ export type SubtopicRenderer =
   | 'chart-german-volume'
   | 'package-category'
   | 'pricing-matrix'
-  | 'worked-example';
+  | 'worked-example'
+  | 'digital-workflow';
 
 export interface SubtopicMeta {
   id: string;

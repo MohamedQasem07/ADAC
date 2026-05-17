@@ -12,6 +12,7 @@ import { CategoryDetail } from '@/components/packages/CategoryDetail';
 import { PricingMatrix } from '@/components/packages/PricingMatrix';
 import { WorkedExampleCard } from '@/components/packages/WorkedExampleCard';
 import { CardsLayout } from '@/components/sections/layouts/CardsLayout';
+import { DigitalWorkflowShowcase } from '@/components/sections/DigitalWorkflowShowcase';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 import { SampleReportCard } from '@/components/sections/SampleReportCard';
@@ -93,6 +94,11 @@ export default function SubtopicPage({
   // §13.5 — Worked Example · Package Flow (Phase 2.4L L2.1).
   if (subtopic.renderer === 'worked-example') {
     return <WorkedExampleCard />;
+  }
+
+  // §10.5 — Digital Package Workflow · animated screenshot story (Phase 2.4M / §10.5).
+  if (subtopic.renderer === 'digital-workflow') {
+    return <DigitalWorkflowShowcase />;
   }
 
   // Cards renderer (§2.4 Equipment, §5.5 Response Time).

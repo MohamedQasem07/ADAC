@@ -252,6 +252,18 @@ export function WorkedExampleCard() {
               ADAC receives a predictable package workflow: defined scope, documented
               treatment, clean invoice line, and a clear escalation boundary.
             </p>
+            <p className="mt-3 text-sm leading-relaxed text-ice/80">
+              This worked example is operationally supported by HMC&rsquo;s digital case file
+              and smart invoice workflow described in{' '}
+              <a
+                href="/section/10/10.5"
+                className="underline-offset-4 hover:underline"
+                style={{ color: 'var(--theme-badge-text)' }}
+              >
+                §10.5 Digital Package Workflow
+              </a>
+              .
+            </p>
           </div>
         </div>
       </motion.aside>

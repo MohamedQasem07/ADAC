@@ -181,6 +181,42 @@ Each carries the in-place `transparencyNote` already added in 2.4H pointing read
 
 No new chart or animation library was added. Recharts 2.13 + Framer Motion 11 handled the grouped chart, the null-month gaps, and the entry animation without complaint. Lenis stays disabled.
 
+## 4e. Phase 2.4M — Digital Package Workflow showcase (§10.5)
+
+Added a major operational subtopic under §10 Documentation Standards proving HMC operates a real digital case workflow rather than handwritten paperwork. Positioned as a business differentiator for the ADAC narrative.
+
+### What was added
+
+- **New route `/section/10/10.5` · Digital Package Workflow.** Subtitle: *From case registration to ADAC-ready file*. Sits alongside the existing §10.1–§10.4 documentation set.
+- **New component `src/components/sections/DigitalWorkflowShowcase.tsx`.** Premium animated screenshot story (Framer Motion 11 · `ease.premium` · `staggerTight` · `useScrollReveal`). 8 demo screens revealed in numeric order from `public/screenshots/digital-workflow/1.png`–`8.png`. Each card reveals with `opacity 0→1 · y 24→0 · scale 0.97→1`. A soft gold gradient progress rail runs behind the cards on desktop · cards stack vertically on mobile (`grid-cols-1 → sm:grid-cols-2 → lg:grid-cols-4`).
+- **Renderer dispatch `'digital-workflow'`** wired in `src/app/section/[id]/[sub]/page.tsx` after the existing `worked-example` handler.
+- **`sections.json` entry** added under §10 as the fifth subtopic.
+
+### Wording rules respected
+
+- *"can prepare"* · *"semi-automatic"* · *"operator-confirmed"* · *"nurse-confirmed"* · *"proposed coded invoice rows"* · *"within seconds after clinical confirmation"* — used verbatim where applicable.
+- Invoice path described as **semi-automatic and operator-confirmed before final save** · NOT "fully automatic final invoice".
+- Doctor-order → nursing-execution linkage phrased as *"can prepare"* / *"supports execution"* rather than claiming perfect automation.
+- Internal time target labelled explicitly: *"Internal workflow target: ADAC-ready report and invoice pack within one working minute after clinical confirmation for standard package cases. This is an internal operational target, not a contractual guarantee."*
+
+### Screenshot policy
+
+- All 8 demo screens live under `public/screenshots/digital-workflow/`.
+- Page footer + alt-text + small caption tag every card with *"Demo workflow screens · no patient-sensitive data intended for presentation."*
+- Plain `<img>` tags with `loading="lazy"` + `object-contain` · no Next/Image (next.config has `output: 'export'`).
+
+### Cross-link from §13.5 Worked Example
+
+A single sentence was appended inside the existing "What this proves for ADAC" callout in `WorkedExampleCard.tsx`: *"This worked example is operationally supported by HMC's digital case file and smart invoice workflow described in §10.5 Digital Package Workflow."* The rest of §13.5 is byte-identical · no other changes.
+
+### Out of scope (untouched)
+
+Charts · chart data · Data Room · pricing logic · `packages.json` · scenarios · themes · `/control` · Lenis · §17 · Universal Inclusions / Exclusions · existing §13.5 worked example body (except the one new cross-link sentence).
+
+### Stack note
+
+No new dependency added. Re-used `framer-motion@11.11.17`, `lucide-react@0.460.0`, and the existing `motion.ts` primitives + `useScrollReveal` hook + Tailwind Navy/Gold theme tokens (`var(--theme-accent)`, `var(--theme-badge-bg)` etc.). Component is fully theme-aware so it inherits the Premium Navy / Partnership Mode swap automatically.
+
 ## 5. Critical locked rules
 
 - **Numbers are locked.** Never change: `268` (ADAC cases total) · `57/103/97/11` (yearly) · `200` (analysis window) · `44/156` (cash/insurance) · `1,127` (German patients) · `20.37%` (market share) · `78%` (insurance combined 2024–25) · `22%` (cash combined).
