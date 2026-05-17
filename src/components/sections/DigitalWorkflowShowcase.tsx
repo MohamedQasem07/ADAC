@@ -281,6 +281,8 @@ export function DigitalWorkflowShowcase() {
 
         <ol className="space-y-28 md:space-y-36">
           {steps.map((s, i) => (
+            // index is forwarded for future variants; the new full-width
+            // hero layout no longer alternates left/right.
             <StepPanel key={s.n} step={s} index={i} />
           ))}
         </ol>
@@ -335,131 +337,128 @@ export function DigitalWorkflowShowcase() {
   );
 }
 
-function StepPanel({ step, index }: { step: Step; index: number }) {
-  const { ref, inView } = useScrollReveal({ threshold: 0.15 });
-  // Alternate image left / right on desktop for visual rhythm.
-  const flip = index % 2 === 1;
+function StepPanel({ step }: { step: Step; index: number }) {
+  const { ref, inView } = useScrollReveal({ threshold: 0.12 });
 
   return (
-    <li ref={ref}>
-      <div
-        className={`grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-10 ${
-          flip ? 'md:[&>*:first-child]:order-2' : ''
-        }`}
+    <li ref={ref} className="flex flex-col gap-8">
+      {/* 1. Step header row — STEP 01 · Title · 1 / 8 */}
+      <motion.header
+        initial={{ opacity: 0, y: 14 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+        transition={{ duration: 0.6, ease: ease.premium }}
       >
-        {/* Screenshot panel — the hero of each step */}
-        <motion.figure
-          className="md:col-span-7"
-          initial={{ opacity: 0, y: 32, scale: 0.96 }}
-          animate={
-            inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 32, scale: 0.96 }
-          }
-          transition={{ duration: 0.9, ease: ease.premium }}
-        >
-          <div
-            className="relative overflow-hidden rounded-sm border border-white/10 bg-navy/40"
-            style={{
-              boxShadow:
-                '0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,97,0.08)',
-            }}
+        <div className="flex items-baseline justify-between gap-4">
+          <p
+            className="font-mono text-[10px] uppercase tracking-[0.4em]"
+            style={{ color: 'var(--theme-accent)' }}
           >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute left-2.5 top-2.5 z-10 h-3 w-3 border-l border-t opacity-70"
-              style={{ borderColor: 'var(--theme-accent)' }}
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute bottom-2.5 right-2.5 z-10 h-3 w-3 border-b border-r opacity-60"
-              style={{ borderColor: 'var(--theme-accent)' }}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={SHOT(step.n)}
-              alt={`Step ${step.n} — ${step.title}`}
-              className="block h-auto w-full"
-              loading="lazy"
-            />
-          </div>
-        </motion.figure>
-
-        {/* Explanation panel — three small labelled blocks */}
+            Step {String(step.n).padStart(2, '0')}
+          </p>
+          <p
+            className="font-mono text-[10px] tracking-[0.25em]"
+            style={{ color: 'var(--theme-accent)' }}
+          >
+            {step.n} / {TOTAL}
+          </p>
+        </div>
+        {/* Per-step progress bar */}
         <motion.div
-          className="flex flex-col justify-center md:col-span-5"
-          initial={{ opacity: 0, y: 18 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-          transition={{ duration: 0.7, ease: ease.premium, delay: 0.15 }}
+          aria-hidden
+          className="mt-2 h-px w-full origin-left"
+          style={{ background: 'var(--theme-accent)', opacity: 0.5 }}
+          initial={{ scaleX: 0 }}
+          animate={inView ? { scaleX: step.n / TOTAL } : { scaleX: 0 }}
+          transition={{ duration: 1.0, ease: ease.premium, delay: 0.1 }}
+        />
+        <h3 className="mt-4 font-display text-2xl leading-tight text-white md:text-3xl lg:text-4xl">
+          {step.title}
+        </h3>
+      </motion.header>
+
+      {/* 2. Full-width screenshot — the hero of the step */}
+      <motion.figure
+        initial={{ opacity: 0, y: 28, scale: 0.97 }}
+        animate={
+          inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 28, scale: 0.97 }
+        }
+        transition={{ duration: 0.9, ease: ease.premium, delay: 0.15 }}
+        className="w-full"
+      >
+        <div
+          className="relative mx-auto overflow-hidden rounded-sm border border-white/10 bg-navy/40"
+          style={{
+            boxShadow:
+              '0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,169,97,0.08)',
+          }}
         >
-          <div className="flex items-baseline justify-between">
-            <p
-              className="font-mono text-[10px] uppercase tracking-[0.4em]"
-              style={{ color: 'var(--theme-accent)' }}
-            >
-              Step {String(step.n).padStart(2, '0')}
-            </p>
-            <p
-              className="font-mono text-[10px] tracking-[0.25em]"
-              style={{ color: 'var(--theme-accent)' }}
-            >
-              {step.n} / {TOTAL}
-            </p>
-          </div>
-
-          {/* Per-step mini progress bar */}
-          <motion.div
+          <span
             aria-hidden
-            className="mt-2 h-px w-full origin-left"
-            style={{ background: 'var(--theme-accent)', opacity: 0.5 }}
-            initial={{ scaleX: 0 }}
-            animate={inView ? { scaleX: step.n / TOTAL } : { scaleX: 0 }}
-            transition={{ duration: 1.0, ease: ease.premium, delay: 0.1 }}
-          />
-
-          <h3 className="mt-4 font-display text-2xl leading-tight text-white md:text-3xl">
-            {step.title}
-          </h3>
-
-          {/* What happens */}
-          <div className="mt-5">
-            <p
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85"
-            >
-              What happens
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-ice/85 md:text-base">
-              {step.whatHappens}
-            </p>
-          </div>
-
-          {/* Why it is smart */}
-          <div className="mt-4">
-            <p
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85"
-            >
-              Why it is smart
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-ice/85 md:text-base">
-              {step.whySmart}
-            </p>
-          </div>
-
-          {/* ADAC value — theme-accent block */}
-          <div
-            className="mt-5 border-l-2 pl-4"
+            className="pointer-events-none absolute left-3 top-3 z-10 h-3.5 w-3.5 border-l border-t opacity-70"
             style={{ borderColor: 'var(--theme-accent)' }}
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute bottom-3 right-3 z-10 h-3.5 w-3.5 border-b border-r opacity-60"
+            style={{ borderColor: 'var(--theme-accent)' }}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={SHOT(step.n)}
+            alt={`Step ${step.n} — ${step.title}`}
+            className="mx-auto block h-auto w-full object-contain"
+            style={{ maxHeight: '70vh' }}
+            loading="lazy"
+          />
+        </div>
+      </motion.figure>
+
+      {/* 3. Three compact caption blocks underneath — desktop 3-up, stacked on mobile */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+        transition={{ duration: 0.7, ease: ease.premium, delay: 0.3 }}
+        className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5"
+      >
+        {/* What happens */}
+        <div className="rounded-sm border border-white/10 bg-navy/40 p-4 backdrop-blur-sm">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85">
+            What happens
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-ice/85">
+            {step.whatHappens}
+          </p>
+        </div>
+
+        {/* Why it is smart */}
+        <div className="rounded-sm border border-white/10 bg-navy/40 p-4 backdrop-blur-sm">
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ice/85">
+            Why it is smart
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-ice/85">
+            {step.whySmart}
+          </p>
+        </div>
+
+        {/* ADAC value — theme accent emphasis */}
+        <div
+          className="rounded-sm border p-4 backdrop-blur-sm"
+          style={{
+            background: 'var(--theme-badge-bg)',
+            borderColor: 'var(--theme-badge-border)',
+          }}
+        >
+          <p
+            className="font-mono text-[10px] uppercase tracking-[0.3em]"
+            style={{ color: 'var(--theme-badge-text)' }}
           >
-            <p
-              className="font-mono text-[10px] uppercase tracking-[0.3em]"
-              style={{ color: 'var(--theme-accent)' }}
-            >
-              ADAC value
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-white md:text-base">
-              {step.adacValue}
-            </p>
-          </div>
-        </motion.div>
-      </div>
+            ADAC value
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-white">
+            {step.adacValue}
+          </p>
+        </div>
+      </motion.div>
     </li>
   );
 }
