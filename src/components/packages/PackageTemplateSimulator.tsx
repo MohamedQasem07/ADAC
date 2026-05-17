@@ -1,8 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   FileText,
   Plus,
@@ -55,74 +54,108 @@ const LIGHT_BLUE = '#EBF3FB';
 const RED = '#C00000';
 const GREY_RULE = '#DDDDDD';
 
-/* ───────────────── Print stylesheet (shared) ─────────────────
- * Single source of truth for the @media print rule used by both
- * print preview modals. Hides every element on the page except the
- * portalled `.hmc-print-root` and strips the sheet's modal chrome
- * down to bare paper-on-A4.
+/* ───────────────── Bulletproof print via hidden iframe ─────────────────
  *
- * Phase 2.4U.1 fix:
- *   - The 2.4U version used `visibility: hidden` which still keeps
- *     elements in the box model, so the simulator's article wrapper
- *     (py-20 md:py-24) emitted 4–5 blank pages above the modal.
- *   - Switched to `display: none` so hidden elements are removed
- *     from layout entirely.
- *   - Both modals now portal into document.body via createPortal so
- *     `.hmc-print-root` is a direct child of <body>, letting
- *     `body > *:not(.hmc-print-root)` cleanly hide everything else.
- *   - Strip sheet padding in print; rely on @page margin only.
- *   - break-inside: avoid on letterhead, patient grid, GRAND TOTAL
- *     bar, and footer so key blocks never split mid-row.
+ * Phase 2.4U.2 — CSS-based print isolation (visibility:hidden in 2.4U;
+ * display:none on body siblings in 2.4U.1) kept emitting blank first
+ * pages because:
+ *   - Tailwind's `inset-0` shorthand expands to four individual
+ *     longhand properties; `inset:auto !important` couldn't reliably
+ *     defeat all of them across browsers.
+ *   - Several `position:fixed` overlays mounted as body siblings
+ *     (cheatsheet, search, hotkey toast, scenario indicator,
+ *     AnimatePresence portals) still claimed page-height layout area
+ *     in print even when display:none was applied.
+ *
+ * Bulletproof fix: build a hidden <iframe>, copy the active sheet's
+ * outerHTML plus the parent's stylesheets into it, then call
+ * `iframe.contentWindow.print()`. Chrome prints ONLY the iframe's
+ * own body — no app shell, no modal chrome, no other DOM at all.
  */
-const PRINT_STYLE = `
-@media print {
-  @page { size: A4; margin: 10mm; }
+function printElement(el: HTMLElement) {
+  // Collect every stylesheet currently on the parent page so Tailwind
+  // classes inside the cloned sheet still resolve in the iframe.
+  const headStyles = Array.from(
+    document.querySelectorAll('link[rel="stylesheet"], style')
+  )
+    .map((node) => node.outerHTML)
+    .join('\n');
 
-  /* Hide everything except the print root. */
-  body > *:not(.hmc-print-root) { display: none !important; }
+  const sheetHTML = el.outerHTML;
 
-  /* The portalled modal becomes the only printable thing on the page. */
-  .hmc-print-root {
-    position: static !important;
-    inset: auto !important;
-    width: 100% !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-    overflow: visible !important;
-    backdrop-filter: none !important;
-    display: block !important;
-    color: #000 !important;
-  }
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.cssText =
+    'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+  document.body.appendChild(iframe);
 
-  /* All children of the print root: also strip modal chrome. */
-  .hmc-print-root .hmc-print-controls { display: none !important; }
+  const doc = iframe.contentDocument;
+  if (!doc) return;
 
-  /* The A4 sheet itself: drop modal-only padding/shadow so @page margin
-     is the only space around the content. */
-  .hmc-print-root .hmc-print-sheet {
-    box-shadow: none !important;
-    max-width: none !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-    color: #000 !important;
-  }
+  doc.open();
+  doc.write(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  ${headStyles}
+  <style>
+    @page { size: A4; margin: 10mm; }
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #FFFFFF !important;
+      color: #000000 !important;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .hmc-print-sheet {
+      box-shadow: none !important;
+      max-width: none !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #FFFFFF !important;
+    }
+    .hmc-print-no-break {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    /* Make sure the navy bars, red rules, and LIGHT_BLUE zebra rows
+       print with their background colour (browsers strip backgrounds
+       by default in print). */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+  </style>
+</head>
+<body>${sheetHTML}</body>
+</html>`);
+  doc.close();
 
-  /* Key blocks that must never split mid-row. */
-  .hmc-print-no-break {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
+  // Give the iframe a tick to apply external stylesheets, then print.
+  // Use both onload and a small setTimeout fallback for safety.
+  const fire = () => {
+    try {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+    } catch {
+      /* user-cancelled or browser blocked */
+    }
+    // Defer cleanup so the print dialog has time to consume the iframe.
+    setTimeout(() => {
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }, 1500);
+  };
 
-  /* Tighten line-heights a notch for printable density. */
-  .hmc-print-sheet * {
-    color: #000 !important;
+  if (iframe.contentDocument?.readyState === 'complete') {
+    setTimeout(fire, 250);
+  } else {
+    iframe.addEventListener('load', () => setTimeout(fire, 100));
+    // Fallback in case the load event doesn't fire (Safari quirk).
+    setTimeout(fire, 800);
   }
 }
-`;
 
 /* ───────────────── Invoice-style scenario-aware total text ─────────────────
  * Phase 2.4T — the GRAND TOTAL row inside the invoice document should read
@@ -622,14 +655,14 @@ function makeDefaults(pkg: Package | null): ReportFields {
   const t = CATEGORY_TEMPLATES[templateKey] ?? CATEGORY_TEMPLATES.GI;
 
   return {
-    patientInitials: 'M.K.',
+    patientInitials: 'Mohamed Ramadan',
     adacRef: 'ADAC-DEMO-REF',
     hmcRef: 'HMC-DEMO-CASE',
     date: today,
     toInsurance: 'ADAC AG Holder Assistance',
-    nationality: '—',
-    dob: '—',
-    gender: '—',
+    nationality: 'German',
+    dob: '1993-05-29',
+    gender: 'Male',
     dateOfAdmission: today,
     dateOfDischarge: today,
     ...t,
@@ -1486,6 +1519,7 @@ function PrintPreviewModal({
   fields: ReportFields;
   onClose: () => void;
 }) {
+  const sheetRef = useRef<HTMLDivElement>(null);
   // Esc closes the modal.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -1502,20 +1536,18 @@ function PrintPreviewModal({
   }, [onClose]);
 
   const handlePrint = () => {
-    if (typeof window !== 'undefined') window.print();
+    if (sheetRef.current) printElement(sheetRef.current);
   };
 
-  if (typeof document === 'undefined') return null;
-
-  return createPortal(
+  return (
     <div
-      className="hmc-print-root fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
+      className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Medical report print preview"
     >
-      {/* Top-right chrome — hidden in print */}
-      <div className="hmc-print-controls fixed right-6 top-6 z-[81] flex gap-2">
+      {/* Top-right chrome */}
+      <div className="fixed right-6 top-6 z-[81] flex gap-2">
         <button
           type="button"
           onClick={handlePrint}
@@ -1535,8 +1567,10 @@ function PrintPreviewModal({
         </button>
       </div>
 
-      {/* A4 sheet — read-only printable view */}
+      {/* A4 sheet — read-only printable view. sheetRef is read by
+          printElement() which copies outerHTML into an isolated print iframe. */}
       <div
+        ref={sheetRef}
         className="hmc-print-sheet relative mx-auto w-full max-w-[860px] bg-white p-7 text-black shadow-2xl md:p-10"
       >
         <DemoWatermark />
@@ -1635,10 +1669,7 @@ function PrintPreviewModal({
           required before submission.
         </p>
       </div>
-
-      <style>{PRINT_STYLE}</style>
-    </div>,
-    document.body
+    </div>
   );
 }
 
@@ -1653,6 +1684,7 @@ function InvoicePrintPreviewModal({
   fields: ReportFields;
   onClose: () => void;
 }) {
+  const sheetRef = useRef<HTMLDivElement>(null);
   const items = splitIncluded(pkg.included);
 
   useEffect(() => {
@@ -1669,19 +1701,17 @@ function InvoicePrintPreviewModal({
   }, [onClose]);
 
   const handlePrint = () => {
-    if (typeof window !== 'undefined') window.print();
+    if (sheetRef.current) printElement(sheetRef.current);
   };
 
-  if (typeof document === 'undefined') return null;
-
-  return createPortal(
+  return (
     <div
-      className="hmc-print-root fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
+      className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Package invoice print preview"
     >
-      <div className="hmc-print-controls fixed right-6 top-6 z-[81] flex gap-2">
+      <div className="fixed right-6 top-6 z-[81] flex gap-2">
         <button
           type="button"
           onClick={handlePrint}
@@ -1701,7 +1731,7 @@ function InvoicePrintPreviewModal({
         </button>
       </div>
 
-      <div className="hmc-print-sheet relative mx-auto w-full max-w-[860px] bg-white p-7 text-black shadow-2xl md:p-10">
+      <div ref={sheetRef} className="hmc-print-sheet relative mx-auto w-full max-w-[860px] bg-white p-7 text-black shadow-2xl md:p-10">
         <DemoWatermark />
         <HMCLetterhead />
         <DocumentTitle title="Package Invoice" />
@@ -1837,10 +1867,7 @@ function InvoicePrintPreviewModal({
           dispatch in production.
         </p>
       </div>
-
-      <style>{PRINT_STYLE}</style>
-    </div>,
-    document.body
+    </div>
   );
 }
 
@@ -1964,7 +1991,7 @@ function PatientCaseDataPanel({
           label="Date of birth"
           type="date"
           value={fields.dob === '—' ? '' : fields.dob}
-          onChange={(v) => setField('dob', v || '—')}
+          onChange={(v) => setField('dob', v)}
         />
         <PanelField
           label="Date of visit"
