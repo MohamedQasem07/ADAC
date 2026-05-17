@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { fallbackPackagesData } from '@/data/fallback';
 import { useOverrides } from '@/context/PresentationOverridesContext';
+import { usePricing } from '@/context/PricingContext';
 import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { Package, PackageCategory } from '@/types/content';
@@ -52,6 +53,36 @@ const MED_BLUE = '#2E75B6';
 const LIGHT_BLUE = '#EBF3FB';
 const RED = '#C00000';
 const GREY_RULE = '#DDDDDD';
+
+/* ───────────────── Invoice-style scenario-aware total text ─────────────────
+ * Phase 2.4T — the GRAND TOTAL row inside the invoice document should read
+ * as plain white invoice-style bold text, not a coloured PriceBadge chip.
+ * This helper consumes the SAME usePricing() context PriceBadge uses, so
+ * Scenario A continues to render "To be agreed" and Scenarios B/C render
+ * the catalogue figure. Pricing logic, PriceBadge, and scenario state are
+ * untouched.
+ */
+function InvoiceTotalValue({ pkg }: { pkg: Package }) {
+  const { scenario } = usePricing();
+  const text =
+    scenario === 'A'
+      ? 'To be agreed'
+      : `€${scenario === 'B' ? pkg.prices.B : pkg.prices.C}`;
+  return (
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={`${scenario}-${text}`}
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -4 }}
+        transition={{ duration: 0.4, ease: ease.premium }}
+        className="font-sans text-base font-bold uppercase tracking-[0.05em] text-white md:text-lg"
+      >
+        {text}
+      </motion.span>
+    </AnimatePresence>
+  );
+}
 
 /* ───────────────── Field shapes ───────────────── */
 
@@ -1198,7 +1229,15 @@ function EditableList({
 
 /* ───────────────── Invoice Panel ───────────────── */
 
-function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
+function InvoicePanel({
+  pkg,
+  fields,
+  onOpenPrintPreview,
+}: {
+  pkg: Package;
+  fields: ReportFields;
+  onOpenPrintPreview: () => void;
+}) {
   const items = splitIncluded(pkg.included);
 
   return (
@@ -1208,7 +1247,7 @@ function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
     >
       {/* Outer dark chrome label band */}
       <header
-        className="flex items-center justify-between border-b border-white/10 px-5 py-2.5"
+        className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-2.5"
         style={{ background: 'var(--theme-badge-bg)' }}
       >
         <div className="flex items-center gap-2">
@@ -1220,9 +1259,24 @@ function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
             Package Invoice Preview
           </p>
         </div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
-          {pkg.code}
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
+            {pkg.code}
+          </p>
+          <button
+            type="button"
+            onClick={onOpenPrintPreview}
+            className="inline-flex items-center gap-1.5 rounded-sm border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-colors"
+            style={{
+              borderColor: 'var(--theme-accent)',
+              background: 'var(--theme-badge-bg)',
+              color: 'var(--theme-badge-text)',
+            }}
+          >
+            <Printer size={12} />
+            Print Preview
+          </button>
+        </div>
       </header>
 
       {/* White document sheet */}
@@ -1349,20 +1403,22 @@ function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
           ))}
         </div>
 
-        {/* GRAND TOTAL bar */}
+        {/* GRAND TOTAL bar — official invoice-style: DARK_BLUE full-width
+            band, white bold left label, white bold right total via the
+            scenario-aware InvoiceTotalValue helper (NOT PriceBadge). */}
         <div
-          className="relative mt-0 flex flex-wrap items-center justify-between gap-3 px-3 py-3 text-white"
+          className="relative mt-0 flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
           style={{ background: DARK_BLUE }}
         >
           <div>
-            <p className="font-sans text-[11px] font-bold uppercase tracking-[0.15em] md:text-[12px]">
+            <p className="font-sans text-[12px] font-bold uppercase tracking-[0.18em] md:text-[13px]">
               Grand Total
             </p>
             <p className="text-[10px] italic text-white/80 md:text-[11px]">
               Single agreed package line. Per-item billing not applied.
             </p>
           </div>
-          <PriceBadge pkg={pkg} size="lg" />
+          <InvoiceTotalValue pkg={pkg} />
         </div>
 
         {/* Transparency note */}
@@ -1559,6 +1615,214 @@ function PrintPreviewModal({
   );
 }
 
+/* ───────────────── Invoice Print Preview Modal ───────────────── */
+
+function InvoicePrintPreviewModal({
+  pkg,
+  fields,
+  onClose,
+}: {
+  pkg: Package;
+  fields: ReportFields;
+  onClose: () => void;
+}) {
+  const items = splitIncluded(pkg.included);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') window.print();
+  };
+
+  return (
+    <div
+      className="hmc-print-modal fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-navy-deep/85 px-4 py-10 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Package invoice print preview"
+    >
+      <div className="hmc-print-controls fixed right-6 top-6 z-[81] flex gap-2">
+        <button
+          type="button"
+          onClick={handlePrint}
+          className="inline-flex items-center gap-1.5 rounded-sm border border-white/40 bg-white/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white transition-colors hover:bg-white/20"
+        >
+          <Printer size={13} />
+          Print
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close print preview"
+          className="inline-flex items-center gap-1.5 rounded-sm border border-white/40 bg-white/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-white transition-colors hover:bg-white/20"
+        >
+          <X size={13} />
+          Close
+        </button>
+      </div>
+
+      <div className="hmc-print-sheet relative mx-auto w-full max-w-[860px] bg-white p-7 text-black shadow-2xl md:p-10">
+        <DemoWatermark />
+        <HMCLetterhead />
+        <DocumentTitle title="Package Invoice" />
+        <PatientMetaGrid
+          rows={[
+            {
+              l1: 'Your ref.',
+              v1: fields.adacRef,
+              l2: 'OUR Ref No:',
+              v2: fields.hmcRef,
+            },
+            {
+              l1: 'Insurance:',
+              v1: fields.toInsurance,
+              l2: 'Currency:',
+              v2: 'EUR',
+            },
+            {
+              l1: 'Patient:',
+              v1: fields.patientInitials,
+              l2: 'Date of Birth:',
+              v2: fields.dob,
+            },
+            {
+              l1: 'Nationality:',
+              v1: fields.nationality,
+              l2: 'Gender:',
+              v2: fields.gender,
+            },
+            {
+              l1: 'Date of Admission:',
+              v1: fields.dateOfAdmission,
+              l2: 'Date of Discharge:',
+              v2: fields.dateOfDischarge,
+            },
+            {
+              l1: 'Case Type:',
+              v1: 'Outpatient — Package',
+              l2: 'Invoice Type:',
+              v2: 'Package Invoice',
+            },
+          ]}
+          toText={fields.toInsurance}
+        />
+
+        <div className="mt-4 grid grid-cols-1 gap-3 text-[12px] md:grid-cols-2 md:text-[13px]">
+          <div>
+            <p
+              className="font-sans text-[10px] font-bold uppercase tracking-[0.08em]"
+              style={{ color: DARK_BLUE }}
+            >
+              Package Code
+            </p>
+            <p className="mt-0.5 font-mono text-[13px] font-semibold text-black md:text-[14px]">
+              {pkg.code}
+            </p>
+          </div>
+          <div>
+            <p
+              className="font-sans text-[10px] font-bold uppercase tracking-[0.08em]"
+              style={{ color: DARK_BLUE }}
+            >
+              Package Name
+            </p>
+            <p className="mt-0.5 text-[13px] text-black md:text-[14px]">{pkg.name}</p>
+          </div>
+        </div>
+
+        <div
+          className="mt-5 px-3 py-2 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-white md:text-[11px]"
+          style={{ background: DARK_BLUE }}
+        >
+          Package Inclusions
+        </div>
+        <div
+          className="grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)_120px] items-center px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.1em] text-white md:text-[10px]"
+          style={{ background: MED_BLUE }}
+        >
+          <span>#</span>
+          <span>Item / Service</span>
+          <span>Description</span>
+          <span className="text-right">Billing Type</span>
+        </div>
+        <div className="border-l border-r" style={{ borderColor: GREY_RULE }}>
+          {items.map((it, i) => (
+            <div
+              key={it + i}
+              className="grid grid-cols-[40px_minmax(0,1fr)_minmax(0,1fr)_120px] items-baseline gap-x-3 border-b px-3 py-2 text-[12px] md:text-[13px]"
+              style={{
+                background: i % 2 === 0 ? LIGHT_BLUE : '#FFFFFF',
+                borderColor: GREY_RULE,
+              }}
+            >
+              <span className="font-mono text-[10px] text-gray-700 md:text-[11px]">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="font-medium text-black">{it}</span>
+              <span className="text-gray-800">Included in package scope.</span>
+              <span
+                className="text-right font-mono text-[10px] uppercase tracking-[0.06em] md:text-[11px]"
+                style={{ color: DARK_BLUE }}
+              >
+                Included · package
+              </span>
+            </div>
+          ))}
+        </div>
+        <div
+          className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-white md:px-5 md:py-3.5"
+          style={{ background: DARK_BLUE }}
+        >
+          <div>
+            <p className="font-sans text-[12px] font-bold uppercase tracking-[0.18em] md:text-[13px]">
+              Grand Total
+            </p>
+            <p className="text-[10px] italic text-white/80 md:text-[11px]">
+              Single agreed package line. Per-item billing not applied.
+            </p>
+          </div>
+          <InvoiceTotalValue pkg={pkg} />
+        </div>
+
+        <p className="mt-4 text-[11px] italic leading-relaxed text-gray-700 md:text-[12px]">
+          Included items are shown for transparency. Billing remains a single
+          agreed package line unless escalation or out-of-scope services are
+          documented separately.
+        </p>
+
+        <HMCFooter />
+
+        <p className="mt-3 text-center text-[10px] italic text-gray-600 md:text-[11px]">
+          Demo preview only · No real patient data · Operator-confirmed before
+          dispatch in production.
+        </p>
+      </div>
+
+      <style>{`
+        @media print {
+          body * { visibility: hidden !important; }
+          .hmc-print-modal { position: static !important; background: white !important; padding: 0 !important; backdrop-filter: none !important; }
+          .hmc-print-modal, .hmc-print-modal * { visibility: visible !important; }
+          .hmc-print-controls { display: none !important; }
+          .hmc-print-sheet { box-shadow: none !important; max-width: none !important; width: 100% !important; margin: 0 !important; padding: 12mm !important; }
+          @page { size: A4; margin: 12mm; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 function ReadOnlyDocSection({ label, value }: { label: string; value: string }) {
   return (
     <div>
@@ -1632,6 +1896,7 @@ export function PackageTemplateSimulator() {
   const [loadedPkg, setLoadedPkg] = useState<Package | null>(defaultPkg);
   const [fields, setFields] = useState<ReportFields>(() => makeDefaults(defaultPkg));
   const [printOpen, setPrintOpen] = useState(false);
+  const [invoicePrintOpen, setInvoicePrintOpen] = useState(false);
 
   const pendingPackageOptions = useMemo(
     () => allPackages.filter((p) => p.category === pendingCategoryId),
@@ -1799,7 +2064,9 @@ export function PackageTemplateSimulator() {
         </motion.section>
       )}
 
-      {/* Two large preview panels */}
+      {/* Two large preview documents — Phase 2.4T: full-width, vertically
+          stacked. Invoice first (meeting flow: see the official invoice
+          first, then the supporting medical report). */}
       <AnimatePresence mode="wait">
         <motion.section
           key={loadedPkg?.code ?? 'empty'}
@@ -1807,10 +2074,15 @@ export function PackageTemplateSimulator() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.5, ease: ease.premium }}
-          className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2"
+          className="mt-8 space-y-8"
         >
           {loadedPkg && (
             <>
+              <InvoicePanel
+                pkg={loadedPkg}
+                fields={fields}
+                onOpenPrintPreview={() => setInvoicePrintOpen(true)}
+              />
               <ReportPanel
                 pkg={loadedPkg}
                 fields={fields}
@@ -1821,7 +2093,6 @@ export function PackageTemplateSimulator() {
                 removeListItem={removeListItem}
                 onOpenPrintPreview={() => setPrintOpen(true)}
               />
-              <InvoicePanel pkg={loadedPkg} fields={fields} />
             </>
           )}
         </motion.section>
@@ -1833,12 +2104,21 @@ export function PackageTemplateSimulator() {
         required before submission.
       </p>
 
-      {/* Print preview modal */}
+      {/* Report print preview modal */}
       {printOpen && loadedPkg && (
         <PrintPreviewModal
           pkg={loadedPkg}
           fields={fields}
           onClose={() => setPrintOpen(false)}
+        />
+      )}
+
+      {/* Invoice print preview modal */}
+      {invoicePrintOpen && loadedPkg && (
+        <InvoicePrintPreviewModal
+          pkg={loadedPkg}
+          fields={fields}
+          onClose={() => setInvoicePrintOpen(false)}
         />
       )}
     </article>
