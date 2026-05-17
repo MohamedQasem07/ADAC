@@ -7,6 +7,8 @@ import { ease } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { MarkdownContent, Package, PackageCategory } from '@/types/content';
 import { CategoryGrid } from '@/components/packages/CategoryGrid';
+import { UniversalInclusionsStrip } from '@/components/packages/UniversalInclusionsStrip';
+import { CandidatePilotPackages } from '@/components/packages/CandidatePilotPackages';
 
 interface PackageCatalogueOverviewProps {
   sectionId: string;
@@ -57,7 +59,15 @@ export function PackageCatalogueOverview({
         )}
       </motion.header>
 
+      {/* Phase 2.4N — Universal Inclusions / Exclusions strip above the grid */}
+      <div className="mb-16">
+        <UniversalInclusionsStrip />
+      </div>
+
       <CategoryGrid sectionId={sectionId} categories={categories} packages={packages} />
+
+      {/* Phase 2.4N — Candidate Packages for Pilot Scope Alignment below the grid */}
+      <CandidatePilotPackages />
     </section>
   );
 }

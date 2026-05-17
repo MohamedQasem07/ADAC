@@ -5,6 +5,8 @@ import { FlowLayout } from './layouts/FlowLayout';
 import { GridLayout } from './layouts/GridLayout';
 import { KpiHeroLayout } from './layouts/KpiHeroLayout';
 import { TimelineLayout } from './layouts/TimelineLayout';
+import { UniversalInclusionsStrip } from '@/components/packages/UniversalInclusionsStrip';
+import { PackageOperatingKit } from '@/components/packages/PackageOperatingKit';
 
 interface LayoutAwareSectionProps {
   sectionId: string;
@@ -37,6 +39,23 @@ export function LayoutAwareSection({
   subtopics,
 }: LayoutAwareSectionProps) {
   const layout = content.frontmatter.layout as string | undefined;
+
+  // Phase 2.4N — §13 Pricing Philosophy cover gets two extra blocks
+  // (Universal Inclusions/Exclusions strip above the editorial body,
+  // Package Operating Kit concept below it) so the audience can answer
+  // the "what's in / what's quoted on top / how does it become an
+  // ADAC file" questions without leaving the §13 cover.
+  if (sectionId === '13') {
+    return (
+      <>
+        <div className="pt-24">
+          <UniversalInclusionsStrip />
+        </div>
+        <EditorialLayout content={content} />
+        <PackageOperatingKit />
+      </>
+    );
+  }
 
   switch (layout) {
     case 'hero-stat':
