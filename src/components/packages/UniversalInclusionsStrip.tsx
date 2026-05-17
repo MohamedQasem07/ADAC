@@ -133,6 +133,10 @@ export function UniversalInclusionsStrip() {
           Mode of delivery does not change the package logic unless clinical
           escalation or out-of-scope services are required.
         </p>
+        <p className="mt-2 text-center text-[11px] leading-relaxed text-ice/65 md:text-xs">
+          Specialised or non-formulary medications, if clinically required, are
+          documented and quoted separately.
+        </p>
       </div>
     </motion.section>
   );

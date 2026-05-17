@@ -175,6 +175,11 @@ export function PackageOperatingKit() {
         Concept view. Full per-category templates can be prepared during
         the June preparation phase.
       </p>
+      <p className="mt-3 text-center text-sm leading-relaxed text-white md:text-base">
+        Every approved package family can receive a matching medical report
+        template, nursing sheet template, invoice line, and breakdown format
+        during the June preparation phase.
+      </p>
     </section>
   );
 }

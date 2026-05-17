@@ -110,6 +110,12 @@ const KEY_POINTS_ALIASES = new Set([
   "what's included",
   'channels',
   'cadence',
+  // Phase 2.4O — §17 Discussion Points restructure. The "HMC suggested
+  // position" section in each §17 card is rendered as the bullet/insight
+  // card grid (same visual slot as Key points), so the alias maps here.
+  'hmc suggested position',
+  'hmc position',
+  'suggested position',
 ]);
 
 const ADAC_MEANING_ALIASES = new Set([
@@ -118,6 +124,12 @@ const ADAC_MEANING_ALIASES = new Set([
   'operational meaning',
   'for adac',
   'why it matters for adac',
+  // Phase 2.4O — §17 Discussion Points: the "What we need ADAC to
+  // confirm" section is the partner-facing ask, rendered as the
+  // themed callout (same visual slot as "What this means for ADAC").
+  'what we need adac to confirm',
+  'adac to confirm',
+  'confirm',
 ]);
 
 const CONTEXT_ALIASES = new Set([
@@ -126,6 +138,11 @@ const CONTEXT_ALIASES = new Set([
   'background',
   'the challenge',
   'why it matters',
+  // Phase 2.4O — §17 Discussion Points: each card opens with the
+  // "Question" section, rendered as the intro paragraph (same visual
+  // slot as Context).
+  'question',
+  'the question',
 ]);
 
 /**

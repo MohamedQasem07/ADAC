@@ -18,7 +18,8 @@
       "id": 2,
       "code": "RX",
       "name": "Respiratory Conditions",
-      "description": "Acute respiratory infections — bronchitis, pharyngitis, tonsillitis, pneumonia — are among the most frequent presentations in travelers visiting the Red Sea region. Packages cover mild outpatient cases through acute exacerbations requiring nebulizer therapy and supportive treatment."
+      "description": "Acute respiratory infections — bronchitis, pharyngitis, tonsillitis, pneumonia — are among the most frequent presentations in travelers visiting the Red Sea region. Packages cover mild outpatient cases through acute exacerbations requiring nebulizer therapy and supportive treatment.",
+      "escalationNote": "Severe respiratory distress, suspected acute COVID-19 with hypoxia, or paediatric stridor are escalated to §11 admission pathway. Assistance company notified within 15 minutes."
     },
     {
       "id": 3,
@@ -37,31 +38,36 @@
       "id": 4,
       "code": "OR",
       "name": "Trauma & Orthopedic",
-      "description": "Trauma cases — sprains, contusions, suspected fractures — are common in active tourist environments. HMC's portable X-Ray capability allows full assessment at the hotel for travelers unable to travel, with cast or immobilization performed on site."
+      "description": "Trauma cases — sprains, contusions, suspected fractures — are common in active tourist environments. HMC's portable X-Ray capability allows full assessment at the hotel for travelers unable to travel, with cast or immobilization performed on site.",
+      "escalationNote": "Open fractures, suspected spinal injury, multi-trauma, or compartment-syndrome signs are escalated to §11 ambulance pathway with receiving-hospital coordination."
     },
     {
       "id": 5,
       "code": "EN",
       "name": "ENT (Ear · Nose · Throat)",
-      "description": "ENT presentations include ear barotrauma (common after diving), otitis from swimming, and acute throat infections. Ear wash and foreign-body extraction are routinely performed using portable equipment."
+      "description": "ENT presentations include ear barotrauma (common after diving), otitis from swimming, and acute throat infections. Ear wash and foreign-body extraction are routinely performed using portable equipment.",
+      "escalationNote": "Severe epistaxis unresponsive to anterior packing, suspected mastoiditis, deep neck infection, or hearing loss with neurological signs are escalated to §11 specialist pathway."
     },
     {
       "id": 6,
       "code": "DN",
       "name": "Dental Emergency",
-      "description": "Dental packages cover urgent presentations only. Insurance coverage for dental services varies by plan — pre-authorization is recommended for any procedure beyond consultation."
+      "description": "Dental packages cover urgent presentations only. Insurance coverage for dental services varies by plan — pre-authorization is recommended for any procedure beyond consultation.",
+      "escalationNote": "Maxillofacial trauma, deep facial-space infection, airway-threatening swelling, or oral bleeding refractory to local measures are escalated to §11 oral-surgery pathway."
     },
     {
       "id": 7,
       "code": "DR",
       "name": "Allergic & Skin Conditions",
-      "description": "Sun exposure, marine environment, and dietary changes lead to a high incidence of allergic and dermatological presentations during travel."
+      "description": "Sun exposure, marine environment, and dietary changes lead to a high incidence of allergic and dermatological presentations during travel.",
+      "escalationNote": "Anaphylaxis, full-thickness or extensive burns, suspected Stevens-Johnson syndrome, or severe systemic reactions are escalated to §11 ambulance pathway."
     },
     {
       "id": 8,
       "code": "EY",
       "name": "Eye Conditions",
-      "description": "Conjunctivitis from sun, chlorine, or sand is the dominant eye presentation. Foreign-body removal is performed in clinic under magnification."
+      "description": "Conjunctivitis from sun, chlorine, or sand is the dominant eye presentation. Foreign-body removal is performed in clinic under magnification.",
+      "escalationNote": "Penetrating eye injury, sudden vision loss, suspected acute angle-closure glaucoma, or chemical burn to the eye are escalated to §11 ophthalmology specialist pathway with receiving-hospital coordination."
     },
     {
       "id": 9,
