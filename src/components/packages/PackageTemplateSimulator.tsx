@@ -10,6 +10,9 @@ import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import type { Package, PackageCategory } from '@/types/content';
 import { PriceBadge } from './PriceBadge';
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+const HMC_LOGO = `${BASE_PATH}/brand/hmc-logo-white.png`;
+
 /**
  * Phase 2.4Q — Package Template Simulator (§13.6).
  *
@@ -453,6 +456,133 @@ export function PackageTemplateSimulator() {
 
 /* ───────────────── Report Panel ───────────────── */
 
+/* ───────────────── Shared document chrome ───────────────── */
+
+/**
+ * White-sheet HMC letterhead used by both the medical-report and the
+ * invoice document previews. Mirrors §10.1 SampleReportCard's pattern so
+ * the audience reads both pages as "the same kind of HMC file."
+ */
+function HMCLetterhead({
+  documentTitle,
+  documentTitleArabic,
+  rightLabel,
+  rightValue,
+}: {
+  documentTitle: string;
+  documentTitleArabic?: string;
+  rightLabel: string;
+  rightValue: string;
+}) {
+  return (
+    <div className="relative -mx-5 -mt-5 mb-6 bg-navy-medium px-5 py-4 text-white md:-mx-7 md:-mt-7 md:px-7 md:py-5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={HMC_LOGO}
+            alt=""
+            className="hidden h-10 w-auto object-contain sm:block"
+            aria-hidden
+          />
+          <div>
+            <p className="font-display text-base font-semibold leading-tight md:text-lg">
+              Hurghada Medical Center
+            </p>
+            <p className="text-[10px] uppercase tracking-[0.22em] text-white/70">
+              Outpatient Operations · Red Sea Region
+            </p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
+            {rightLabel}
+          </p>
+          <p className="font-mono text-xs md:text-sm">{rightValue}</p>
+        </div>
+      </div>
+      {/* Thin gold separator + document title row */}
+      <div
+        className="mt-3 h-px w-full"
+        style={{ background: 'rgba(201,169,97,0.55)' }}
+      />
+      <div className="mt-3 flex items-baseline justify-between gap-2">
+        <p className="font-display text-xl tracking-[0.06em] text-white md:text-2xl">
+          {documentTitle}
+        </p>
+        {documentTitleArabic && (
+          <p
+            className="text-sm text-white/70"
+            style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+          >
+            {documentTitleArabic}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Diagonal watermark used on every document sheet so the demo nature is
+ * unmistakable at a glance.
+ */
+function DemoWatermark() {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      style={{
+        transform: 'rotate(-22deg)',
+        fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)',
+        fontFamily: 'var(--font-playfair), Georgia, serif',
+        color: 'rgba(201, 169, 97, 0.16)',
+        fontWeight: 700,
+        letterSpacing: '0.1em',
+      }}
+    >
+      DEMO PREVIEW · NO REAL PATIENT DATA
+    </span>
+  );
+}
+
+/**
+ * Light document footer mirroring §10.1's footer strip.
+ */
+function DocumentFooter({
+  leftText,
+  rightText,
+}: {
+  leftText: string;
+  rightText: string;
+}) {
+  return (
+    <div className="relative mt-6 flex items-center justify-between border-t border-ink-medium/15 bg-ice px-1 pt-3 text-[10px] uppercase tracking-[0.22em] text-ink-medium md:text-[11px]">
+      <span>{leftText}</span>
+      <span>{rightText}</span>
+    </div>
+  );
+}
+
+/* ───────────────── Medical Report Panel ───────────────── */
+
+const REPORT_SECTIONS: Array<{
+  key: keyof ReportFields;
+  label: string;
+  rows?: number;
+}> = [
+  { key: 'complaint', label: 'Chief Complaint', rows: 2 },
+  { key: 'vitals', label: 'Vitals', rows: 2 },
+  { key: 'examination', label: 'Clinical Examination', rows: 3 },
+  { key: 'diagnosis', label: 'Diagnosis', rows: 2 },
+  { key: 'investigations', label: 'Investigations', rows: 2 },
+  { key: 'treatment', label: 'Treatment Given', rows: 3 },
+  { key: 'medications', label: 'Medications', rows: 2 },
+  { key: 'procedures', label: 'Procedures', rows: 2 },
+  { key: 'dischargeAdvice', label: 'Discharge Advice', rows: 2 },
+  { key: 'followUp', label: 'Follow-up Plan', rows: 2 },
+];
+
 function ReportPanel({
   pkg,
   fields,
@@ -467,105 +597,107 @@ function ReportPanel({
       className="overflow-hidden rounded-sm border border-white/10 bg-navy/40 backdrop-blur-sm"
       aria-label="Editable medical report template"
     >
+      {/* Outer dark chrome label band */}
       <header
-        className="flex items-center justify-between border-b border-white/10 px-5 py-3"
+        className="flex items-center justify-between border-b border-white/10 px-5 py-2.5"
         style={{ background: 'var(--theme-badge-bg)' }}
       >
         <div className="flex items-center gap-2">
-          <Stethoscope
-            size={16}
-            style={{ color: 'var(--theme-badge-text)' }}
-          />
+          <Stethoscope size={14} style={{ color: 'var(--theme-badge-text)' }} />
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.35em]"
+            className="font-mono text-[10px] uppercase tracking-[0.32em]"
             style={{ color: 'var(--theme-badge-text)' }}
           >
-            Editable medical report template
+            Editable Medical Report Template
           </p>
         </div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ice/70">
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
           {pkg.code}
         </p>
       </header>
 
-      <div className="space-y-4 px-5 py-5 md:px-6 md:py-6">
-        {/* References + identity row */}
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <TextRow
+      {/* White document sheet */}
+      <div className="relative bg-white p-5 text-ink-dark md:p-7">
+        <DemoWatermark />
+
+        <HMCLetterhead
+          documentTitle="MEDICAL REPORT"
+          rightLabel="Issued"
+          rightValue={fields.date || '—'}
+        />
+
+        {/* Metadata grid — four-up on desktop */}
+        <div className="relative grid grid-cols-2 gap-x-5 gap-y-3 text-[12px] md:grid-cols-4 md:text-[13px]">
+          <EditableMetaCell
             label="Patient initials"
             value={fields.patientInitials}
             onChange={(v) => setField('patientInitials', v)}
           />
-          <TextRow
-            label="Date"
-            value={fields.date}
-            onChange={(v) => setField('date', v)}
-          />
-          <TextRow
+          <EditableMetaCell
             label="ADAC reference"
             value={fields.adacRef}
             onChange={(v) => setField('adacRef', v)}
           />
-          <TextRow
-            label="HMC case reference"
+          <EditableMetaCell
+            label="HMC reference"
             value={fields.hmcRef}
             onChange={(v) => setField('hmcRef', v)}
           />
+          <EditableMetaCell
+            label="Date"
+            value={fields.date}
+            onChange={(v) => setField('date', v)}
+          />
         </div>
 
-        {/* Clinical fields — textarea per field */}
-        <TextAreaRow
-          label="Complaint"
-          value={fields.complaint}
-          onChange={(v) => setField('complaint', v)}
-        />
-        <TextAreaRow
-          label="Vitals"
-          value={fields.vitals}
-          onChange={(v) => setField('vitals', v)}
-        />
-        <TextAreaRow
-          label="Examination"
-          value={fields.examination}
-          onChange={(v) => setField('examination', v)}
-        />
-        <TextAreaRow
-          label="Diagnosis"
-          value={fields.diagnosis}
-          onChange={(v) => setField('diagnosis', v)}
-        />
-        <TextAreaRow
-          label="Investigations"
-          value={fields.investigations}
-          onChange={(v) => setField('investigations', v)}
-        />
-        <TextAreaRow
-          label="Treatment"
-          value={fields.treatment}
-          onChange={(v) => setField('treatment', v)}
-        />
-        <TextAreaRow
-          label="Medications"
-          value={fields.medications}
-          onChange={(v) => setField('medications', v)}
-        />
-        <TextAreaRow
-          label="Procedures"
-          value={fields.procedures}
-          onChange={(v) => setField('procedures', v)}
-        />
-        <TextAreaRow
-          label="Discharge advice"
-          value={fields.dischargeAdvice}
-          onChange={(v) => setField('dischargeAdvice', v)}
-        />
-        <TextAreaRow
-          label="Follow-up"
-          value={fields.followUp}
-          onChange={(v) => setField('followUp', v)}
+        {/* Package code + name row */}
+        <div className="relative mt-4 rounded-sm border border-ink-medium/15 bg-ice/60 p-3 md:p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-ink-medium">
+              Package
+            </p>
+            <p className="font-mono text-[12px] font-semibold text-ink-dark md:text-[13px]">
+              {pkg.code}
+            </p>
+          </div>
+          <p className="mt-1 font-display text-base leading-snug text-ink-dark md:text-lg">
+            {pkg.name}
+          </p>
+        </div>
+
+        {/* Report sections — each renders as a labelled document block with
+            a white textarea matching the surrounding paper. */}
+        <div className="relative mt-5 space-y-4">
+          {REPORT_SECTIONS.map(({ key, label, rows }) => (
+            <ReportSection
+              key={key}
+              label={label}
+              value={fields[key] as string}
+              rows={rows}
+              onChange={(v) => setField(key, v)}
+            />
+          ))}
+        </div>
+
+        {/* Doctor / operator review note */}
+        <div className="relative mt-6 rounded-sm border border-ink-medium/15 bg-ice/60 p-3 text-[12px] leading-relaxed text-ink-medium md:p-4 md:text-[13px]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-ink-medium">
+            Doctor / operator review
+          </p>
+          <p className="mt-1">
+            This is a template preview. The treating doctor and the
+            operations team review and sign off every real medical report
+            before it is submitted to the assistance partner.
+          </p>
+        </div>
+
+        <DocumentFooter
+          leftText="Demo preview · digitally signed in production"
+          rightText="Page 1 of 1"
         />
 
-        <p className="pt-2 text-[11px] italic text-ice/65">
+        {/* In-panel safety strip */}
+        <p className="relative mt-3 text-[11px] italic leading-relaxed text-ink-medium md:text-xs">
           Demo preview only · No real patient data · Doctor / operator review
           required before submission.
         </p>
@@ -574,7 +706,7 @@ function ReportPanel({
   );
 }
 
-function TextRow({
+function EditableMetaCell({
   label,
   value,
   onChange,
@@ -585,44 +717,51 @@ function TextRow({
 }) {
   return (
     <label className="block">
-      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ice/85">
+      <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-ink-medium md:text-[10px]">
         {label}
       </span>
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-sm border border-white/15 bg-navy-deep/70 px-3 py-2 text-sm text-white outline-none transition-colors focus:border-[var(--theme-accent)]"
+        className="mt-0.5 w-full border-b border-ink-medium/30 bg-transparent py-1 font-mono text-[12px] text-ink-dark outline-none transition-colors focus:border-navy-medium md:text-[13px]"
       />
     </label>
   );
 }
 
-function TextAreaRow({
+function ReportSection({
   label,
   value,
+  rows = 2,
   onChange,
 }: {
   label: string;
   value: string;
+  rows?: number;
   onChange: (v: string) => void;
 }) {
   return (
-    <label className="block">
-      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-ice/85">
+    <div className="relative">
+      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ink-medium">
         {label}
-      </span>
+      </p>
+      <div
+        className="mt-1.5 h-px w-full"
+        style={{ background: 'rgba(27,58,92,0.18)' }}
+      />
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        rows={2}
-        className="mt-1 w-full resize-y rounded-sm border border-white/15 bg-navy-deep/70 px-3 py-2 text-sm leading-relaxed text-white outline-none transition-colors focus:border-[var(--theme-accent)]"
+        rows={rows}
+        className="mt-2 w-full resize-y border border-transparent bg-transparent text-[13px] leading-relaxed text-ink-dark outline-none transition-colors hover:border-ink-medium/15 focus:border-navy-medium/40 md:text-sm"
+        style={{ padding: '4px 2px' }}
       />
-    </label>
+    </div>
   );
 }
 
-/* ───────────────── Invoice Panel ───────────────── */
+/* ───────────────── Package Invoice Panel ───────────────── */
 
 function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
   const items = splitIncluded(pkg.included);
@@ -632,126 +771,125 @@ function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
       className="overflow-hidden rounded-sm border border-white/10 bg-navy/40 backdrop-blur-sm"
       aria-label="Package invoice preview"
     >
+      {/* Outer dark chrome label band */}
       <header
-        className="flex items-center justify-between border-b border-white/10 px-5 py-3"
+        className="flex items-center justify-between border-b border-white/10 px-5 py-2.5"
         style={{ background: 'var(--theme-badge-bg)' }}
       >
         <div className="flex items-center gap-2">
-          <FileText
-            size={16}
-            style={{ color: 'var(--theme-badge-text)' }}
-          />
+          <FileText size={14} style={{ color: 'var(--theme-badge-text)' }} />
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.35em]"
+            className="font-mono text-[10px] uppercase tracking-[0.32em]"
             style={{ color: 'var(--theme-badge-text)' }}
           >
-            Package invoice preview
+            Package Invoice Preview
           </p>
         </div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-ice/70">
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ice/70">
           {pkg.code}
         </p>
       </header>
 
-      {/* White invoice "sheet" — mirrors §10.1 SampleReportCard styling so
-          the audience reads it as the same "kind of file" they saw at §10.1. */}
-      <div className="relative bg-white p-5 text-ink-dark md:p-6">
-        {/* Diagonal demo watermark */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
-          style={{
-            transform: 'rotate(-22deg)',
-            fontSize: 'clamp(1.5rem, 4.5vw, 3.5rem)',
-            fontFamily: 'var(--font-playfair), Georgia, serif',
-            color: 'rgba(201, 169, 97, 0.16)',
-            fontWeight: 700,
-            letterSpacing: '0.1em',
-          }}
-        >
-          DEMO PREVIEW · NO REAL PATIENT DATA
-        </span>
+      {/* White document sheet */}
+      <div className="relative bg-white p-5 text-ink-dark md:p-7">
+        <DemoWatermark />
 
-        {/* HMC letterhead band */}
-        <div className="relative -mx-5 -mt-5 mb-4 bg-navy-medium px-5 py-3 text-white md:-mx-6 md:-mt-6 md:px-6 md:py-4">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="font-display text-base font-semibold md:text-lg">
-                Hurghada Medical Center
-              </p>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/70">
-                Package Invoice · Demo Preview
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
-                Issued
-              </p>
-              <p className="font-mono text-xs md:text-sm">{fields.date}</p>
-            </div>
-          </div>
+        <HMCLetterhead
+          documentTitle="PACKAGE INVOICE"
+          rightLabel="Issued"
+          rightValue={fields.date || '—'}
+        />
+
+        {/* Metadata grid — six fields, three per row on desktop */}
+        <div className="relative grid grid-cols-2 gap-x-5 gap-y-3 text-[12px] md:grid-cols-3 md:text-[13px]">
+          <MetaCell label="HMC reference" value={fields.hmcRef} />
+          <MetaCell label="ADAC reference" value={fields.adacRef} />
+          <MetaCell label="Date" value={fields.date} />
+          <MetaCell label="Patient initials" value={fields.patientInitials} />
+          <MetaCell label="Package code" value={pkg.code} mono />
+          <MetaCell label="Package name" value={pkg.name} wide />
         </div>
 
-        {/* Reference + identity row */}
-        <div className="relative grid grid-cols-2 gap-3 text-[12px] md:grid-cols-4 md:text-[13px]">
-          <Cell label="ADAC reference" value={fields.adacRef} />
-          <Cell label="HMC reference" value={fields.hmcRef} />
-          <Cell label="Patient initials" value={fields.patientInitials} />
-          <Cell label="Date" value={fields.date} />
-        </div>
-
-        {/* Package line */}
-        <div className="relative mt-5 rounded-sm border border-ink-medium/15 bg-ice/60 p-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ink-medium">
-            Package
-          </p>
-          <p className="mt-1 font-mono text-sm font-semibold text-ink-dark">
-            {pkg.code}
-          </p>
-          <p className="mt-1 font-display text-lg leading-snug text-ink-dark md:text-xl">
-            {pkg.name}
-          </p>
-        </div>
-
-        {/* Included items list — no per-item prices */}
-        <div className="relative mt-5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ink-medium">
-            Included items · transparency view (no per-item billing)
-          </p>
-          <ul className="mt-3 space-y-1.5 text-[13px] leading-relaxed text-ink-dark md:text-sm">
-            {items.map((it) => (
-              <li key={it} className="flex items-start gap-2">
-                <CheckCircle2
-                  size={14}
-                  className="mt-1 shrink-0"
-                  style={{ color: '#1B3A5C' }}
-                />
-                <span>{it}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Final total — single line, scenario-aware via PriceBadge */}
-        <div className="relative mt-6 flex items-baseline justify-between border-t border-ink-medium/15 pt-4">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-ink-medium">
-              Total · single agreed package line
-            </p>
-            <p className="mt-1 text-[11px] italic text-ink-medium">
-              Included items above are shown for transparency only.
-            </p>
-          </div>
-          <PriceBadge pkg={pkg} size="lg" />
+        {/* Invoice table — Item / Description / Billing type. No per-item prices. */}
+        <div className="relative mt-6 overflow-hidden rounded-sm border border-ink-medium/15">
+          <table className="w-full text-left text-[13px] md:text-sm">
+            <thead className="bg-ice/80 text-[10px] uppercase tracking-[0.22em] text-ink-medium">
+              <tr>
+                <th className="w-12 px-3 py-2 font-medium">#</th>
+                <th className="px-3 py-2 font-medium">Item</th>
+                <th className="px-3 py-2 font-medium">Description</th>
+                <th className="hidden px-3 py-2 font-medium md:table-cell">
+                  Billing type
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((it, i) => (
+                <tr
+                  key={it}
+                  className="border-t border-ink-medium/10 align-top"
+                >
+                  <td className="px-3 py-2 font-mono text-[11px] text-ink-medium">
+                    {String(i + 1).padStart(2, '0')}
+                  </td>
+                  <td className="px-3 py-2 font-medium text-ink-dark">
+                    <span className="inline-flex items-center gap-2">
+                      <CheckCircle2
+                        size={13}
+                        className="shrink-0"
+                        style={{ color: '#1B3A5C' }}
+                      />
+                      {it}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-ink-dark">
+                    Included in package scope.
+                  </td>
+                  <td className="hidden px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-medium md:table-cell">
+                    Included · package
+                  </td>
+                </tr>
+              ))}
+              {/* Total row */}
+              <tr
+                className="border-t-2 align-baseline"
+                style={{ borderColor: '#1B3A5C' }}
+              >
+                <td colSpan={2} className="px-3 py-3">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-ink-medium">
+                    Total
+                  </p>
+                  <p className="mt-1 font-display text-base leading-tight text-ink-dark md:text-lg">
+                    Single agreed package line
+                  </p>
+                </td>
+                <td className="px-3 py-3 text-[12px] italic text-ink-medium">
+                  Included items above are shown for transparency only.
+                </td>
+                <td className="px-3 py-3 text-right" colSpan={1}>
+                  <div className="flex justify-end">
+                    <PriceBadge pkg={pkg} size="lg" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* Footnote */}
-        <p className="relative mt-5 text-[11px] italic leading-relaxed text-ink-medium md:text-xs">
+        <p className="relative mt-5 text-[12px] italic leading-relaxed text-ink-medium md:text-[13px]">
           Included items are shown for transparency. Billing remains a single
           agreed package line unless escalation or out-of-scope services are
           documented separately.
         </p>
-        <p className="relative mt-2 text-[11px] italic text-ink-medium md:text-xs">
+
+        <DocumentFooter
+          leftText="Demo preview · operator-confirmed in production"
+          rightText="Page 1 of 1"
+        />
+
+        {/* In-panel safety strip */}
+        <p className="relative mt-3 text-[11px] italic leading-relaxed text-ink-medium md:text-xs">
           Demo preview only · No real patient data · Doctor / operator review
           required before submission.
         </p>
@@ -760,13 +898,25 @@ function InvoicePanel({ pkg, fields }: { pkg: Package; fields: ReportFields }) {
   );
 }
 
-function Cell({ label, value }: { label: string; value: string }) {
+function MetaCell({
+  label,
+  value,
+  mono,
+  wide,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  wide?: boolean;
+}) {
   return (
-    <div>
-      <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-ink-medium md:text-[10px]">
+    <div className={wide ? 'col-span-2 md:col-span-2' : undefined}>
+      <p className="font-mono text-[9px] uppercase tracking-[0.24em] text-ink-medium md:text-[10px]">
         {label}
       </p>
-      <p className="mt-0.5 font-mono text-[12px] text-ink-dark md:text-[13px]">
+      <p
+        className={`mt-0.5 ${mono ? 'font-mono' : ''} text-[13px] text-ink-dark md:text-sm`}
+      >
         {value || '—'}
       </p>
     </div>
