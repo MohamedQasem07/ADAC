@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -8,6 +9,7 @@ import {
   Bandage,
   Compass,
   Ear,
+  ImageIcon,
   MapPin,
   Sailboat,
   Stethoscope,
@@ -20,6 +22,7 @@ import {
 } from 'lucide-react';
 import { ease, staggerTight } from '@/lib/motion';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
+import { EquipmentGalleryModal } from './EquipmentGalleryModal';
 
 const ICON_MAP: Record<string, LucideIcon> = {
   Activity,
@@ -42,6 +45,13 @@ interface CardItem {
   icon?: string;
   title: string;
   body: string;
+  /**
+   * Optional per-card photo gallery (§2.4 only). When present, the
+   * card becomes clickable and opens an EquipmentGalleryModal showing
+   * all listed photos. §5.5 (the other consumer of this layout) omits
+   * this field and renders the original non-clickable card.
+   */
+  photos?: string[];
 }
 
 interface GalleryImage {
@@ -81,6 +91,7 @@ function asset(src: string): string {
  */
 export function CardsLayout({ data }: { data: CardsLayoutData }) {
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
+  const [activeItem, setActiveItem] = useState<CardItem | null>(null);
 
   return (
     <section ref={ref} className="mx-auto w-full max-w-6xl px-8 py-24">
@@ -109,19 +120,16 @@ export function CardsLayout({ data }: { data: CardsLayoutData }) {
       >
         {data.items.map((item) => {
           const Icon = pickLucideIcon(item.icon);
-          return (
-            <motion.li
-              key={item.title}
-              variants={{
-                hidden: { opacity: 0, y: 22 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.65, ease: ease.premium },
-                },
-              }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover"
-            >
+          const hasPhotos = Array.isArray(item.photos) && item.photos.length > 0;
+
+          // Shared card visuals — keeps the design identical whether
+          // the card is a clickable button (with photos) or a static
+          // <div> (without).
+          const cardClass =
+            'group relative flex h-full w-full flex-col overflow-hidden rounded-sm border border-white/10 bg-navy/40 p-6 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-theme/50 hover:shadow-card-hover';
+
+          const innerContent = (
+            <>
               <span
                 aria-hidden
                 className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-theme/40 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
@@ -141,12 +149,56 @@ export function CardsLayout({ data }: { data: CardsLayoutData }) {
               <p className="mt-3 text-sm leading-relaxed text-ink-soft/85">
                 {item.body}
               </p>
+              {hasPhotos && (
+                <span
+                  className="mt-5 inline-flex items-center gap-1.5 self-start rounded-sm border border-theme/30 bg-theme/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.25em] text-theme transition-colors group-hover:bg-theme/[0.12]"
+                  aria-hidden
+                >
+                  <ImageIcon size={11} />
+                  View photos
+                </span>
+              )}
+            </>
+          );
+
+          return (
+            <motion.li
+              key={item.title}
+              variants={{
+                hidden: { opacity: 0, y: 22 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.65, ease: ease.premium },
+                },
+              }}
+            >
+              {hasPhotos ? (
+                <button
+                  type="button"
+                  className={`${cardClass} cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-accent)]/55`}
+                  onClick={() => setActiveItem(item)}
+                  aria-label={`${item.title} — view photos`}
+                >
+                  {innerContent}
+                </button>
+              ) : (
+                <div className={cardClass}>{innerContent}</div>
+              )}
             </motion.li>
           );
         })}
       </motion.ul>
 
       {data.gallery && <GallerySection gallery={data.gallery} inView={inView} />}
+
+      <EquipmentGalleryModal
+        open={activeItem !== null}
+        title={activeItem?.title ?? ''}
+        description={activeItem?.body}
+        photos={activeItem?.photos ?? []}
+        onClose={() => setActiveItem(null)}
+      />
     </section>
   );
 }
