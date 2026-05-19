@@ -27,6 +27,10 @@ export default function MobileLandingPage() {
   useEffect(() => {
     try {
       window.sessionStorage.setItem('hmc-audience-mode', '1');
+      // Phase 2.4Z — also stamp the access-mode key so QR-scanning
+      // mobile attendees never see the desktop login gate, regardless
+      // of which detection path resolves first.
+      window.sessionStorage.setItem('hmc-adac-access-mode', 'guest');
     } catch {
       // ignore — fall through to URL-based detection
     }

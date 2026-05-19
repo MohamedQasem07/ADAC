@@ -38,6 +38,11 @@ import { usePathname } from 'next/navigation';
 
 const SESSION_KEY = 'hmc-audience-mode';
 const SESSION_VALUE = '1';
+// Phase 2.4Z — guest access mode (set by LoginGate or /m) also activates
+// audience-safe rendering. Read directly from sessionStorage so this
+// module stays import-cycle-free with AccessModeContext.
+const ACCESS_KEY = 'hmc-adac-access-mode';
+const ACCESS_GUEST = 'guest';
 
 interface AudienceModeState {
   /** True when the current tab is in mobile audience mode. */
@@ -50,35 +55,80 @@ export function AudienceModeProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname() || '/';
   const [isAudience, setIsAudience] = useState(false);
 
-  // Detect audience mode from URL (?m=1) or sessionStorage. Reading
-  // window.location.search directly (instead of useSearchParams) avoids
-  // the App-Router static-export Suspense requirement and is sufficient
-  // because we re-evaluate on every pathname change.
+  // Detect audience mode from URL (?m=1), sessionStorage, or the
+  // Phase 2.4Z guest access mode. Reading window.location.search
+  // directly (instead of useSearchParams) avoids the App-Router
+  // static-export Suspense requirement and is sufficient because we
+  // re-evaluate on every pathname change.
+  //
+  // Polling sessionStorage in a tiny interval lets us pick up the
+  // moment the LoginGate writes 'guest' without a hard dependency on
+  // AccessModeContext. We tear the poll down once the audience flag
+  // is locked in, so steady-state cost is zero.
   useEffect(() => {
-    let active = false;
-    try {
-      active = new URLSearchParams(window.location.search).get('m') === '1';
-    } catch {
-      active = false;
-    }
-
-    if (!active) {
+    function evaluate(): boolean {
+      let active = false;
       try {
-        active = window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE;
+        active = new URLSearchParams(window.location.search).get('m') === '1';
       } catch {
-        // sessionStorage unavailable — silently leave inactive.
+        active = false;
       }
+      if (!active) {
+        try {
+          active = window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE;
+        } catch {
+          // sessionStorage unavailable — silently leave inactive.
+        }
+      }
+      // Phase 2.4Z — guest access mode also activates audience-safe rendering.
+      if (!active) {
+        try {
+          active = window.sessionStorage.getItem(ACCESS_KEY) === ACCESS_GUEST;
+        } catch {
+          /* ignore */
+        }
+      }
+      return active;
     }
 
-    if (active) {
-      try {
-        window.sessionStorage.setItem(SESSION_KEY, SESSION_VALUE);
-      } catch {
-        // ignore
+    let cancelled = false;
+    function apply(active: boolean) {
+      if (cancelled) return;
+      if (active) {
+        try {
+          window.sessionStorage.setItem(SESSION_KEY, SESSION_VALUE);
+        } catch {
+          // ignore
+        }
       }
+      setIsAudience(active);
     }
 
-    setIsAudience(active);
+    apply(evaluate());
+    if (!evaluate()) {
+      // Light poll for the LoginGate "Continue as Guest" click that
+      // sets the access-mode key from a sibling component. Stops the
+      // moment guest is detected (we only need to catch the transition
+      // once per tab; after that the flag is locked in).
+      const id = window.setInterval(() => {
+        if (cancelled) {
+          window.clearInterval(id);
+          return;
+        }
+        if (evaluate()) {
+          apply(true);
+          window.clearInterval(id);
+        }
+      }, 250);
+      return () => {
+        cancelled = true;
+        window.clearInterval(id);
+      };
+    }
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   const value = useMemo<AudienceModeState>(() => ({ isAudience }), [isAudience]);
@@ -106,7 +156,11 @@ export function audienceModeActive(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     if (new URLSearchParams(window.location.search).get('m') === '1') return true;
-    return window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE;
+    if (window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE) return true;
+    // Phase 2.4Z — guest access mode also activates audience-safe behaviour
+    // (no pricing writes, no Cmd+1/2/3, no presenter chrome, etc.).
+    if (window.sessionStorage.getItem(ACCESS_KEY) === ACCESS_GUEST) return true;
+    return false;
   } catch {
     return false;
   }

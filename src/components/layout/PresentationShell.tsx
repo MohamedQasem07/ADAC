@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { AccessModeProvider } from '@/context/AccessModeContext';
 import { AudienceModeProvider, useAudienceMode } from '@/context/AudienceModeContext';
 import { PricingProvider } from '@/context/PricingContext';
 import { PresentationOverridesProvider } from '@/context/PresentationOverridesContext';
 import { VisualThemeProvider } from '@/context/VisualThemeContext';
 import { parsePathname } from '@/lib/nav-config';
+import { LoginGate } from '@/components/access/LoginGate';
 import { ControlPanelOverlay } from '@/components/control/ControlPanelOverlay';
 import { AmbientBackground } from './AmbientBackground';
 import { Breadcrumb } from './Breadcrumb';
@@ -35,13 +37,16 @@ import { MobileQuickJumpSheet } from '@/components/mobile/MobileQuickJumpSheet';
 export function PresentationShell({ children }: { children: React.ReactNode }) {
   return (
     <VisualThemeProvider>
-      <PresentationOverridesProvider>
-        <PricingProvider>
-          <AudienceModeProvider>
-            <ShellChrome>{children}</ShellChrome>
-          </AudienceModeProvider>
-        </PricingProvider>
-      </PresentationOverridesProvider>
+      <AccessModeProvider>
+        <PresentationOverridesProvider>
+          <PricingProvider>
+            <AudienceModeProvider>
+              <ShellChrome>{children}</ShellChrome>
+              <LoginGate />
+            </AudienceModeProvider>
+          </PricingProvider>
+        </PresentationOverridesProvider>
+      </AccessModeProvider>
     </VisualThemeProvider>
   );
 }

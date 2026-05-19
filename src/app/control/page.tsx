@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { ControlPanel } from '@/components/control/ControlPanel';
 import { audienceHref, audienceModeActive } from '@/context/AudienceModeContext';
+import { accessModeActive } from '@/context/AccessModeContext';
 
 /**
  * Standalone Presenter Control Mode route.
@@ -30,20 +31,26 @@ import { audienceHref, audienceModeActive } from '@/context/AudienceModeContext'
  * background div, so no React mismatch warning).
  */
 export default function ControlPage() {
-  const [audience, setAudience] = useState<boolean | null>(null);
+  // `null` = pre-hydration sentinel; `true` = block (audience / guest /
+  // unauthenticated); `false` = render the ControlPanel.
+  const [blocked, setBlocked] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setAudience(audienceModeActive());
+    // Phase 2.4Z — /control is admin-only. Block when:
+    //   • mobile audience mode is active (existing 2.4W behaviour), or
+    //   • the access gate has not authenticated as admin yet.
+    const isAdmin = accessModeActive() === 'admin';
+    setBlocked(audienceModeActive() || !isAdmin);
   }, []);
 
   // First render on both server and client — render only the bare
   // background. Prevents any flash of presenter chrome before the
   // audience check resolves on /control?m=1.
-  if (audience === null) {
+  if (blocked === null) {
     return <div className="min-h-screen bg-navy-deep" aria-hidden />;
   }
 
-  if (audience) {
+  if (blocked) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-navy-deep px-6 py-12">
         <div
@@ -107,7 +114,7 @@ export default function ControlPage() {
 
   return (
     <div className="min-h-screen bg-navy-deep">
-      <div className="border-b border-white/10 bg-navy-deep/80 px-4 py-3 backdrop-blur-sm">
+      <div className="flex items-center justify-between border-b border-white/10 bg-navy-deep/80 px-4 py-3 backdrop-blur-sm">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-ice/70 transition-colors hover:text-gold"
@@ -115,6 +122,24 @@ export default function ControlPage() {
           <ArrowLeft size={14} />
           Back to presentation
         </Link>
+        {/* Phase 2.4Z — admin escape hatch. Clears session keys and
+            reloads to the gate; the presenter can switch into guest
+            mode for a quick demo without opening dev tools. */}
+        <button
+          type="button"
+          onClick={() => {
+            try {
+              window.sessionStorage.removeItem('hmc-adac-access-mode');
+              window.sessionStorage.removeItem('hmc-audience-mode');
+            } catch {
+              /* ignore */
+            }
+            window.location.href = '/?admin=1';
+          }}
+          className="inline-flex items-center gap-2 rounded-sm border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.3em] text-ice/70 transition-colors hover:border-white/35 hover:text-white"
+        >
+          Sign out
+        </button>
       </div>
       <div className="mx-auto max-w-6xl">
         <ControlPanel />
