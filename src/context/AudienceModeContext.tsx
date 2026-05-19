@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { usePathname } from 'next/navigation';
+import { useAccessMode } from '@/context/AccessModeContext';
 
 /**
  * Phase 2.4W — Mobile Audience Mode.
@@ -53,6 +54,7 @@ const AudienceModeContext = createContext<AudienceModeState | undefined>(undefin
 
 export function AudienceModeProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname() || '/';
+  const { accessMode } = useAccessMode();
   const [isAudience, setIsAudience] = useState(false);
 
   // Detect audience mode from URL (?m=1), sessionStorage, or the
@@ -61,75 +63,38 @@ export function AudienceModeProvider({ children }: { children: ReactNode }) {
   // static-export Suspense requirement and is sufficient because we
   // re-evaluate on every pathname change.
   //
-  // Polling sessionStorage in a tiny interval lets us pick up the
-  // moment the LoginGate writes 'guest' without a hard dependency on
-  // AccessModeContext. We tear the poll down once the audience flag
-  // is locked in, so steady-state cost is zero.
+  // Depending on `accessMode` (from AccessModeContext, mounted above)
+  // means the LoginGate's "Continue as Guest" click flips this hook
+  // synchronously — no polling needed.
   useEffect(() => {
-    function evaluate(): boolean {
-      let active = false;
+    let active = false;
+    try {
+      active = new URLSearchParams(window.location.search).get('m') === '1';
+    } catch {
+      active = false;
+    }
+    if (!active) {
       try {
-        active = new URLSearchParams(window.location.search).get('m') === '1';
+        active = window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE;
       } catch {
-        active = false;
+        // sessionStorage unavailable — silently leave inactive.
       }
-      if (!active) {
-        try {
-          active = window.sessionStorage.getItem(SESSION_KEY) === SESSION_VALUE;
-        } catch {
-          // sessionStorage unavailable — silently leave inactive.
-        }
-      }
-      // Phase 2.4Z — guest access mode also activates audience-safe rendering.
-      if (!active) {
-        try {
-          active = window.sessionStorage.getItem(ACCESS_KEY) === ACCESS_GUEST;
-        } catch {
-          /* ignore */
-        }
-      }
-      return active;
+    }
+    // Phase 2.4Z — guest access mode also activates audience-safe rendering.
+    if (!active && accessMode === 'guest') {
+      active = true;
     }
 
-    let cancelled = false;
-    function apply(active: boolean) {
-      if (cancelled) return;
-      if (active) {
-        try {
-          window.sessionStorage.setItem(SESSION_KEY, SESSION_VALUE);
-        } catch {
-          // ignore
-        }
+    if (active) {
+      try {
+        window.sessionStorage.setItem(SESSION_KEY, SESSION_VALUE);
+      } catch {
+        // ignore
       }
-      setIsAudience(active);
     }
 
-    apply(evaluate());
-    if (!evaluate()) {
-      // Light poll for the LoginGate "Continue as Guest" click that
-      // sets the access-mode key from a sibling component. Stops the
-      // moment guest is detected (we only need to catch the transition
-      // once per tab; after that the flag is locked in).
-      const id = window.setInterval(() => {
-        if (cancelled) {
-          window.clearInterval(id);
-          return;
-        }
-        if (evaluate()) {
-          apply(true);
-          window.clearInterval(id);
-        }
-      }, 250);
-      return () => {
-        cancelled = true;
-        window.clearInterval(id);
-      };
-    }
-
-    return () => {
-      cancelled = true;
-    };
-  }, [pathname]);
+    setIsAudience(active);
+  }, [pathname, accessMode]);
 
   const value = useMemo<AudienceModeState>(() => ({ isAudience }), [isAudience]);
 
