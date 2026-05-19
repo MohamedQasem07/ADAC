@@ -34,8 +34,8 @@ export const metadata: Metadata = {
 const THEME_INIT_SCRIPT = `
 try {
   var t = localStorage.getItem('hmc-adac-visual-theme-v1');
-  if (t === 'partnership' || t === 'premium-navy') {
-    if (t === 'partnership') document.documentElement.setAttribute('data-theme','partnership');
+  if (t === 'partnership' || t === 'cinematic') {
+    document.documentElement.setAttribute('data-theme', t);
   }
 } catch (e) {}
 `;

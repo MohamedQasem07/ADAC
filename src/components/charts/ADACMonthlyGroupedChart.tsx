@@ -50,7 +50,7 @@ interface YearPalette {
   y2026: string;
 }
 
-const YEAR_COLORS: Record<'premium-navy' | 'partnership', YearPalette> = {
+const YEAR_COLORS: Record<'premium-navy' | 'partnership' | 'cinematic', YearPalette> = {
   'premium-navy': {
     y2023: '#5E8AB8', // refined steel blue
     y2024: '#A67C3F', // muted bronze amber
@@ -62,6 +62,12 @@ const YEAR_COLORS: Record<'premium-navy' | 'partnership', YearPalette> = {
     y2024: '#B8881F', // deeper amber (clearly NOT the bright yellow)
     y2025: '#FFD200', // ADAC yellow
     y2026: '#67D4E8', // cyan (clearly cool)
+  },
+  cinematic: {
+    y2023: '#7C8BD8', // soft cool violet-blue (desaturated)
+    y2024: '#C97FA5', // muted rose (warm, desaturated)
+    y2025: '#5EE9C9', // mint — strongest year, matches theme primary
+    y2026: '#54C7E8', // bright cyan (clearly cool, plus dashed border)
   },
 };
 

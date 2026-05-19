@@ -37,6 +37,17 @@ const PALETTES: Record<VisualTheme, ChartPalette> = {
     textPrimary: '#F7FAFC',
     textSecondary: '#D7E2EF',
   },
+  cinematic: {
+    primary: '#5EE9C9',
+    primarySoft: '#2DD4BF',
+    primaryRgb: '94, 233, 201',
+    secondary: '#A78BFA',
+    tertiary: '#F472B6',
+    cyan: '#54C7E8',
+    danger: '#EF6F6F',
+    textPrimary: '#F2EFE9',
+    textSecondary: '#C5BFCE',
+  },
 };
 
 /**

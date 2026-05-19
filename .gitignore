@@ -52,3 +52,6 @@ Master_Sheet_New.xlsm
 master_sheet_tayb.xlsx
 *.xlsx
 *.xlsm
+
+# Handoff inspection workspace (Phase 1 discovery only)
+.handoff-temp/

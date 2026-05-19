@@ -323,3 +323,140 @@ html[data-theme='partnership'] [data-welcome-split]::after {
     transparent 75%
   );
 }
+
+/* ─── Phase 2.4Y — Cinematic theme ────────────────────────────────
+   Third optional visual theme: obsidian base with mint / violet /
+   rose accents. CSS-only, no new fonts, no new JS, no new components.
+   Opt-in only via the on-screen Visual Theme switcher or the Control
+   Mode Theme tab; Premium Navy remains the default and Partnership is
+   untouched. The Phase 2.4Y design audit lives in PROJECT_HANDOFF.md. */
+[data-theme='cinematic'] {
+  /* — Brand literals (the same in all themes; used by components
+       that always need an HMC blue, HMC red or ADAC yellow regardless
+       of theme — clinical/escalation badges, framework callouts). — */
+  --theme-hmc-blue: #2f80ed;
+  --theme-hmc-red: #c63838;
+  --theme-adac-yellow: #ffd200;
+
+  /* — Accents — mint primary. — */
+  --theme-accent: #5ee9c9;
+  --theme-accent-soft: #2dd4bf;
+  --theme-accent-rgb: 94, 233, 201;
+
+  /* — CTAs — mint fill with near-black text (mint at 64 % luminance
+       reads best paired with deep ink, matching the cinematic mood). — */
+  --theme-cta-bg: #5ee9c9;
+  --theme-cta-bg-hover: #2dd4bf;
+  --theme-cta-text: #07070b;
+  --theme-cta-glow: rgba(94, 233, 201, 0.32);
+  --theme-cta-glow-strong: rgba(94, 233, 201, 0.5);
+
+  /* — Welcome / connector glows — mint (HMC side) + violet (ADAC
+       side); the connector runs mint → violet so the dual-brand
+       handshake still reads even under the cinematic palette. — */
+  --theme-glow-hmc: rgba(94, 233, 201, 0.32);
+  --theme-glow-adac: rgba(167, 139, 250, 0.32);
+  --theme-connector-from: #5ee9c9;
+  --theme-connector-to: #a78bfa;
+
+  /* — Badges — soft mint surface, mint border + text. — */
+  --theme-badge-bg: rgba(94, 233, 201, 0.08);
+  --theme-badge-border: rgba(94, 233, 201, 0.45);
+  --theme-badge-text: #5ee9c9;
+
+  /* — Page background — obsidian with three soft ambient glows
+       (mint top-left, violet top-right, rose bottom-centre) layered
+       over a vertical near-black gradient. The inline SVG noise tile
+       is the cinematic grain; opacity is kept low so the projector
+       stays clean at 5 m. — */
+  --theme-page-bg: #07070b;
+  --theme-page-bg-gradient:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/></svg>"),
+    radial-gradient(48% 60% at 12% 18%, rgba(94, 233, 201, 0.16), transparent 65%),
+    radial-gradient(50% 55% at 88% 14%, rgba(167, 139, 250, 0.16), transparent 65%),
+    radial-gradient(45% 50% at 50% 95%, rgba(244, 114, 182, 0.09), transparent 65%),
+    linear-gradient(180deg, #07070b 0%, #0d0c13 55%, #07070b 100%),
+    #07070b;
+
+  /* — Surfaces / cards — near-black elevated panels with a hairline
+       border; on hover mint takes over the border + glow. — */
+  --theme-surface: rgba(255, 255, 255, 0.025);
+  --theme-surface-elevated: rgba(255, 255, 255, 0.045);
+  --theme-card-bg: rgba(21, 19, 29, 0.55);
+  --theme-card-border: rgba(255, 255, 255, 0.08);
+  --theme-card-hover-border: rgba(94, 233, 201, 0.45);
+  --theme-card-hover-glow: rgba(94, 233, 201, 0.2);
+
+  /* — Text — warm off-white main, muted purple-grey for secondary
+       (kept brighter than the original handoff #8E8997 so projector
+       legibility at 5 m matches the other two themes). — */
+  --theme-text-main: #f2efe9;
+  --theme-text-muted: #c5bfce;
+
+  /* — Sidebar — obsidian glass surface, mint active row. — */
+  --theme-sidebar-bg: rgba(7, 7, 11, 0.95);
+  --theme-sidebar-backdrop: rgba(7, 7, 11, 0.5);
+  --theme-sidebar-active-bg: rgba(94, 233, 201, 0.1);
+  --theme-sidebar-active-border: #5ee9c9;
+  --theme-sidebar-active-text: #5ee9c9;
+
+  /* — Gradients — */
+  --theme-gradient-hero: linear-gradient(
+    135deg,
+    rgba(94, 233, 201, 0.12),
+    rgba(167, 139, 250, 0.08) 55%,
+    transparent
+  );
+  --theme-gradient-card: linear-gradient(
+    135deg,
+    rgba(94, 233, 201, 0.05),
+    rgba(167, 139, 250, 0.04)
+  );
+
+  /* — Charts — mint primary, violet secondary, rose tertiary. — */
+  --theme-chart-primary: #5ee9c9;
+  --theme-chart-primary-soft: #2dd4bf;
+  --theme-chart-primary-rgb: 94, 233, 201;
+  --theme-chart-secondary: #a78bfa;
+  --theme-chart-tertiary: #f472b6;
+  --theme-chart-danger: #ef6f6f;
+  --theme-chart-cyan: #54c7e8;
+  --theme-chart-text: #f2efe9;
+  --theme-chart-text-secondary: #c5bfce;
+}
+
+/* Cinematic surface overrides — mirror the Phase 2.4E.3 partnership
+   block. Hardcoded Tailwind `bg-navy*` and `text-gold*` classes are
+   shifted to obsidian / mint so the cinematic mood reaches every
+   surface, not just the accent layer. Scoped to
+   html[data-theme='cinematic'] so Premium Navy + Partnership are
+   unaffected. */
+html[data-theme='cinematic'] .bg-navy-deep      { background-color: #07070b !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/30  { background-color: rgba(13, 12, 19, 0.30) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/40  { background-color: rgba(13, 12, 19, 0.40) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/50  { background-color: rgba(13, 12, 19, 0.50) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/60  { background-color: rgba(13, 12, 19, 0.60) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/70  { background-color: rgba(7, 7, 11, 0.70) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/75  { background-color: rgba(7, 7, 11, 0.75) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/80  { background-color: rgba(7, 7, 11, 0.80) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/85  { background-color: rgba(7, 7, 11, 0.85) !important; }
+html[data-theme='cinematic'] .bg-navy-deep\/95  { background-color: rgba(7, 7, 11, 0.95) !important; }
+
+html[data-theme='cinematic'] .bg-navy        { background-color: #0d0c13 !important; }
+html[data-theme='cinematic'] .bg-navy\/30    { background-color: rgba(21, 19, 29, 0.30) !important; }
+html[data-theme='cinematic'] .bg-navy\/40    { background-color: rgba(21, 19, 29, 0.40) !important; }
+html[data-theme='cinematic'] .bg-navy\/50    { background-color: rgba(21, 19, 29, 0.50) !important; }
+html[data-theme='cinematic'] .bg-navy\/60    { background-color: rgba(21, 19, 29, 0.55) !important; }
+html[data-theme='cinematic'] .bg-navy\/80    { background-color: rgba(13, 12, 19, 0.75) !important; }
+html[data-theme='cinematic'] .bg-navy\/95    { background-color: rgba(7, 7, 11, 0.92) !important; }
+
+/* CTA text on mint stays the original deep navy — high contrast on
+   mint at 64 % luminance, no override needed. */
+
+/* Force any leftover `text-gold` / `border-gold` / `bg-gold` in
+   audience-facing surfaces to the cinematic mint accent, matching
+   the partnership treatment. */
+html[data-theme='cinematic'] .text-gold       { color: var(--theme-accent) !important; }
+html[data-theme='cinematic'] .text-gold-soft  { color: var(--theme-accent-soft) !important; }
+html[data-theme='cinematic'] .border-gold     { border-color: var(--theme-accent) !important; }
+html[data-theme='cinematic'] .bg-gold         { background-color: var(--theme-accent) !important; }

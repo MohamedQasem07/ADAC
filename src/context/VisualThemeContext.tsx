@@ -10,10 +10,12 @@ import {
   type ReactNode,
 } from 'react';
 
-export type VisualTheme = 'premium-navy' | 'partnership';
+export type VisualTheme = 'premium-navy' | 'partnership' | 'cinematic';
 
 export const THEME_STORAGE_KEY = 'hmc-adac-visual-theme-v1';
 export const DEFAULT_THEME: VisualTheme = 'premium-navy';
+
+const THEME_ORDER: VisualTheme[] = ['premium-navy', 'partnership', 'cinematic'];
 
 interface VisualThemeState {
   theme: VisualTheme;
@@ -24,7 +26,11 @@ interface VisualThemeState {
 const VisualThemeContext = createContext<VisualThemeState | undefined>(undefined);
 
 function isValidTheme(value: unknown): value is VisualTheme {
-  return value === 'premium-navy' || value === 'partnership';
+  return (
+    value === 'premium-navy' ||
+    value === 'partnership' ||
+    value === 'cinematic'
+  );
 }
 
 /**
@@ -95,7 +101,9 @@ export function VisualThemeProvider({ children }: { children: ReactNode }) {
   );
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme === 'premium-navy' ? 'partnership' : 'premium-navy');
+    const idx = THEME_ORDER.indexOf(theme);
+    const next = THEME_ORDER[(idx + 1) % THEME_ORDER.length];
+    setTheme(next);
   }, [setTheme, theme]);
 
   const value = useMemo<VisualThemeState>(

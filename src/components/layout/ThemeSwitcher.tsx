@@ -17,7 +17,14 @@ interface ThemeOption {
 const OPTIONS: ThemeOption[] = [
   { id: 'premium-navy', label: 'Premium Navy',     swatchA: '#0A1929', swatchB: '#C9A961' },
   { id: 'partnership',  label: 'HMC × ADAC Mode',  swatchA: '#0F6FE5', swatchB: '#FFCC00' },
+  { id: 'cinematic',    label: 'Cinematic',        swatchA: '#07070B', swatchB: '#5EE9C9' },
 ];
+
+const THEME_LABELS: Record<VisualTheme, string> = {
+  'premium-navy': 'Premium Navy',
+  partnership: 'HMC × ADAC Mode',
+  cinematic: 'Cinematic',
+};
 
 /**
  * Top-right on-screen Visual Theme switcher (Phase 2.4E.2).
@@ -90,7 +97,7 @@ export function ThemeSwitcher() {
         ref={buttonRef}
         type="button"
         aria-label="Visual Theme"
-        title={`Visual Theme — ${theme === 'partnership' ? 'HMC × ADAC Mode' : 'Premium Navy'}`}
+        title={`Visual Theme — ${THEME_LABELS[theme]}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}

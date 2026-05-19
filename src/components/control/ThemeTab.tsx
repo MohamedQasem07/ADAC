@@ -31,6 +31,15 @@ const OPTIONS: ThemeOption[] = [
     swatchB: '#FFCC00',
     swatchC: '#54C7E8',
   },
+  {
+    id: 'cinematic',
+    label: 'Cinematic',
+    description:
+      'Optional. Obsidian background with mint, violet and rose accents. Soft ambient glow + subtle grain, refined card surfaces. CSS-only.',
+    swatchA: '#07070B',
+    swatchB: '#5EE9C9',
+    swatchC: '#A78BFA',
+  },
 ];
 
 /**
@@ -67,7 +76,7 @@ export function ThemeTab() {
         </div>
       </section>
 
-      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {OPTIONS.map((opt) => {
           const isCurrent = opt.id === theme;
           return (
