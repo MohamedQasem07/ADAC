@@ -46,7 +46,7 @@ export function MobileBottomNav({ onOpenQuickJump }: MobileBottomNavProps) {
           type="button"
           onClick={onOpenQuickJump}
           aria-label="Jump to a section"
-          className="mx-1 flex h-12 w-12 items-center justify-center self-center rounded-full border transition-colors"
+          className="mx-1 flex h-12 w-12 items-center justify-center self-center rounded-full border transition-all duration-200 active:scale-95"
           style={{
             borderColor: 'color-mix(in srgb, var(--theme-accent) 55%, transparent)',
             background: 'color-mix(in srgb, var(--theme-accent) 15%, transparent)',
@@ -99,7 +99,7 @@ function NavButton({
     <Link
       href={href}
       aria-label={`${label}: ${title}`}
-      className={`flex min-h-[44px] items-center gap-2 rounded-sm px-3 py-2 text-ice/85 transition-colors hover:text-white ${
+      className={`flex min-h-[44px] items-center gap-2 rounded-sm px-3 py-2 text-ice/85 transition-all duration-200 hover:text-white active:scale-[0.97] ${
         isPrev ? 'justify-start' : 'justify-end'
       }`}
     >

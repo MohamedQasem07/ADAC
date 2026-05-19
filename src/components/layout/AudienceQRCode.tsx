@@ -1,6 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Smartphone } from 'lucide-react';
+import { ease } from '@/lib/motion';
+import { useScrollReveal } from '@/lib/use-scroll-reveal';
 import { useAudienceMode } from '@/context/AudienceModeContext';
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -21,14 +25,19 @@ const QR_SRC = `${BASE_PATH}/qr/mobile.svg`;
  */
 export function AudienceQRCode() {
   const { isAudience } = useAudienceMode();
+  const { ref, inView } = useScrollReveal({ threshold: 0.15 });
   if (isAudience) return null;
 
   return (
     <section
+      ref={ref}
       aria-label="Scan to follow on mobile"
       className="mx-auto mt-12 max-w-4xl px-8"
     >
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+        transition={{ duration: 0.7, ease: ease.premium }}
         className="relative flex flex-col items-center gap-5 overflow-hidden rounded-sm border px-6 py-7 backdrop-blur-sm sm:flex-row sm:items-center sm:gap-6 sm:px-7"
         style={{
           borderColor:
@@ -77,9 +86,10 @@ export function AudienceQRCode() {
         {/* Caption */}
         <div className="min-w-0 flex-1 text-center sm:text-left">
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.4em]"
+            className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.4em]"
             style={{ color: 'var(--theme-accent)' }}
           >
+            <Smartphone size={11} />
             Follow along on your phone
           </p>
           <p className="mt-1.5 font-display text-xl font-semibold leading-snug text-white sm:text-2xl">
@@ -94,7 +104,7 @@ export function AudienceQRCode() {
             iPhone Safari · Android Chrome
           </p>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
