@@ -1,7 +1,7 @@
 ---
 title: "Geographic Coverage"
 eyebrow: "§15.5"
-summary: "Ten clinical locations across the Red Sea corridor — one partner, one standard."
+summary: "Eleven clinical locations across the Red Sea corridor — one partner, one standard."
 layout: "structured"
 ---
 
@@ -11,9 +11,9 @@ German travelers to the Red Sea concentrate along a corridor that runs from Hurg
 
 ## Key points
 
-- **Ten locations across the corridor.** Hurghada cluster, Sahl Hasheesh cluster, Safaga and Soma Bay, and the Marsa Alam extension are covered under one operational framework.
+- **Eleven locations across the corridor.** Hurghada cluster, Sahl Hasheesh cluster, Safaga and Soma Bay, and the Marsa Alam extension are covered under one operational framework.
 - **24/7 across the network.** Every location operates around the clock, with consistent on-call structure regardless of zone.
-- **One reporting standard.** SLA, medical report format, and invoicing are identical across all ten sites — ADAC does not adapt its workflow per location.
+- **One reporting standard.** SLA, medical report format, and invoicing are identical across all eleven sites — ADAC does not adapt its workflow per location.
 - **Hotel-zone access in place.** Operational agreements with the major hotel groups in the corridor enable hotel-room visits without renegotiation per case.
 - **Mobile capacity for resort clusters.** A mobile clinic unit can be deployed where a localized cluster of cases appears, without standing up a new site.
 

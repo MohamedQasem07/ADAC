@@ -16,6 +16,7 @@
     { "id": "7",  "number": 7,  "name": "Tourist Promenade Clinic 2",   "zone": "Hurghada",      "color": "navy", "x": 50, "y": 30, "services": ["GP", "Pediatric"],               "hours": "24/7" },
     { "id": "8",  "number": 8,  "name": "Sahl Hasheesh Medical Center", "zone": "Sahl Hasheesh", "color": "gold", "x": 58, "y": 38, "services": ["GP", "ER", "Labs", "X-Ray"],     "hours": "24/7" },
     { "id": "9",  "number": 9,  "name": "Kay Soul Romance Clinic",      "zone": "Sahl Hasheesh", "color": "gold", "x": 62, "y": 42, "services": ["GP", "Hotel visits"],            "hours": "24/7" },
-    { "id": "10", "number": 10, "name": "Sahl Hasheesh Medical Center 2","zone": "Sahl Hasheesh","color": "gold", "x": 66, "y": 45, "services": ["GP", "ER", "Pediatric"],         "hours": "24/7" }
+    { "id": "10", "number": 10, "name": "Sahl Hasheesh Medical Center 2","zone": "Sahl Hasheesh","color": "gold", "x": 66, "y": 45, "services": ["GP", "ER", "Pediatric"],         "hours": "24/7" },
+    { "id": "11", "number": 11, "name": "Marsa Alam Clinic",             "zone": "Marsa Alam",    "color": "ink",  "x": 75, "y": 53, "services": ["GP", "Hotel visits"],            "hours": "24/7" }
   ]
 }

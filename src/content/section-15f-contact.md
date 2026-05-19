@@ -13,7 +13,7 @@ Tourist-medical cases often fragment across multiple clinics, multiple shifts, a
 
 - **One Operations Department.** ADAC interacts with one operational counterpart for the partnership, headed by a named senior coordinator.
 - **One coordinator per case.** The same person handles each case from initial notification through discharge to invoice closure — no shift handover from ADAC's perspective.
-- **One reporting cadence.** Daily case status, monthly performance review, and quarterly portfolio summary follow one schedule across all ten locations.
+- **One reporting cadence.** Daily case status, monthly performance review, and quarterly portfolio summary follow one schedule across all eleven locations.
 - **One escalation channel.** A single hotline and a single written reporting channel handle clinical escalations and operational queries — no routing decisions for ADAC.
 - **One performance review counterpart.** Monthly reviews happen with the same operational lead, so improvement actions accumulate rather than reset.
 

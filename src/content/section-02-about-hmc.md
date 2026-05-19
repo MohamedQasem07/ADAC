@@ -1,10 +1,10 @@
 ---
 title: "Five years serving ADAC AG Holders in the Red Sea."
 eyebrow: "About HMC"
-subtitle: "10 clinical locations · 24/7 operations · EN / DE / AR / RU"
+subtitle: "11 clinical locations · 24/7 operations · EN / DE / AR / RU"
 layout: "hero-stat"
 stats:
-  - { value: 10, label: "Clinical Locations" }
+  - { value: 11, label: "Clinical Locations" }
   - { value: "24/7", label: "Operations" }
   - { value: "5+", label: "Years Serving ADAC" }
   - { value: "4", label: "Languages", sublabel: "EN · DE · AR · RU" }

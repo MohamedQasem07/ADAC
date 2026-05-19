@@ -136,7 +136,7 @@ export default function SubtopicPage({
         <NetworkMap
           data={content.data as NetworkMapData}
           title="HMC Clinical Network"
-          populationLabel="10 locations across the Red Sea region"
+          populationLabel="11 locations across the Red Sea region"
           annotation="24/7 operations · Hotel coverage by mode A/B/C"
         />
       );

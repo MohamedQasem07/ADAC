@@ -1,7 +1,7 @@
 ---
 title: "Coverage across the Red Sea."
 eyebrow: "Geographic Reach"
-subtitle: "Hurghada · Sahl Hasheesh · Safaga · Marsa Alam — 10 locations, 24/7."
+subtitle: "Hurghada · Sahl Hasheesh · Safaga · Marsa Alam — 11 locations, 24/7."
 layout: "editorial"
 ---
 

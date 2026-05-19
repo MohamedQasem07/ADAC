@@ -211,7 +211,8 @@
         { "id": "14.1", "title": "May 2026 — Agreement", "content": "section-14a-may.md", "renderer": "markdown" },
         { "id": "14.2", "title": "June 2026 — Preparation", "content": "section-14b-june.md", "renderer": "markdown" },
         { "id": "14.3", "title": "Jul-Sep 2026 — Pilot", "content": "section-14c-pilot.md", "renderer": "markdown" },
-        { "id": "14.4", "title": "October 2026 — Review", "content": "section-14d-review.md", "renderer": "markdown" }
+        { "id": "14.4", "title": "October 2026 — Review", "content": "section-14d-review.md", "renderer": "markdown" },
+        { "id": "14.5", "title": "Next Meeting · ARC Europe", "content": "section-14e-arc.md", "renderer": "markdown" }
       ]
     },
     {
