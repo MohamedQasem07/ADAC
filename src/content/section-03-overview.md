@@ -1,5 +1,5 @@
 ---
-title: "Five years of joint work, on one page."
+title: "A decade of joint work · latest 2023–2026 dataset on one page."
 eyebrow: "Partnership Track Record"
 subtitle: "ADAC × HMC — verified against the official 2025 Partnership Overview."
 layout: "dashboard"

@@ -20,9 +20,9 @@
     { "icon": "TestTube",     "title": "Point-of-care labs",       "body": "CBC, CRP, electrolytes, troponin — sample at the patient, run in our nearest network lab.",
       "photos": ["/equipment-gallery/point-of-care-labs/1.jpg", "/equipment-gallery/point-of-care-labs/2.jpg", "/equipment-gallery/point-of-care-labs/3.jpg"] },
     { "icon": "Truck",        "title": "Mobile clinic unit",       "body": "Fully equipped vehicle deployable to hotel gates for cases requiring extended observation.",
-      "photos": ["/equipment-gallery/mobile-clinic-unit/1.jpeg", "/equipment-gallery/mobile-clinic-unit/2.jpeg", "/equipment-gallery/mobile-clinic-unit/3.jpeg", "/equipment-gallery/mobile-clinic-unit/4.jpeg"] },
+      "photos": ["/equipment-gallery/mobile-clinic-unit/1.png"] },
     { "icon": "Ambulance",    "title": "Ambulance + semi-ambulance","body": "Stabilization and transport network for escalation to ER or onward hospital care.",
-      "photos": ["/equipment-gallery/ambulance-semi-ambulance/1.jpeg", "/equipment-gallery/ambulance-semi-ambulance/2.jpeg"] }
+      "photos": ["/equipment-gallery/ambulance-semi-ambulance/1.jpeg", "/equipment-gallery/ambulance-semi-ambulance/2.jpeg", "/equipment-gallery/ambulance-semi-ambulance/3.jpeg", "/equipment-gallery/ambulance-semi-ambulance/4.jpeg", "/equipment-gallery/ambulance-semi-ambulance/5.jpeg", "/equipment-gallery/ambulance-semi-ambulance/6.jpeg"] }
   ],
   "gallery": {
     "caption": "Selected operational photos · ambulance coverage, mobile units, and portable medical equipment.",

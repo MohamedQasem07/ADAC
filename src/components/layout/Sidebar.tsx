@@ -9,6 +9,7 @@ import {
   parsePathname,
   routeToHref,
 } from '@/lib/nav-config';
+import { useAccessMode } from '@/context/AccessModeContext';
 import { cn } from '@/lib/utils';
 
 interface SidebarProps {
@@ -85,6 +86,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname() || '/';
   const current = parsePathname(pathname);
   const sections = getAllSectionsClient();
+  // Phase 2.4AC — gold "anchor" focus markers are a presenter aid.
+  // Guests get the sidebar (navigation) but not the markers.
+  const { accessMode } = useAccessMode();
+  const showFocusMarkers = accessMode === 'admin';
 
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => ({
     [current.sectionId]: true,
@@ -205,7 +210,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                         {s.title}
                       </span>
                       {/* Phase 2.4V — Gold Focus Marker (presenter-only). */}
-                      {isFocus && <FocusMarker />}
+                      {isFocus && showFocusMarkers && <FocusMarker />}
                       {/* Executive accent for the Data Room */}
                       {isDataRoom && (
                         <span
@@ -283,7 +288,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                                 {sub.id}
                               </span>
                               <span className="min-w-0 flex-1 truncate">{sub.title}</span>
-                              {subFocus && <FocusMarker />}
+                              {subFocus && showFocusMarkers && <FocusMarker />}
                             </Link>
                           </li>
                         );

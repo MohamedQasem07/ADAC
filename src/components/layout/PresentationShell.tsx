@@ -80,15 +80,22 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
           non-admin viewer (mobile OR desktop guest). Renders nothing. */}
       {isViewerSafe && <AudienceScenarioLock />}
 
-      {/* Presenter-only chrome — hidden from both mobile audience and
-          desktop guest. */}
-      {!isViewerSafe && (
+      {/* Phase 2.4AC — Sidebar + MenuButton are part of the normal
+          DESKTOP chrome and must remain visible for desktop guests.
+          They're hidden only when the strict mobile audience flag is
+          on (the mobile layout uses MobileBottomNav instead). The
+          Sidebar itself hides its gold "anchor" focus markers for
+          non-admin viewers via useAccessMode(). */}
+      {!isAudience && (
         <>
           <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
           <MenuButton onClick={() => setSidebarOpen(true)} />
-          <ThemeSwitcher />
         </>
       )}
+
+      {/* ThemeSwitcher remains a presenter-only visual control —
+          hidden from both mobile audience and desktop guest. */}
+      {!isViewerSafe && <ThemeSwitcher />}
 
       <Breadcrumb />
 
