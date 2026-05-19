@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useMemo } from 'react';
 import { usePricing } from '@/context/PricingContext';
+import { useAudienceMode } from '@/context/AudienceModeContext';
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { routeToHref } from '@/lib/nav-config';
@@ -29,6 +30,7 @@ interface CategoryGridProps {
  */
 export function CategoryGrid({ sectionId, categories, packages }: CategoryGridProps) {
   const { scenario } = usePricing();
+  const { isAudience } = useAudienceMode();
   const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
@@ -47,7 +49,9 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
       {categories.map((cat, i) => {
         const catPkgs = effective.filter((p) => p.category === cat.id);
         const subId = `${sectionId}.${i + 1}`; // 12.1, 12.2, ...
-        const range = categoryPriceRange(catPkgs, scenario);
+        const range = isAudience
+          ? 'To be agreed'
+          : categoryPriceRange(catPkgs, scenario);
 
         return (
           <motion.li

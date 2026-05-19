@@ -7,6 +7,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { fallbackPackagesData } from '@/data/fallback';
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { usePricing } from '@/context/PricingContext';
+import { useAudienceMode } from '@/context/AudienceModeContext';
 import { ease, staggerTight } from '@/lib/motion';
 import { categoryPriceRange } from '@/lib/pricing';
 import { useScrollReveal } from '@/lib/use-scroll-reveal';
@@ -24,6 +25,7 @@ import type { Package, PackageCategory } from '@/types/content';
 export function DataRoomPackages() {
   const { applyPackages } = useOverrides();
   const { scenario } = usePricing();
+  const { isAudience } = useAudienceMode();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
   const allPackages = fallbackPackagesData.packages as Package[];
@@ -31,7 +33,9 @@ export function DataRoomPackages() {
   const effective = useMemo(() => applyPackages(allPackages), [applyPackages, allPackages]);
 
   const totalCount = effective.length;
-  const isNegotiation = scenario === 'A';
+  // Mobile audience mode renders the catalogue with "To be agreed" for
+  // every range, matching scenario A semantics without touching state.
+  const isNegotiation = isAudience || scenario === 'A';
 
   return (
     <div ref={ref}>

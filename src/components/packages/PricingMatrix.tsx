@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { usePricing } from '@/context/PricingContext';
+import { useAudienceMode } from '@/context/AudienceModeContext';
 import { useOverrides } from '@/context/PresentationOverridesContext';
 import { ease } from '@/lib/motion';
 import { categoryPriceRange } from '@/lib/pricing';
@@ -22,6 +23,7 @@ interface PricingMatrixProps {
  */
 export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
   const { scenario } = usePricing();
+  const { isAudience } = useAudienceMode();
   const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
@@ -71,10 +73,16 @@ export function PricingMatrix({ categories, packages }: PricingMatrixProps) {
             {categories.map((cat) => {
               const catPkgs = effective.filter((p) => p.category === cat.id);
               if (catPkgs.length === 0) return null;
-              const range = categoryPriceRange(catPkgs, scenario);
+              // Phase 2.4X — mobile audience mode forces "To be agreed"
+              // for the visible range and common-price cells. Scenario
+              // state and packages.json are untouched.
+              const range = isAudience
+                ? 'To be agreed'
+                : categoryPriceRange(catPkgs, scenario);
               const common = pickMostCommon(catPkgs);
-              const commonPrice =
-                scenario === 'A'
+              const commonPrice = isAudience
+                ? 'To be agreed'
+                : scenario === 'A'
                   ? 'To be agreed'
                   : `€${scenario === 'B' ? common.prices.B : common.prices.C}`;
 

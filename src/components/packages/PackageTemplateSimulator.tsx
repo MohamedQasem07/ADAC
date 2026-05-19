@@ -168,8 +168,10 @@ function printElement(el: HTMLElement) {
  */
 function InvoiceTotalValue({ pkg }: { pkg: Package }) {
   const { scenario } = usePricing();
-  const text =
-    scenario === 'A'
+  const { isAudience } = useAudienceMode();
+  const text = isAudience
+    ? 'To be agreed'
+    : scenario === 'A'
       ? 'To be agreed'
       : `€${scenario === 'B' ? pkg.prices.B : pkg.prices.C}`;
   return (

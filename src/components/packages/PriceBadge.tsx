@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePricing } from '@/context/PricingContext';
+import { useAudienceMode } from '@/context/AudienceModeContext';
 import { ease } from '@/lib/motion';
 import type { Package } from '@/types/content';
 
@@ -15,12 +16,18 @@ interface PriceBadgeProps {
  * Animated price chip. Smoothly crossfades when the active pricing
  * scenario changes (Cmd/Ctrl+1/2/3). Scenario A renders the literal
  * "To be agreed" text; B and C render "€NNN".
+ *
+ * In mobile audience mode, the badge always reads "To be agreed"
+ * regardless of scenario — a display-only override that leaves
+ * packages.json and scenario state untouched.
  */
 export function PriceBadge({ pkg, size = 'md' }: PriceBadgeProps) {
   const { scenario } = usePricing();
+  const { isAudience } = useAudienceMode();
 
-  const text =
-    scenario === 'A'
+  const text = isAudience
+    ? 'To be agreed'
+    : scenario === 'A'
       ? 'To be agreed'
       : `€${scenario === 'B' ? pkg.prices.B : pkg.prices.C}`;
 
