@@ -168,7 +168,7 @@ export function ArcEuropeSlide() {
         <div className="flex flex-1 flex-col items-center text-center">
           <div className="flex h-16 w-32 items-center justify-center md:h-20 md:w-40">
             <img
-              src={asset('/brand/arc-europe.png')}
+              src={asset('/brand/arc-europe-white.png')}
               alt="ARC Europe"
               className="max-h-full max-w-full object-contain"
             />
