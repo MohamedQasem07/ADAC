@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronRight, Sparkles, Star } from 'lucide-react';
+import { ChevronRight, Sparkles, Star, Sparkle } from 'lucide-react';
 import {
   getAllSectionsClient,
   parsePathname,
@@ -299,6 +299,53 @@ export function Sidebar({ open, onClose }: SidebarProps) {
               );
             })}
           </ul>
+
+          {/* Phase 2.4AD — Admin-only Premium Deck Preview entry.
+              Sits at the very bottom of the navigation, after the
+              closing/shortcuts area, so the section list above is not
+              disturbed. Hidden for guests. */}
+          {accessMode === 'admin' && (
+            <div className="mt-6 border-t border-white/5 px-1 pt-4">
+              <Link
+                href="/premium-preview"
+                onClick={onClose}
+                className={cn(
+                  'group flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm transition-colors',
+                  pathname === '/premium-preview' ||
+                    pathname.startsWith('/premium-preview/')
+                    ? 'text-white'
+                    : 'text-ice/85 hover:bg-white/5 hover:text-white'
+                )}
+                style={{
+                  backgroundColor:
+                    pathname === '/premium-preview'
+                      ? 'var(--theme-sidebar-active-bg)'
+                      : undefined,
+                }}
+              >
+                <span
+                  className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm border"
+                  style={{
+                    borderColor:
+                      'color-mix(in srgb, var(--theme-accent) 40%, transparent)',
+                    background:
+                      'color-mix(in srgb, var(--theme-accent) 10%, transparent)',
+                    color: 'var(--theme-accent)',
+                  }}
+                >
+                  <Sparkle size={12} />
+                </span>
+                <span className="flex flex-col">
+                  <span className="font-display text-[13px] leading-tight">
+                    Premium Deck Preview
+                  </span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-ice/55">
+                    Admin · alt visual
+                  </span>
+                </span>
+              </Link>
+            </div>
+          )}
         </nav>
 
         <footer className="border-t border-white/5 px-6 py-4 text-[11px] uppercase tracking-[0.3em] text-ice/75">
