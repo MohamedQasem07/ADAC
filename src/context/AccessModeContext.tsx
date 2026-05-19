@@ -99,6 +99,10 @@ export function AccessModeProvider({ children }: { children: ReactNode }) {
       if (forceLogin) {
         try {
           window.sessionStorage.removeItem(STORAGE_KEY);
+          // Phase 2.4AB — also clear the mobile audience flag so a
+          // previously-mobile tab reaching `?admin=1` doesn't bring
+          // mobile UI into the next admin login.
+          window.sessionStorage.removeItem(AUDIENCE_KEY);
         } catch {
           /* ignore */
         }

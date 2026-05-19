@@ -168,8 +168,8 @@ function printElement(el: HTMLElement) {
  */
 function InvoiceTotalValue({ pkg }: { pkg: Package }) {
   const { scenario } = usePricing();
-  const { isAudience } = useAudienceMode();
-  const text = isAudience
+  const { isViewerSafe } = useAudienceMode();
+  const text = isViewerSafe
     ? 'To be agreed'
     : scenario === 'A'
       ? 'To be agreed'
@@ -2173,8 +2173,10 @@ function PanelField({
 export function PackageTemplateSimulator() {
   const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.05 });
-  // Phase 2.4W — audience mode renders the simulator view-only.
-  const { isAudience } = useAudienceMode();
+  // Phase 2.4W / 2.4AB — non-admin viewers (mobile audience OR desktop
+  // guest) get the simulator view-only with no print/invoice buttons.
+  const { isViewerSafe } = useAudienceMode();
+  const isAudience = isViewerSafe;
 
   const allPackages = useMemo(
     () => applyPackages(fallbackPackagesData.packages as Package[]),

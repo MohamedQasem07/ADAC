@@ -30,7 +30,7 @@ interface CategoryGridProps {
  */
 export function CategoryGrid({ sectionId, categories, packages }: CategoryGridProps) {
   const { scenario } = usePricing();
-  const { isAudience } = useAudienceMode();
+  const { isViewerSafe } = useAudienceMode();
   const { applyPackages } = useOverrides();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
@@ -49,7 +49,7 @@ export function CategoryGrid({ sectionId, categories, packages }: CategoryGridPr
       {categories.map((cat, i) => {
         const catPkgs = effective.filter((p) => p.category === cat.id);
         const subId = `${sectionId}.${i + 1}`; // 12.1, 12.2, ...
-        const range = isAudience
+        const range = isViewerSafe
           ? 'To be agreed'
           : categoryPriceRange(catPkgs, scenario);
 

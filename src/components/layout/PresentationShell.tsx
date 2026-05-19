@@ -9,6 +9,7 @@ import { PresentationOverridesProvider } from '@/context/PresentationOverridesCo
 import { VisualThemeProvider } from '@/context/VisualThemeContext';
 import { parsePathname } from '@/lib/nav-config';
 import { LoginGate } from '@/components/access/LoginGate';
+import { LogoutButton } from '@/components/access/LogoutButton';
 import { ControlPanelOverlay } from '@/components/control/ControlPanelOverlay';
 import { AmbientBackground } from './AmbientBackground';
 import { Breadcrumb } from './Breadcrumb';
@@ -55,7 +56,12 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || '/';
   const route = parsePathname(pathname);
   const isCover = route.sectionId === '1' && !route.subId;
-  const { isAudience } = useAudienceMode();
+  // Phase 2.4AB — two flags now: `isAudience` is strict mobile (route
+  // /m or ?m=1), `isViewerSafe` is mobile-OR-guest. Presenter chrome
+  // gates on the wider `isViewerSafe`; mobile-only UI (bottom nav,
+  // mobile padding) gates on the strict `isAudience` so desktop guests
+  // get the normal desktop layout minus prices/admin tools.
+  const { isAudience, isViewerSafe } = useAudienceMode();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [quickJumpOpen, setQuickJumpOpen] = useState(false);
@@ -69,12 +75,14 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
     <>
       <AmbientBackground />
 
-      {/* Audience-mode side effect: force scenario back to B once and
-          guard the persist+hotkey paths in PricingContext. Renders
-          nothing. */}
-      {isAudience && <AudienceScenarioLock />}
+      {/* Scenario lock side effect: force scenario back to B once and
+          guard the persist+hotkey paths in PricingContext for any
+          non-admin viewer (mobile OR desktop guest). Renders nothing. */}
+      {isViewerSafe && <AudienceScenarioLock />}
 
-      {!isAudience && (
+      {/* Presenter-only chrome — hidden from both mobile audience and
+          desktop guest. */}
+      {!isViewerSafe && (
         <>
           <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
           <MenuButton onClick={() => setSidebarOpen(true)} />
@@ -84,7 +92,9 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
 
       <Breadcrumb />
 
-      {/* Main slot — section pages render their own SectionFrame later. */}
+      {/* Main slot — section pages render their own SectionFrame later.
+          Mobile-only bottom padding so the MobileBottomNav doesn't cover
+          the last line of content; desktop guests don't need it. */}
       <div
         className={`relative z-10 min-h-screen ${
           isAudience ? 'pb-[calc(env(safe-area-inset-bottom)+5.5rem)]' : ''
@@ -93,7 +103,8 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
         <PageTransition>{children}</PageTransition>
       </div>
 
-      {!isAudience && (
+      {/* Presenter-only overlays — same gating as the top-left chrome. */}
+      {!isViewerSafe && (
         <>
           <KeyboardNav onToggleSidebar={() => setSidebarOpen((v) => !v)} />
           <ScenarioIndicator />
@@ -108,6 +119,8 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
           it mounted in both modes. */}
       <HotkeyToast />
 
+      {/* Strict mobile UI — only when on /m or ?m=1. Desktop guests
+          must NOT get the mobile bottom nav. */}
       {isAudience && (
         <>
           <MobileBottomNav onOpenQuickJump={() => setQuickJumpOpen(true)} />
@@ -117,6 +130,10 @@ function ShellChrome({ children }: { children: React.ReactNode }) {
           />
         </>
       )}
+
+      {/* Logout button — visible whenever a viewer is authenticated.
+          Hidden on the LoginGate (LoginGate covers everything anyway). */}
+      <LogoutButton />
     </>
   );
 }

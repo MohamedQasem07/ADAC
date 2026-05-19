@@ -23,9 +23,9 @@ interface PriceBadgeProps {
  */
 export function PriceBadge({ pkg, size = 'md' }: PriceBadgeProps) {
   const { scenario } = usePricing();
-  const { isAudience } = useAudienceMode();
+  const { isViewerSafe } = useAudienceMode();
 
-  const text = isAudience
+  const text = isViewerSafe
     ? 'To be agreed'
     : scenario === 'A'
       ? 'To be agreed'

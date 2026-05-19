@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { PricingScenario } from '@/types/content';
-import { audienceModeActive } from '@/context/AudienceModeContext';
+import { viewerSafeActive } from '@/context/AudienceModeContext';
 
 interface PricingState {
   scenario: PricingScenario;
@@ -56,10 +56,11 @@ export function PricingProvider({ children }: { children: ReactNode }) {
   const setScenario = useCallback((next: PricingScenario) => {
     setScenarioState((prev) => {
       if (prev === next) return prev;
-      // Phase 2.4W — audience mode never persists scenario writes to
-      // localStorage. This prevents an audience tab from accidentally
+      // Phase 2.4W / 2.4AB — any non-admin viewer (mobile audience OR
+      // desktop guest) never persists scenario writes to localStorage.
+      // This prevents an audience or guest tab from accidentally
       // overwriting the presenter's scenario across tabs/devices.
-      if (!audienceModeActive()) {
+      if (!viewerSafeActive()) {
         try {
           window.localStorage.setItem(STORAGE_KEY, next);
         } catch {
@@ -82,7 +83,9 @@ export function PricingProvider({ children }: { children: ReactNode }) {
   // ensures a stray Cmd+1/Cmd+3 can never cycle scenarios.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (audienceModeActive()) return;
+      // Block scenario keyboard shortcut for any non-admin viewer
+      // (mobile audience OR desktop guest).
+      if (viewerSafeActive()) return;
       if (!(e.metaKey || e.ctrlKey)) return;
       if (e.altKey || e.shiftKey) return;
 

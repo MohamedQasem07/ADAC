@@ -24,9 +24,12 @@ const QR_SRC = `${BASE_PATH}/qr/mobile.svg`;
  * Visually paired with a short caption so attendees know what to do.
  */
 export function AudienceQRCode() {
-  const { isAudience } = useAudienceMode();
+  // Hide the QR for any non-admin viewer — mobile attendees are already
+  // on the mobile view, and desktop guests do not need to be invited to
+  // re-enter via QR.
+  const { isViewerSafe } = useAudienceMode();
   const { ref, inView } = useScrollReveal({ threshold: 0.15 });
-  if (isAudience) return null;
+  if (isViewerSafe) return null;
 
   return (
     <section

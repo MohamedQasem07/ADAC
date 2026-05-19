@@ -25,7 +25,7 @@ import type { Package, PackageCategory } from '@/types/content';
 export function DataRoomPackages() {
   const { applyPackages } = useOverrides();
   const { scenario } = usePricing();
-  const { isAudience } = useAudienceMode();
+  const { isViewerSafe } = useAudienceMode();
   const { ref, inView } = useScrollReveal({ threshold: 0.1 });
 
   const allPackages = fallbackPackagesData.packages as Package[];
@@ -33,9 +33,10 @@ export function DataRoomPackages() {
   const effective = useMemo(() => applyPackages(allPackages), [applyPackages, allPackages]);
 
   const totalCount = effective.length;
-  // Mobile audience mode renders the catalogue with "To be agreed" for
-  // every range, matching scenario A semantics without touching state.
-  const isNegotiation = isAudience || scenario === 'A';
+  // Any non-admin viewer (mobile audience OR desktop guest) and Scenario A
+  // both render "To be agreed" for every range, matching scenario A
+  // semantics without touching state.
+  const isNegotiation = isViewerSafe || scenario === 'A';
 
   return (
     <div ref={ref}>
