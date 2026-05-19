@@ -15,6 +15,8 @@ import { PackageTemplateSimulator } from '@/components/packages/PackageTemplateS
 import { CardsLayout } from '@/components/sections/layouts/CardsLayout';
 import { DigitalWorkflowShowcase } from '@/components/sections/DigitalWorkflowShowcase';
 import { MarkdownSection } from '@/components/sections/MarkdownSection';
+import { ArcEuropeSlide } from '@/components/sections/strategy/ArcEuropeSlide';
+import { ReputationSlide } from '@/components/sections/reputation/ReputationSlide';
 import { PlaceholderSection } from '@/components/sections/PlaceholderSection';
 import { SampleReportCard } from '@/components/sections/SampleReportCard';
 import type { Package, PackageCategory } from '@/types/content';
@@ -100,6 +102,32 @@ export default function SubtopicPage({
   // §13.6 — Package Template Simulator (Phase 2.4Q).
   if (subtopic.renderer === 'package-simulator') {
     return <PackageTemplateSimulator />;
+  }
+
+  // §14.5 — Next Meeting · ARC Europe (Phase 2.4AA).
+  if (subtopic.renderer === 'arc-europe') {
+    return <ArcEuropeSlide />;
+  }
+
+  // §2.5 — Reputation with live Google reviews evidence (Phase 2.4AA).
+  if (subtopic.renderer === 'reputation') {
+    const content = loadReferencedContent(subtopic.content);
+    if (content?.kind === 'markdown') {
+      return (
+        <ReputationSlide
+          content={content.data}
+          sectionId={section.id}
+          subId={subtopic.id}
+        />
+      );
+    }
+    return (
+      <PlaceholderSection
+        section={section}
+        subtopic={subtopic}
+        reason="missing-content"
+      />
+    );
   }
 
   // §10.5 — Digital Package Workflow · animated screenshot story (Phase 2.4M / §10.5).

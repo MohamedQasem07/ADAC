@@ -13,5 +13,19 @@
     { "icon": "TestTube",     "title": "Point-of-care labs",       "body": "CBC, CRP, electrolytes, troponin — sample at the patient, run in our nearest network lab." },
     { "icon": "Truck",        "title": "Mobile clinic unit",       "body": "Fully equipped vehicle deployable to hotel gates for cases requiring extended observation." },
     { "icon": "Ambulance",    "title": "Ambulance + semi-ambulance","body": "Stabilization and transport network for escalation to ER or onward hospital care." }
-  ]
+  ],
+  "gallery": {
+    "caption": "Selected operational photos · ambulance coverage, mobile units, and portable medical equipment.",
+    "featured": [
+      { "src": "/equipment/ambulance-1.jpg",         "label": "Ambulance coverage",        "alt": "HMC ambulance — exterior" },
+      { "src": "/equipment/portable-doctor-kit.jpg", "label": "Portable doctor kit",       "alt": "Portable doctor kit used on hotel-room visits" },
+      { "src": "/equipment/patient-report-device-1.jpg", "label": "Patient-report device",  "alt": "Point-of-care patient-report device" }
+    ],
+    "thumbnails": [
+      { "src": "/equipment/ambulance-3.jpg",         "label": "Mobile clinic unit",        "alt": "Mobile clinic unit deployment" },
+      { "src": "/equipment/ambulance-5.jpg",         "label": "On-site response capability","alt": "On-site response capability" },
+      { "src": "/equipment/ambulance-7.jpg",         "label": "Ambulance fleet",           "alt": "Ambulance fleet" },
+      { "src": "/equipment/patient-report-device-2.jpg", "label": "Diagnostic device",      "alt": "Diagnostic patient-report device" }
+    ]
+  }
 }

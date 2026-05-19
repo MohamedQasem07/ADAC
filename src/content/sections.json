@@ -38,7 +38,7 @@
         { "id": "2.2", "title": "Our Network", "content": "section-02b-locations.json", "renderer": "map" },
         { "id": "2.3", "title": "Our Team", "content": "section-02c-team.md", "renderer": "markdown" },
         { "id": "2.4", "title": "Our Equipment", "content": "section-02d-equipment.json", "renderer": "cards" },
-        { "id": "2.5", "title": "Our Reputation", "content": "section-02e-reputation.md", "renderer": "markdown" }
+        { "id": "2.5", "title": "Our Reputation", "content": "section-02e-reputation.md", "renderer": "reputation" }
       ]
     },
     {
@@ -212,7 +212,7 @@
         { "id": "14.2", "title": "June 2026 — Preparation", "content": "section-14b-june.md", "renderer": "markdown" },
         { "id": "14.3", "title": "Jul-Sep 2026 — Pilot", "content": "section-14c-pilot.md", "renderer": "markdown" },
         { "id": "14.4", "title": "October 2026 — Review", "content": "section-14d-review.md", "renderer": "markdown" },
-        { "id": "14.5", "title": "Next Meeting · ARC Europe", "content": "section-14e-arc.md", "renderer": "markdown" }
+        { "id": "14.5", "title": "Next Meeting · ARC Europe", "renderer": "arc-europe" }
       ]
     },
     {

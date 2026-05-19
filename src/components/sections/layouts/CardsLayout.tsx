@@ -44,11 +44,31 @@ interface CardItem {
   body: string;
 }
 
+interface GalleryImage {
+  src: string;
+  label: string;
+  alt?: string;
+}
+
+interface GalleryData {
+  caption?: string;
+  featured: GalleryImage[];
+  thumbnails?: GalleryImage[];
+}
+
 interface CardsLayoutData {
   title?: string;
   eyebrow?: string;
   summary?: string;
   items: CardItem[];
+  gallery?: GalleryData;
+}
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
+function asset(src: string): string {
+  if (!src) return src;
+  if (src.startsWith('http')) return src;
+  return `${BASE_PATH}${src}`;
 }
 
 /**
@@ -125,7 +145,131 @@ export function CardsLayout({ data }: { data: CardsLayoutData }) {
           );
         })}
       </motion.ul>
+
+      {data.gallery && <GallerySection gallery={data.gallery} inView={inView} />}
     </section>
+  );
+}
+
+function GallerySection({ gallery, inView }: { gallery: GalleryData; inView: boolean }) {
+  return (
+    <motion.div
+      variants={staggerTight}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+      className="mt-20"
+    >
+      <div className="mb-8 flex items-center gap-4">
+        <span
+          aria-hidden
+          className="block h-px flex-1"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, var(--theme-accent) 50%, transparent)',
+          }}
+        />
+        <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-theme">
+          Operational evidence
+        </span>
+        <span
+          aria-hidden
+          className="block h-px flex-1"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, var(--theme-accent) 50%, transparent)',
+          }}
+        />
+      </div>
+
+      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {gallery.featured.map((img) => (
+          <motion.li
+            key={img.src}
+            variants={{
+              hidden: { opacity: 0, y: 18 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.65, ease: ease.premium },
+              },
+            }}
+            className="group relative overflow-hidden rounded-sm border border-white/10 bg-navy-deep/40"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <img
+                src={asset(img.src)}
+                alt={img.alt ?? img.label}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(180deg, transparent 55%, rgba(7,7,11,0.85) 100%)',
+                }}
+              />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 px-4 pb-3.5 pt-2">
+              <p
+                className="font-mono text-[10px] uppercase tracking-[0.3em]"
+                style={{ color: 'var(--theme-accent)' }}
+              >
+                {img.label}
+              </p>
+            </div>
+          </motion.li>
+        ))}
+      </ul>
+
+      {gallery.thumbnails && gallery.thumbnails.length > 0 && (
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {gallery.thumbnails.map((img) => (
+            <motion.li
+              key={img.src}
+              variants={{
+                hidden: { opacity: 0, y: 14 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.55, ease: ease.premium },
+                },
+              }}
+              className="group relative overflow-hidden rounded-sm border border-white/10 bg-navy-deep/40"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <img
+                  src={asset(img.src)}
+                  alt={img.alt ?? img.label}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      'linear-gradient(180deg, transparent 60%, rgba(7,7,11,0.85) 100%)',
+                  }}
+                />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 px-3 pb-2 pt-1.5">
+                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-ice/85">
+                  {img.label}
+                </p>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
+      )}
+
+      {gallery.caption && (
+        <p className="mt-6 text-center text-xs italic text-ink-soft/75">
+          {gallery.caption}
+        </p>
+      )}
+    </motion.div>
   );
 }
 

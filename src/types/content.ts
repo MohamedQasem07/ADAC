@@ -38,7 +38,9 @@ export type SubtopicRenderer =
   | 'pricing-matrix'
   | 'worked-example'
   | 'digital-workflow'
-  | 'package-simulator';
+  | 'package-simulator'
+  | 'arc-europe'
+  | 'reputation';
 
 export interface SubtopicMeta {
   id: string;
